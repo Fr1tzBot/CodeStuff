@@ -1,16 +1,13 @@
 # Reference
 
-## TODO
-### TODO:
+## TODO:
+
 try to explain every program in this folder
 
-### TODO:
 fix creatingAfunctions
 
-### TODO:
-comments
+add comments
 
-### TODO:
 Make standard naming system
 
 ## Files
