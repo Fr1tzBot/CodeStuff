@@ -1,2 +1,2 @@
-# learning_java
-A repository for the code I make in the process of learning java
+# Java Stuff
+A place for reference code and java projects
