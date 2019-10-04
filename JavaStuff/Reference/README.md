@@ -2,7 +2,7 @@
 
 ## ToDo
 
-* try to explain every program in this folder
+* ~~try to explain every program in this folder~~
 
 * fix creatingAfunctions
 
