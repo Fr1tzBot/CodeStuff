@@ -1,15 +1,19 @@
-## Reference
+# Reference
 
+## TODO
 ### TODO:
 try to explain every program in this folder
 
 ### TODO:
 fix creatingAfunctions
 
-TODO: comments
+### TODO:
+comments
 
-TODO: Make standard naming system
+### TODO:
+Make standard naming system
 
+## Files
 ForLoop.java: Basic syntax of a for loop
 
 README.md: an explaination of all of the documents
