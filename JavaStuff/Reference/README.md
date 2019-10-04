@@ -6,6 +6,8 @@ TODO: fix creatingAfunctions
 
 TODO: comments
 
+TODO: Make standard naming system
+
 ForLoop.java: Basic syntax of a for loop
 
 README.md: an explaination of all of the documents
