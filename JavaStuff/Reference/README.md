@@ -2,13 +2,13 @@
 
 ## ToDo
 
-try to explain every program in this folder
+* try to explain every program in this folder
 
-fix creatingAfunctions
+* fix creatingAfunctions
 
-add comments
+* add comments
 
-Make standard naming system
+* Make standard naming system
 
 ## Files
 ForLoop.java: Basic syntax of a for loop
