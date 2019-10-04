@@ -1,4 +1,2 @@
-# python_projects
-this is a repository with all of the stuff I make using python
-
-and whatever other languages I am using when I back up code
+# Python Stuff
+this repo has reference code and code I'm working on
