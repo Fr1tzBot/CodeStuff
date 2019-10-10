@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Decimal {
+public class Calculator {
     public static void main(String[] args) {
         double n1, n2;
         String operation;
