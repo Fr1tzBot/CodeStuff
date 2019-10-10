@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 //Work in progress
 //a remake of my python calculator
-public class MyClass {
+public class calculator2 {
     public static void main(String args[])
         throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
