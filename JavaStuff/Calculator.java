@@ -1,6 +1,10 @@
 import java.util.Scanner;
 
+<<<<<<< HEAD:JavaStuff/Calculator.java
 public class calculator {
+=======
+public class Calculator {
+>>>>>>> 653afe5d0d3edf3de4a26ea451616cf54eec6938:JavaStuff/Calculator.java
     public static void main(String[] args) {
         double n1, n2;
         String operation;
