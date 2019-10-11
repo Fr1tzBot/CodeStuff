@@ -1,5 +1,5 @@
 import java.lang.*;
-public class variable {
+public class Variable {
 	public static void main(String[] args) {
 	    String yay;
 	    yay = "yay ";

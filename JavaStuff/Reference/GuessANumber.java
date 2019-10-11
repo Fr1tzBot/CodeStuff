@@ -1,6 +1,6 @@
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
-public class guessNumber{
+public class GuessANumber{
     public static int rand (int min, int max){
         int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
         return randomNum;
