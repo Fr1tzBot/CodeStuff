@@ -7,6 +7,7 @@ public class Calculator2 {
     public static void main(String args[])
         throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
+        scanner.close(); //to fix warning, remove later
         System.out.println("welcome to the java interactived calculator!");
         Thread.sleep(2000);
         System.out.println("This calulator will work as a calculator for dividing, multiplying, subtracting, adding, or exponents");
