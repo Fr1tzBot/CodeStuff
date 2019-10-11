@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 //Work in progress
 //a remake of my python calculator
-public class calculator2 {
+public class Calculator2 {
     public static void main(String args[])
         throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
@@ -22,7 +22,7 @@ public class calculator2 {
         int Second_numberint = 0;
         while(rerun) {
             while(true){
-                First_number =
+                //First_number =
             }
         }
         
