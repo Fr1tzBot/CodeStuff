@@ -1,7 +1,6 @@
 from os import walk
 import os
 
-os.system("cd /")
 f = []
 c = 0
 while len(f) > 1:
