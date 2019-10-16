@@ -1,5 +1,5 @@
 import java.util.concurrent.ThreadLocalRandom;
-public class exceptions {
+public class Exceptions {
        public static int rand (int min, int max){
         int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
         return randomNum;

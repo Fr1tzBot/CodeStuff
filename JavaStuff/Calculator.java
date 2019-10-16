@@ -15,7 +15,8 @@ public class Calculator {
         Scanner op = new Scanner(System.in);
         System.out.println("Enter your operation");
         operation = op.next();
-
+        op.close();
+        scannerObject.close();
         switch (operation)  {
         case "+":
             System.out.println("Your answer is " + (n1 + n2));

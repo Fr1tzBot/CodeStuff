@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - calculator2",
+            "request": "launch",
+            "mainClass": "calculator2",
+            "projectName": "CodeStuff_c2a4ceb6"
+        }
+    ]
+}
