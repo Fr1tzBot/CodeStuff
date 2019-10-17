@@ -6,8 +6,8 @@ except ImportError:
     print("No module named 'google' found")
     install = raw_input("Install it now?")
     if install == "yes":
-	system("pip install beautifulsoup4")
-	system("pip install google")
+	system("pip3 install beautifulsoup4")
+	system("pip3 install google")
 	from googlesearch import search
     else:
 	exit()
