@@ -9,5 +9,6 @@ public class Input {
     } else {
       System.out.println("your username is not valid");
     }
+    scanner.close();
   }
 }

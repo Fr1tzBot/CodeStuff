@@ -28,5 +28,6 @@ public class GuessANumber{
                 }
             }
         }
+        scanner.close();
     }
 }
