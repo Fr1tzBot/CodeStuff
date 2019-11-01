@@ -14,34 +14,34 @@ while ans:
       
     
     elif answers == 1:
-        print "It is certain"
+        print("It is certain")
         time.sleep(1)
     
     elif answers == 2:
-        print "Outlook good"
+        print("Outlook good")
         time.sleep(1)
     
     elif answers == 3:
-        print "You may rely on it"
+        print("You may rely on it")
         time.sleep(1)
     
     elif answers == 4:
-        print "Ask again later"
+        print("Ask again later")
         time.sleep(1)
     
     elif answers == 5:
-        print "Concentrate and ask again"
+        print("Concentrate and ask again")
         time.sleep(1)
     
     elif answers == 6:
-        print "Reply hazy, try again"
+        print("Reply hazy, try again")
         time.sleep(1)
     
     elif answers == 7:
-        print "My reply is no"
+        print("My reply is no")
         time.sleep(1)
     
     elif answers == 8:
-        print "My sources say no"
+        print("My sources say no")
         time.sleep(1)
 

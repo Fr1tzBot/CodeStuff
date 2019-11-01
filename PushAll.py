@@ -9,6 +9,6 @@ command = "git commit -m '" + str(commitname)
 command = command + "'"
 print(command)
 system(command)
-system("git push origin CloudShell")
+system("git push origin master")
 system("git status")
 
