@@ -1,6 +1,11 @@
 from os import system
+from time import sleep
 
+system("git status")
+sleep(5)
 system("git add --all")
+sleep(5)
+system("git status")
 commitname = input("Commit Name: ")
 print(commitname)
 print(type(commitname))
