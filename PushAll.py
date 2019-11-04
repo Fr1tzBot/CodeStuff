@@ -18,6 +18,6 @@ sleep(1)
 system("git config --global user.email 'ftgeib640@pccsk12.com'")
 system("git config --global user.name 'Fritz Geib'")
 system(command)
-system("git push origin master")
+system("sudo git push origin master")
 system("git status")
 
