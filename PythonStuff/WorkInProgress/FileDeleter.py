@@ -29,7 +29,11 @@ while active:
 			break
 		if mode == "d":
 			#delete directory
-			pass
+			print("What is the path to your directory?")
+			path = input()
+			if path[len(path) -1] != "/":
+				path = path + "/"
+			system("rm -rf
 		if mode == "o":
 			#delete one file
 			pass
