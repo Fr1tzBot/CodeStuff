@@ -33,10 +33,12 @@ while active:
 			path = input()
 			if path[len(path) -1] != "/":
 				path = path + "/"
-			system("rm -rf
+			system("rm -rf " + path)
 		if mode == "o":
 			#delete one file
-			pass
+			print("What is the Path to the File?")
+			path = input()
+			system("rm " + path)
 		#
 	#
 #
