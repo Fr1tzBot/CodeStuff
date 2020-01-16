@@ -25,7 +25,7 @@ public class Calculator {
                 //try{
                 System.out.println("What is Your First Number?");
                 //Scanner scanner = new Scanner(System.in);
-                First_number = scanner.nextLine();
+                //First_number = scanner.nextLine();
                 //}
             }
         }

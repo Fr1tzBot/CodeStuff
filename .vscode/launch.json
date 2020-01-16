@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - FileChange",
+            "request": "launch",
+            "mainClass": "FileChange",
+            "projectName": "CodeStuff_bf4fbc43"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - ForLoop",
             "request": "launch",
             "mainClass": "ForLoop",
