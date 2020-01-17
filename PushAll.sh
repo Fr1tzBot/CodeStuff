@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sh JavaStuff/CleanClass.sh
 git status
 sleep 1
 git add --all
