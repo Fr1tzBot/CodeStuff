@@ -1,4 +1,3 @@
-import java.lang.*;
 import java.util.Scanner;
 
 //Work in progress
@@ -15,11 +14,11 @@ public class Calculator {
         System.out.println("First you will have to enter your first number, then your operator, and finally, your second number.");
         Thread.sleep(1000);
         Boolean rerun = true;
-        int First_number = 0;
-        String Second_number = "";
-        String Operator = "";
-        int First_numberint = 0;
-        int Second_numberint = 0;
+        //int First_number = 0;
+        //String Second_number = "";
+        //String Operator = "";
+        //int First_numberint = 0;
+        //int Second_numberint = 0;
         while(rerun) {
             while(true){
                 //try{
@@ -29,5 +28,6 @@ public class Calculator {
                 //}
             }
         }
+        scanner.close();
     }
 }
