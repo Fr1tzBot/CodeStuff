@@ -15,7 +15,8 @@ CreateTestDir () {
     mkdir testDir
     mkdir testDir/testDir2
     touch testDir/testDir2/test.txt
-    touch testDir/testDir2/test2.txt
+    mkdir testDir/testDir3
+    touch testDir/testDir3/test2.txt
     echo "created test dir"
     #fi
 }
@@ -24,6 +25,6 @@ cleanDir () {
     echo "removed test dir"
 }
 CreateTestDir
-find "testDir/testDir2" -name "*.txt" -type f -exec mv {} "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/" \;
+find "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/" -name "*.txt" -type f -exec mv {} "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/" \;
 #find "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/testDir2/"" -name "*.txt" -type f -delete
 echo 'remove all .txt files'
