@@ -20,28 +20,30 @@ cleanTestDir () {
     rm -rf copyTo
     echo "removed test dir"
 }
-findFunction () {
-    if [ "$4" == "mv" ] || [ "$4" == "move"]; then
-        find $1 -name "$2" -type "$3" -exec mv {} $5 \;
-    elif [ "$4" == "delete" ] || [ "$4" == "del"]; then
-        find $1 -name "$2" -type "$3" -delete
-    else
-        find $1 -name "$2" -type "$3" 
-    fi
-}
-echo 'FileDel v1.2 >>>'
+echo 'FileDel v1.3 >>>'
 read -p "mode?" mode
 echo $mode
 if [ "$mode" == "test" ]; then
     #run test scripts
     cleanTestDir
     CreateTestDir
-    findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "*.txt" f mv ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/
-    #find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name "*.txt" -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
+    #findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "*.txt" f mv ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/
+    find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name "*.txt" -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
     echo 'move all .txt files'
-    findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "" d delete
-    #find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -type d -delete
+    #findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "" d delete
+    find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -type d -delete
     echo "delete test dirs"
+elif [ "$mode" == "nav"] || [ "$mode" == "navigate"]; then
+    cd /
+    while [ 1 == 1]
+        do
+        pwd
+        read -p ">>>" moveto
+        cd $moveto
+        if [ moveto == "exit"]; then
+            break
+        fi
+    done
 else
     read -p "Target File Extension: " FileExtension
     StarDot="*."
