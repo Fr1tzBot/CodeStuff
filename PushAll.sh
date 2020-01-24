@@ -1,5 +1,6 @@
 #!/bin/bash
 
+git pull
 sh JavaStuff/CleanClass.sh
 git add --all
 git status
