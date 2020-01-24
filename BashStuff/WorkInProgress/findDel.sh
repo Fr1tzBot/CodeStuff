@@ -1,11 +1,3 @@
-echo 'FileDel v1.0 >>>'
-read -p "Target File Extension:" FileExtension
-StarDot="*."
-FileExtension=$StarDot$FileExtension
-#read -p "Path to Copy to:" TargetPath
-#echo 'enter location of files:'
-#read FileDir
-rm -rf testDir
 CreateTestDir () {
     #if [ test -e "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/test.txt" ]; then 
         #then
@@ -22,15 +14,40 @@ CreateTestDir () {
     echo "created test dir"
     #fi
 }
-cleanDir () {
+cleanTestDir () {
     cd ~/Documents/CodeStuff/BashStuff/WorkInProgress/
     rm -rf testDir
     rm -rf copyTo
     echo "removed test dir"
 }
-cleanDir
-CreateTestDir
-find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name $FileExtension -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
-find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -type d -delete
+findFunction () {
+    if [ "$4" == "mv" ] || [ "$4" == "move"]; then
+        find $1 -name "$2" -type "$3" -exec mv {} $5 \;
+    elif [ "$4" == "delete" ] || [ "$4" == "del"]; then
+        find $1 -name "$2" -type "$3" -delete
+    else
+        find $1 -name "$2" -type "$3" 
+    fi
+}
+echo 'FileDel v1.2 >>>'
+read -p "mode?" mode
+echo $mode
+if [ "$mode" == "test" ]; then
+    #run test scripts
+    cleanTestDir
+    CreateTestDir
+    findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "*.txt" f mv ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/
+    #find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name "*.txt" -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
+    echo 'move all .txt files'
+    findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "" d delete
+    #find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -type d -delete
+    echo "delete test dirs"
+else
+    read -p "Target File Extension: " FileExtension
+    StarDot="*."
+    FileExtension=$StarDot$FileExtension
+    find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name $FileExtension -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
+    #read -p "Path to Copy to: " TargetPath
+    #read -p 'Enter location of files: ' FileDir
+fi
 #find "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/testDir2/"" -name "*.txt" -type f -delete
-echo 'move all .txt files'
