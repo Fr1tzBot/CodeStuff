@@ -27,26 +27,16 @@ if [ "$mode" == "test" ]; then
     #run test scripts
     cleanTestDir
     CreateTestDir
-    #findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "*.txt" f mv ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/
     find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name "*.txt" -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
     echo 'move all .txt files'
-    #findFunction ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ "" d delete
     find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -type d -delete
     echo "delete test dirs"
-elif [ "$mode" == "nav"] || [ "$mode" == "navigate"]; then
-    cd /
-    while [ 1 == 1]
-        do
-        pwd
-        read -p ">>>" moveto
-        cd $moveto
-        if [ moveto == "exit"]; then
-            break
-        fi
-    done
 else
     read -p "Target File Extension: " FileExtension
     StarDot="*."
+    if [ !${FileExtension:0:1}${FileExtension:1:1} == "*."] || [ !${FileExtension:0:1} == "."]; then
+
+
     FileExtension=$StarDot$FileExtension
     find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name $FileExtension -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
     #read -p "Path to Copy to: " TargetPath
