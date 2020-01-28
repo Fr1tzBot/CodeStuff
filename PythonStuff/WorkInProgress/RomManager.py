@@ -45,6 +45,7 @@ while active:
         print("Solutions - avoid abbreviations and misspellings")
     if console in consoleList:
        print("good Yeet")
+       
        break 
     else:
         print("Error 43: console not found")
