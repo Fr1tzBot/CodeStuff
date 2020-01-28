@@ -18,8 +18,6 @@ def getConsoleID(consoleName):
         for i in range(len(consoleList)):
             if consoleList[i] == consoleName:
                 return i
-            #yeet
-        #yeet
     else:
         return "Error 43"
     
