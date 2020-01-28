@@ -7,5 +7,8 @@ read -p "What Console is this Game For? " console
 #echo "$console" | tr '[:upper:]' '[:lower:]'
 declare -l console
 console=$console
-if [ console in consoleList ]; then
-    echo
+if [ contains consoleList console ]; then
+    echo "good yeet"
+else
+    echo "bad yeet"
+fi
