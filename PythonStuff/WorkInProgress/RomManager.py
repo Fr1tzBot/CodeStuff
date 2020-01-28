@@ -10,7 +10,19 @@ consoleList = ("atari 800", "atari 2600", "atari 5200", "atari 7800", "atari jag
 "nintendo entertainment system", "super nintendo", "wii", "wii u", 
 
 "final burn alpha", "intellivision", "neo geo", "neo geo pocket", "vectrex", "xbox" ) 
-pathList = ("/mnt/Storage/Filez/Roms/Atari/'Atari 800'")
+pathPrefix = "/mnt/Storage/Filez/Roms/"
+pathSuffix = "/Romset/"
+pathList = ("Atari/'Atari 800'", "Atari/'Atari 2600'", "Atari/'Atari 5200'", 
+"Atari/'Atari 7800", "Atari/'Atari Jaguar'", "Atari/'Atari Lynx'", "Atari/'Atari ST'",
+"Atari/'Atari XEGS'",
+
+"Nintendo/DS", "Nintendo/Famicon", "Nintendo/GameBoy", "Nintendo/'GameBoy Advance'",
+"Nintendo/'GameBoy Color'", "Nintendo/GameCube", "Nintendo/'Nintendo 64'", 
+"Nintendo/Nintendo Entertainment System", "Nintendo/'Super Nintendo'", "Nintendo/Wii",
+"Nintendo/'Wii U'"
+
+"Other/'Final Burn Alpha'", "Other/Intellivision", "Other/'Neo Geo'", 
+"Other/'Neo Geo Pocket'", "Other/Vectrex", "Other/Xbox")
 
 def getConsoleID(consoleName):
     global consoleList
