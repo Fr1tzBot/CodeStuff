@@ -24,14 +24,28 @@ pathList = ("Atari/'Atari 800'", "Atari/'Atari 2600'", "Atari/'Atari 5200'",
 "Other/'Final Burn Alpha'", "Other/Intellivision", "Other/'Neo Geo'", 
 "Other/'Neo Geo Pocket'", "Other/Vectrex", "Other/Xbox")
 
+testPath = "~/Desktop/RomDataBase/Roms Database/roms database/"
+testList = ("NES", "Nintendo 64", "GameBoy")
+test = True
+
 def getConsoleID(consoleName):
+    global test
     global consoleList
-    if consoleName in consoleList:
-        for i in range(len(consoleList)):
-            if consoleList[i] == consoleName:
-                return i
+    global testList
+    if test:
+        if consoleName in testList:
+            for i in range(len(testList)):
+                if testList[i] == consoleName:
+                    return i
+        else:
+            return "Error 43"
     else:
-        return "Error 43"
+        if consoleName in consoleList:
+            for i in range(len(consoleList)):
+                if consoleList[i] == consoleName:
+                    return i
+        else:
+            return "Error 43"
     
 
 while active:
@@ -40,13 +54,22 @@ while active:
     console = input("What console is this rom for?")
     console = console.lower()
     consoleID = getConsoleID(console)
+    print(consoleID)
     if console == "help":
         print("Error 43 - The console you typed is not on the console list")
         print("Solutions - avoid abbreviations and misspellings")
-    if console in consoleList:
+        sleep(2)
+        continue
+    elif console in consoleList and not test:
        print("good Yeet")
-       
+       query = input("What is the name of this ROM?")
+       run("locate " + query)
        break 
+    elif test:
+        if console in testList:
+            print("test yeet")
+            sleep(1)
+            break
     else:
         print("Error 43: console not found")
         print("Type help on the console input for more info.")
