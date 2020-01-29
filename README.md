@@ -1,2 +1,2 @@
 # CodeStuff
-A repo with code stuff and other stuff
+A repo with code-related things
