@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.*;
 
 public class FileChange {
+    //TODO: Cleanup/Continue Work On
     public static void main(String[] args) {
         Path dirPath = Paths.get("/home/fritz/Documents/testDir/");
         Path filePath = Paths.get("/home/fritz/Documents/testDir/yeet.txt");
