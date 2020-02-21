@@ -11,7 +11,7 @@ headX = int(headX)
 headPos = [headX, headY]
 snakeDir = random.randint(0, 7)
 SnakeLength = 1
-Score = 0
+score = 0
 
 appleX = 0
 appleY = 0
@@ -78,8 +78,41 @@ def updateHeadPos():
         headX -= 1
 def updateSnakeDir(testMode):
     global snakeDir
-    if testMode:
+    global appleX
+    global appleY
+    global headX
+    global headY
+    if testMode == 1:
         snakeDir = random.randint(0, 7)
+    elif testMode == 2:
+        #point towards apple
+        #HeadDirs
+        # 0  1  2
+        # 7     3
+        # 6  5  4
+        if appleX < headX and appleY > headY:
+            snakeDir = 0
+        elif appleX == headX and appleY > headY:
+            snakeDir = 1
+        elif appleX > headX and appleY > headY:
+            snakeDir = 2
+        elif appleX > headX and appleY == headY:
+            snakeDir = 3
+        elif appleX > headX and appleY < headY:
+            snakeDir = 4
+        elif appleX == headX and appleY < headY:
+            snakeDir = 5
+        elif appleX < headX and appleY < headX:
+            snakeDir = 6
+        elif appleX < headX and appleY == headY:
+            snakeDir = 7
+        
+        
+        
+        pass
+    elif testMode == 3:
+        #immediatly kill urself
+        pass
     else:
         for i in range(len(allDirs)):
             if allDirs[i] == snakeDir and i == len(allDirs) - 1:
@@ -107,12 +140,16 @@ def dirToEnglish(dir):
         return "Down Left"
     elif dir == 7:
         return "Left"
+applePos = getApplePos()
+print(applePos)
 while True:
-    applePos = getApplePos()
+    updateHeadPos()
+    updateSnakeDir(2)
     headPos = [headX, headY]
     drawPixel(headPos[0], headPos[1])
-    updateHeadPos()
-    drawPixel(applePos[0], applePos[1])
-    updateSnakeDir(True)
-    print("Dir: " + dirToEnglish(snakeDir) + " X: " + str(headX) + " Y: " + str(headY))
+    print("Dir: " + dirToEnglish(snakeDir) + " X: " + str(headX) + " Y: " + str(headY) + " Score: " + str(score))
+    if headPos == applePos:
+        applePos = getApplePos()
+        drawPixel(applePos[0], applePos[1])
+        score += 1
     sleep(0.1)
