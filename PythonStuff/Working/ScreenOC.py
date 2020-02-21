@@ -1,7 +1,7 @@
 #Overclocking Program
 from os import system
 import subprocess
-import commands
+import subprocess
 from time import sleep
 #set defaults
 xres = 1366
@@ -9,7 +9,7 @@ yres = 768
 ref = 60
 def SetRef(NewRef, Interface): #function to set refresh rate
 	command = str("/home/fritz/cvt12" + " " + str(xres) + " " + str(yres) + " " + str(NewRef))
-	cvt12 = (commands.getstatusoutput(command))
+	cvt12 = (subprocess.getstatusoutput(command))
 	cvt12 = cvt12[1]
 	cvt = ""
 	for i in range(cvt12.find('"'), (len(cvt12))):
@@ -24,7 +24,7 @@ def SetRef(NewRef, Interface): #function to set refresh rate
 	system("xrandr --output " + Interface + " --mode " + rb2)
 def CheckInterfaces():
 	command = "xrandr | grep -Pio '.*?\sconnected'"
-	o = commands.getstatusoutput(command)
+	o = subprocess.getstatusoutput(command)
 	o = o[1].split()
 	for i in range(len(o)):
 		if o[i] == "connected":
@@ -40,7 +40,7 @@ if len(CheckInterfaces()) == 1:
 while True:
 	
 	if not oneDisplay:
-		ocInterface = raw_input("Which Display Would You Like To Overclock?")
+		ocInterface = input("Which Display Would You Like To Overclock?")
 		print(ocInterface)
 	else:
 		ocInterface = CheckInterfaces()[0]
@@ -48,7 +48,7 @@ while True:
 	if ocInterface not in CheckInterfaces() and not ocInterface == CheckInterfaces()[0]:
 		continue
 	else:
-		targetOC = raw_input("What Refresh rate Would You Like to Overclock To?")									
+		targetOC = input("What Refresh rate Would You Like to Overclock To?")									
 		
 		
 		

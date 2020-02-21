@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Since we're dealing with dd, abort if any errors occur
-#//TODO: Add Licensing thing os u don't get banned
+#//TODO: Add Licensing thing so u don't get banned
 set -e
 
 TEST_FILE=${1:-dd_obs_testfile}

@@ -27,7 +27,10 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=2
+FILE_NAME_0=339;Python;0;EUTF-8;1;1;0;%2Fhome%2Ffritz%2FDocuments%2FCodeStuff%2FPythonStuff%2FWorkInProgress%2FDD-Blocksize.py;0;4
+FILE_NAME_1=0;Sh;0;EUTF-8;1;1;0;%2Fhome%2Ffritz%2FDocuments%2FCodeStuff%2FBashStuff%2FWorkInProgress%2FDD-Blocksize.sh;0;4
+FILE_NAME_2=35;Python;0;EUTF-8;1;1;0;%2Fhome%2Ffritz%2FDocuments%2FIMU-code%2FTeleOpExample.py;0;4
 
 [VTE]
 last_dir=/home/fritz
