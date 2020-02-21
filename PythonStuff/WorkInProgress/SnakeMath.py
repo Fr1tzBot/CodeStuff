@@ -40,8 +40,8 @@ def clearPixel(z,x,y):
     pass
 def killSnake():
     #end the game here
-    print("you lost,")
-    print("therefore, you are a loser.")
+    print("You lost.")
+    print("Therefore, you are a loser.")
     sleep(1)
     exit()
 def getApplePos():
@@ -76,18 +76,43 @@ def updateHeadPos():
         headY -= 1
     elif snakeDir == 7:
         headX -= 1
-def updateSnakeDir():
+def updateSnakeDir(testMode):
     global snakeDir
-    for i in range(len(allDirs)):
-        if allDirs[i] == snakeDir and i == len(allDirs):
-            snakeDir = allDirs[0]
-        elif allDirs[i] == snakeDir:
-            snakeDir = allDirs[snakeDir + 1]
+    if testMode:
+        snakeDir = random.randint(0, 7)
+    else:
+        for i in range(len(allDirs)):
+            if allDirs[i] == snakeDir and i == len(allDirs) - 1:
+                snakeDir = allDirs[0]
+            elif allDirs[i] == snakeDir:
+                snakeDir = allDirs[snakeDir + 1]
+def dirToEnglish(dir):
+    #BallDirs
+    # 0  1  2
+    # 7     3
+    # 6  5  4
+    if dir == 0:
+        return "Up Left"
+    elif dir == 1:
+        return "Up"
+    elif dir == 2:
+        return "Up Right"
+    elif dir == 3:
+        return "Right"
+    elif dir == 4:
+        return "Down Right"
+    elif dir == 5:
+        return "Down"
+    elif dir == 6:
+        return "Down Left"
+    elif dir == 7:
+        return "Left"
 while True:
     applePos = getApplePos()
     headPos = [headX, headY]
     drawPixel(headPos[0], headPos[1])
     updateHeadPos()
     drawPixel(applePos[0], applePos[1])
-    updateSnakeDir()
-    print(snakeDir)
+    updateSnakeDir(True)
+    print("Dir: " + dirToEnglish(snakeDir) + " X: " + str(headX) + " Y: " + str(headY))
+    sleep(0.1)
