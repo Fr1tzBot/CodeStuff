@@ -92,6 +92,7 @@ def updateSnakeDir(testMode):
         # 6  5  4
         if appleX < headX and appleY > headY:
             snakeDir = 0
+            print(dirToEnglish(snakeDir))
         elif appleX == headX and appleY > headY:
             snakeDir = 1
         elif appleX > headX and appleY > headY:
@@ -106,12 +107,8 @@ def updateSnakeDir(testMode):
             snakeDir = 6
         elif appleX < headX and appleY == headY:
             snakeDir = 7
-        
-        
-        
-        pass
     elif testMode == 3:
-        #immediatly kill urself
+        #immediatly kill urself on snake head
         pass
     else:
         for i in range(len(allDirs)):
@@ -144,7 +141,7 @@ applePos = getApplePos()
 print(applePos)
 while True:
     updateHeadPos()
-    updateSnakeDir(2)
+    updateSnakeDir(1)
     headPos = [headX, headY]
     drawPixel(headPos[0], headPos[1])
     print("Dir: " + dirToEnglish(snakeDir) + " X: " + str(headX) + " Y: " + str(headY) + " Score: " + str(score))
