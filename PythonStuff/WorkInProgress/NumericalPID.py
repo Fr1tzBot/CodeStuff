@@ -1,5 +1,9 @@
 from time import sleep
+import time
 import random
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+import numpy as np
 
 target = 50
 Kp = 5
@@ -25,12 +29,16 @@ def setCondition(error, Kp):
     global Power
     calc = Kp*error
     power = calc
-while True:
+for i in range(100):
+    if i == 0:
+        start_time = time.time()
     error = target - getData()
     setCondition(error, Kp)
     print("E: " + str(error) + " On?: " + str(Power) + " Data: " + str(data))
     if data < 0 or data > 100:
         print("Out Of Bounds Error 969")
         exit()
-    sleep(0.1)
+    plt.plot(time.time() - start_time, data, 'o', color='black')
+    #sleep(0.1)
+plt.show()
     
