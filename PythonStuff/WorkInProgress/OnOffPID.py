@@ -22,10 +22,7 @@ def getData():
     elif data == 0:
         pass
     else:
-        if random.randint(1, 2) == 1:
-            data -= 1
-        else:
-            data -= 2
+        data -= random.randint(1, 2)
     return data
 def setCondition(error, Kp):
     global isOn
