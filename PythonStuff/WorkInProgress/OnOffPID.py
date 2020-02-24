@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.style.use('seaborn-whitegrid')
 import numpy as np
 
-target = 50
+target = 5
 Kp = 5
 data = 0
 isOn = False
@@ -14,20 +14,17 @@ error = 0
 
 def getData():
     global data
-    if random.randint(0, 100) == 69:
+    #if random.randint(0, 100) == 69:
         #print("NOICE!")
-        data = data * 2
-        if data > 100:
-            data = 100
-    elif isOn:
-        if random.randint(1, 5) == 1:
-            data += 1
-        else:
-            data += 2
+        #data = data * 2
+        #if data > 100:
+            #data = 100
+    if isOn:
+        data += 1 #random.randint(1, 5)
     elif data == 0:
         pass
     else:
-        data -= random.randint(1, 5)
+        data -= 1#random.randint(1, 5)
     return data
 def setCondition(error, Kp):
     global isOn
@@ -45,7 +42,7 @@ for i in range(100):
     if data < 0 or data > 100:
         print("Out Of Bounds Error 969")
         exit()
-    plt.plot(time.time() - start_time, data, '-ok')
+    plt.plot(time.time() - start_time, data, 'o', color='black')
 
     #sleep(0.1)
 plt.show()
