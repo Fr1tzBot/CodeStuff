@@ -4,7 +4,7 @@ import random
 target = 50
 Kp = 5
 data = 0
-isOn = False
+Power = False
 error = 0
 
 def getData():
@@ -14,7 +14,7 @@ def getData():
         data = data * 2
         if data > 100:
             data = 100
-    elif isOn:
+    elif Power:
         if random.randint(1, 2) == 1:
             data += 1
         else:
@@ -28,16 +28,13 @@ def getData():
             data -= 2
     return data
 def setCondition(error, Kp):
-    global isOn
+    global Power
     calc = Kp*error
-    if calc > 0:
-        isOn = True
-    elif calc < 0:
-        isOn = False
+    power = calc
 while True:
     error = target - getData()
     setCondition(error, Kp)
-    print("E: " + str(error) + " On?: " + str(isOn) + " Data: " + str(data))
+    print("E: " + str(error) + " On?: " + str(Power) + " Data: " + str(data))
     if data < 0 or data > 100:
         print("Out Of Bounds Error 969")
         exit()
