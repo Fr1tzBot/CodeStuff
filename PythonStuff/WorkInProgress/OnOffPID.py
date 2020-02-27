@@ -11,6 +11,9 @@ Kp = 5
 data = 0
 isOn = False
 error = 0
+hundreds = []
+for i in range(1000000):
+    hundreds.append(i*100)
 
 def getData():
     global data
@@ -38,11 +41,8 @@ def setCondition(error, Kp):
 for i in range(1000):
     if i == 0:
         start_time = time.time()
-    try:
-        if int(i/100) > 0:
-            target = random.randint(0, 100)
-    except:
-        pass
+    if i in hundreds:
+        target = random.randint(0, 100)
     error = target - getData()
     setCondition(error, Kp)
     #print("E: " + str(error) + " On?: " + str(isOn) + " Data: " + str(data))

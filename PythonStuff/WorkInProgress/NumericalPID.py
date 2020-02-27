@@ -40,9 +40,15 @@ def getData():
 def setCondition(error, Kp):
     global Power
     setPower(Kp*error)
-for i in range(100):
+for i in range(1000):
     if i == 0:
         start_time = time.time()
+    try:
+        if int(i/100) > 0:
+            target = random.randint(0, 100)
+            print("YEET")
+    except:
+        pass
     error = target - getData()
     setCondition(error, Kp)
     print("E: " + str(error) + " Power?: " + str(Power) + " Data: " + str(data))
