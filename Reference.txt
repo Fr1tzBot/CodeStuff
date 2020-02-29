@@ -1,0 +1,19 @@
+All reference folders must contain the following:
+
+Defining a variable
+What's Your Name Program
+Hello World
+While Loop
+For loop
+if statement
+Else if (Elif)
+void function
+distance between 2 values functions
+defining an array (1, 2, ...)
+defining a list ("foo", "string", ...)
+full types definition file (float, int, list, bool, etc.)
+
+
+Reference File Naming Format:
+
+HelloWorld.filetype

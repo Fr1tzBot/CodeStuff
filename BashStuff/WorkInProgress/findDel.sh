@@ -21,6 +21,7 @@ cleanTestDir () {
     echo "removed test dir"
 }
 echo 'FileDel v1.3 >>>'
+echo 'Modes: "test", '
 read -p "mode?" mode
 echo $mode
 if [ "$mode" == "test" ]; then
@@ -35,11 +36,10 @@ else
     read -p "Target File Extension: " FileExtension
     StarDot="*."
     if [ !${FileExtension:0:1}${FileExtension:1:1} == "*."] || [ !${FileExtension:0:1} == "."]; then
-
-
-    FileExtension=$StarDot$FileExtension
-    find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name $FileExtension -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
-    #read -p "Path to Copy to: " TargetPath
-    #read -p 'Enter location of files: ' FileDir
+        FileExtension=$StarDot$FileExtension
+        find ~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/ -name $FileExtension -type f -exec mv {} ~/Documents/CodeStuff/BashStuff/WorkInProgress/copyTo/ \;
+        #read -p "Path to Copy to: " TargetPath
+        #read -p 'Enter location of files: ' FileDir
+    fi
 fi
 #find "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/testDir2/"" -name "*.txt" -type f -delete
