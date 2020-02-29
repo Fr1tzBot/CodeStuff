@@ -1,3 +1,4 @@
+#!/bin/bash
 CreateTestDir () {
     #if [ test -e "~/Documents/CodeStuff/BashStuff/WorkInProgress/testDir/test.txt" ]; then 
         #then
