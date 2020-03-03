@@ -1,6 +1,14 @@
 #!/bin/bash
 passwordPath="/home/fritz/password"
 defaultPath="/mnt/Storage/Filez/"
+connection=0
+while ! ping -c1 192.168.66.1 &>/dev/null
+    do 
+    echo "Server connection Failed"
+    echo "Checking for VM..." 
+    break
+done
+
 if [[ -f "$passwordPath" ]]; then
     echo "Beginning SSH Init..."
     password=$(head -n 1 $passwordPath)
