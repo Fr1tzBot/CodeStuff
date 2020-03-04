@@ -1,5 +1,6 @@
 #!/bin/bash
 clear
+#initialize variables
 passwordPath="/home/fritz/password"
 defaultPath="/mnt/Storage/Filez/"
 deployTarget=$1
@@ -7,7 +8,8 @@ targetIP=""
 user="root"
 fullLogin=""
 port=22
-if [[ -f "temp" ]]; then
+search="Not Null"
+if [[ -f "temp" ]]; then #if the temp file exists, remove it
     rm temp
 fi
 if [ -z "$deployTarget" ] #check if it is null
@@ -40,9 +42,11 @@ if [ -z "$deployTarget" ] #check if it is null
         exit 0
     fi
 fi
-fullLogin="$user@$targetIP"
+fullLogin="$user@$targetIP" #set the full login
 if [[ -f "$passwordPath" ]]; then #check if the password file exists
-    echo "Beginning SSH Init with User $fullLogin"
+    echo "Beginning SSH Init..."
+    echo "With User $fullLogin"
+    echo "At host $targetIP"
     password=$(head -n 1 $passwordPath)
     sshpass -p $password ssh $fullLogin cd "$defaultPath"
     if [ ! $2 -z 1 ]
@@ -55,19 +59,25 @@ else
     echo "Permission Denied: /home/fritz/password not found."
     exit 0
 fi
-clear
-echo "Filename to search for:"
 touch temp
-read search
-echo "$search" > temp
-aspell -c temp
-search=$(head -n 1 temp)
-echo $search
-echo "Locate Commands:"
-sshpass -p $password ssh $fullLogin locate ${search}
-sshpass -p $password ssh $fullLogin locate ${search^}
-sshpass -p $password ssh $fullLogin locate ${search^^}
-echo "Press Enter When done"
-read isDone
-rm temp
-rm temp.bak
+while [ ! -z "$search" ]
+    do
+    clear
+    echo "Filename to search for: (press enter to exit)"
+    read search
+    if [ -z "$search" ]
+        then
+        break
+    fi
+    echo "$search" > temp
+    aspell -c temp
+    search=$(head -n 1 temp)
+    echo $search
+    echo "Locate Commands:"
+    sshpass -p $password ssh $fullLogin locate ${search}
+    sshpass -p $password ssh $fullLogin locate ${search^}
+    sshpass -p $password ssh $fullLogin locate ${search^^}
+done
+
+rm temp > /dev/null 2>&1
+rm temp.bak > /dev/null 2>&1
