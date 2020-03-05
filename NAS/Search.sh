@@ -77,6 +77,8 @@ while [ ! -z "$search" ]
     sshpass -p $password ssh $fullLogin locate ${search}
     sshpass -p $password ssh $fullLogin locate ${search^}
     sshpass -p $password ssh $fullLogin locate ${search^^}
+    echo "Press Enter When Done."
+    read isdone
 done
 
 rm temp > /dev/null 2>&1
