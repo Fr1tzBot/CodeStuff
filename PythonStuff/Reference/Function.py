@@ -1,0 +1,2 @@
+def voidFunction():
+  print("foo")

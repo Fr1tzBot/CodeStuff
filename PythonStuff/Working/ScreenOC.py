@@ -64,14 +64,14 @@ while True:
 		if type(targetOC) != int:
 			continue
 	if targetOC < ref:
-		t = raw_input("are you sure you wish to underclock your display? [y/n]")
+		t = input("are you sure you wish to underclock your display? [y/n]")
 		if t.lower() == "y" or t.lower() == "yes":
 			pass
 		else:
 			continue
 	break
 SetRef(targetOC, ocInterface)
-stable = raw_input("Is this Stable? [y/n]")
+stable = input("Is this Stable? [y/n]")
 if stable.lower() == "y" or stable.lower() == "yes":
 	pass
 else:

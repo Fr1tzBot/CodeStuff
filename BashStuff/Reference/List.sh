@@ -1,2 +1,2 @@
 #!/bin/bash
-arrayNAme=("foo" "yeet" "yeetus")
+listName=("foo" "yeet" "yeetus")
