@@ -1,22 +1,22 @@
-import sys
 import pygame
+from time import sleep
 
 
 pygame.init() #initialises the imported modules
 
-size = width, height = 320,340
+size = width, height = 960,720
 speed= [1,1]
 black= 0,0,0 #set the background colour
 
 screen = pygame.display.set_mode(size) 
 
-ball = pygame.image.load("ball.jpg").convert()
+ball = pygame.image.load("ball.png").convert()
 ballrect = ball.get_rect()
 
 while True:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT:
-            sys.exit()
+            exit()
 
     ballrect=ballrect.move(speed)
     if ballrect.left < 0 or ballrect.right>width:
@@ -25,9 +25,8 @@ while True:
         speed[1] =-speed[1]
 
         screen.fill(black)
-
         screen.blit(ball,ballrect)
-
-
         pygame.display.flip()
+        sleep(1)
+    
         
