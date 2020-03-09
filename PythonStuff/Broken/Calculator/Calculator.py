@@ -6,19 +6,21 @@ print("This calulator will work as a calculator for dividing, multiplying, subtr
 time.sleep(1.5)
 print("first you will have to enter your first number, then your operator, and finally, your second number.")
 time.sleep(1.55)
-try:
-  first_number = int(input("What is your first number?"))
-except ValueError:
-  print("you must enter a number")
-  time.sleep(1)
-  quit()
-operator = input("what is your operator?")
-try:
-  second_number = int(input("What is your second number?"))
-except ValueError:
-  print("you must enter a number")
-  sleep.time(1)
-  quit()
+while True:
+  try:
+    first_number = int(input("What is your first number?"))
+  except ValueError:
+    print("you must enter a number")
+    time.sleep(1)
+    continue
+  operator = input("what is your operator?")
+  try:
+    second_number = int(input("What is your second number?"))
+  except ValueError:
+    print("you must enter a number")
+    time.sleep(1)
+    continue
+  break
 if operator == "*" :
   answer = int(first_number) * int(second_number)
   print(answer)
