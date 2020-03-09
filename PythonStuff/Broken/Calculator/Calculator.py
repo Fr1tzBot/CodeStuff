@@ -22,8 +22,8 @@ while True:
     break
   if operator == "!":
     break
-  if operator not in "*, /, +, -, ^, !":
-    print("your operator must be either a +,-,/, or *")
+  if operator not in "*, /, +, -, ^, !, %":
+    print("your operator must be either a +,-,/, *, ^, or %")
     time.sleep(1.8)
     continue
   try:
@@ -47,4 +47,6 @@ if operator == "^":
   answer = (float(first_number) ** float((second_number)))
 if operator == "!":
   answer = math.factorial(float(first_number))
+if operator == "%":
+  answer = (float(first_number) / 100) * float(second_number)
 print(answer)
