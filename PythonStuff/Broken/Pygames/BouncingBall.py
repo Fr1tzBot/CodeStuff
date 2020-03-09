@@ -5,7 +5,7 @@ from time import sleep
 pygame.init() #initialises the imported modules
 
 size = width, height = 960,720
-speed= [1,1]
+speed= [0.1,0.1]
 black= 0,0,0 #set the background colour
 
 screen = pygame.display.set_mode(size) 
@@ -27,6 +27,6 @@ while True:
         screen.fill(black)
         screen.blit(ball,ballrect)
         pygame.display.flip()
-        sleep(1)
+        #sleep(1)
     
         
