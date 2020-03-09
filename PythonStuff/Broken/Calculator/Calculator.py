@@ -14,6 +14,10 @@ while True:
     time.sleep(1)
     continue
   operator = input("what is your operator?")
+  if operator != "-" or "+" or "/" or "*":
+    print("your operator must be either a +,-,/, or *")
+    time.sleep(1.8)
+    continue
   try:
     second_number = int(input("What is your second number?"))
   except ValueError:
