@@ -1,4 +1,3 @@
-import plotly
 #ax+by=c
 #dx+ey=f
 #y=(af-cd)/(ae-bd)
