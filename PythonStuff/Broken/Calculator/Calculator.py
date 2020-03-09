@@ -15,12 +15,12 @@ rerun = True
 while rerun:
   while True:
     try:
-      first_number = float(input("What is your first number?"))
+      first_number = float(input("What is your first number? "))
     except ValueError:
       print("you must enter a number")
       time.sleep(1)
       continue
-    operator = input("what is your operator?")
+    operator = input("what is your operator? ")
     if operator == "square root" or operator == "sqrt":
       break
     if operator == "!":
@@ -30,7 +30,7 @@ while rerun:
       time.sleep(1.8)
       continue
     try:
-      second_number = float(input("What is your second number?"))
+      second_number = float(input("What is your second number? "))
     except ValueError:
       print("you must enter a number")
       time.sleep(1)
@@ -54,7 +54,7 @@ while rerun:
     answer = (float(first_number) / 100) * float(second_number)
   print(answer)
   time.sleep(1)
-  runagain = input("run again? Y, N")
+  runagain = input("run again? Y, N ")
   if runagain == "Y":
     rerun = True
   else:
