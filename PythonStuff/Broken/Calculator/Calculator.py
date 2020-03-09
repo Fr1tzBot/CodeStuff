@@ -1,14 +1,13 @@
 import math
 import time
-time.sleep(1)
 print("welcome to the python interactived calculator!")
-time.sleep(1)
+time.sleep(2)
 print("This calulator will work as a calculator for dividing, multiplying, subtracting, adding, or exponents with two numbers.")
-time.sleep(1.5)
+time.sleep(2)
 print("first you will have to enter your first number, then your operator, and finally, your second number.")
-time.sleep(1.55)
-print("New in version 6.0! square roots. Type squrt or square root in the operator menu.")
-time.sleep(1.555)
+time.sleep(2)
+print("New in version 6.0! square roots. Type sqrt or square root in the operator menu.")
+time.sleep(2)
 while True:
   try:
     first_number = float(input("What is your first number?"))
