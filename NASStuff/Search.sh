@@ -16,31 +16,31 @@ if [ -z "$deployTarget" ] #check if it is null
     then
     deployTarget=2 #if it is, set to VM mode #TODO: switch to autodetect mode
     echo "Fixed input from null"
-    if [ ! $deployTarget -eq $deployTarget ]
-        then
-        echo "math is broken."
-    elif [  $deployTarget -eq 3 ]; 
-        then #TODO: create autodetect mode
-        echo "This Feature Will Be Added Soon!" #automatically detect which server is active
-        #exit 0
-    elif [ $deployTarget -eq 2 ]
-        then
-        targetIP="127.0.0.1" #only the VM is to be targetted
-        port=2222
-    elif [ $deployTarget -eq 1 ]
-        then
-        #only the actual server is to be targetted
-        targetIP="freenas.local"
-    elif [ $deployTarget -eq 0 ]
-        #no ssh target is targetted, create a test directory structure on local machine
-        #TODO: add this functionality
-        then
-        echo "No Test Dir Yet!"
-        exit 0
-    else
-        echo "Error: deployTarget Out of Range"
-        exit 0
-    fi
+fi
+if [ ! $deployTarget -eq $deployTarget ]
+    then
+    echo "math is broken."
+elif [  $deployTarget -eq 3 ]; 
+    then #TODO: create autodetect mode
+    echo "This Feature Will Be Added Soon!" #automatically detect which server is active
+    #exit 0
+elif [ $deployTarget -eq 2 ]
+    then
+    targetIP="127.0.0.1" #only the VM is to be targetted
+    port=2222
+elif [ $deployTarget -eq 1 ]
+    then
+    #only the actual server is to be targetted
+    targetIP="freenas.local"
+elif [ $deployTarget -eq 0 ]
+    #no ssh target is targetted, create a test directory structure on local machine
+    #TODO: add this functionality
+    then
+    echo "No Test Dir Yet!"
+    exit 0
+else
+    echo "Error: deployTarget Out of Range"
+    exit 0
 fi
 fullLogin="$user@$targetIP" #set the full login
 if [[ -f "$passwordPath" ]]; then #check if the password file exists
@@ -60,6 +60,8 @@ else
     exit 0
 fi
 touch temp
+echo "Press Enter To Launch Search"
+read isdone
 while [ ! -z "$search" ]
     do
     clear
