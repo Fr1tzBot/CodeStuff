@@ -30,13 +30,14 @@ elif [ $deployTarget -eq 2 ]
     port=2222
 elif [ $deployTarget -eq 1 ]
     then
-    #only the actual server is to be targetted
-    targetIP="freenas.local"
+    #only a jail in the actual server is to be targetted
+    user="fritz"
+    targetIP="192.168.66.7"
 elif [ $deployTarget -eq 0 ]
     #no ssh target is targetted, create a test directory structure on local machine
     #TODO: add this functionality
     then
-    echo "No Test Dir Yet!"
+    echo "No Test Directory Functionality has been implemented Yet, but I promise it's coming!"
     exit 0
 else
     echo "Error: deployTarget Out of Range"
@@ -45,7 +46,7 @@ fi
 fullLogin="$user@$targetIP" #set the full login
 if [[ -f "$passwordPath" ]]; then #check if the password file exists
     echo "Beginning SSH Init..."
-    echo "With User $fullLogin"
+    echo "With User $user"
     echo "At host $targetIP"
     password=$(head -n 1 $passwordPath)
     sshpass -p $password ssh $fullLogin cd "$defaultPath"
@@ -74,11 +75,12 @@ while [ ! -z "$search" ]
     echo "$search" > temp
     aspell -c temp
     search=$(head -n 1 temp)
-    echo $search
+    #echo $search
+    echo locate -i ${search}
+    #echo $password
     echo "Locate Commands:"
-    sshpass -p $password ssh $fullLogin locate ${search}
-    sshpass -p $password ssh $fullLogin locate ${search^}
-    sshpass -p $password ssh $fullLogin locate ${search^^}
+    sshpass -p ${password} ssh -o StrictHostKeyChecking=no ${fullLogin} locate -i ${search} | grep -v "/usr/"
+    #sshpass -p ${password} ssh -o StrictHostKeyChecking=no ${fullLogin} "find / -name 'ZX Spectrum'"
     echo "Press Enter When Done."
     read isdone
 done
