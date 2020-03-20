@@ -80,7 +80,6 @@ while [ ! -z "$search" ]
     #echo $password
     echo "Locate Commands:"
     sshpass -p ${password} ssh -o StrictHostKeyChecking=no ${fullLogin} locate -i ${search} | grep -v "/usr/"
-    #sshpass -p ${password} ssh -o StrictHostKeyChecking=no ${fullLogin} "find / -name 'ZX Spectrum'"
     echo "Press Enter When Done."
     read isdone
 done
