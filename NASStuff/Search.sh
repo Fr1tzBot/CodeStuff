@@ -2,7 +2,7 @@
 clear
 #initialize variables
 passwordPath="/home/fritz/password"
-defaultPath="/mnt/Storage/Filez/"
+defaultPath="/"
 deployTarget=$1
 targetIP=""
 user="root"
@@ -14,17 +14,26 @@ if [[ -f "temp" ]]; then #if the temp file exists, remove it
 fi
 if [ -z "$deployTarget" ] #check if it is null
     then
-    deployTarget=2 #if it is, set to VM mode #TODO: switch to autodetect mode
-    echo "Fixed input from null"
+    deployTarget=3 #if it is null, automatically detect which server is up
+    echo "Mode Defaulted to AutoDetect"
 fi
 if [ ! $deployTarget -eq $deployTarget ]
     then
-    echo "math is broken."
+    echo "Fatal Error: Math.exe has stopped working."
 elif [  $deployTarget -eq 3 ]; 
     then #TODO: create autodetect mode
-    echo "This Feature Will Be Added Soon!" #automatically detect which server is active
+    if ping -c 1 freenas.local > /dev/null 2>&1
+        then
+        #real server is up
+        deployTarget=1
+    else
+        #default to vm
+        deployTarget=2
+    fi
+    #automatically detect which server is active
     #exit 0
-elif [ $deployTarget -eq 2 ]
+fi
+if [ $deployTarget -eq 2 ]
     then
     targetIP="127.0.0.1" #only the VM is to be targetted
     port=2222
@@ -39,21 +48,23 @@ elif [ $deployTarget -eq 0 ]
     then
     echo "No Test Directory Functionality has been implemented Yet, but I promise it's coming!"
     exit 0
+elif [ $deployTarget -eq 3 ]
+    then
+    echo "Error: Autodetect target failed to set a deployTarget"
+    exit 0
 else
-    echo "Error: deployTarget Out of Range"
+    echo "Error: deployTarget Out of Range (Coded Error)"
     exit 0
 fi
 fullLogin="$user@$targetIP" #set the full login
 if [[ -f "$passwordPath" ]]; then #check if the password file exists
     echo "Beginning SSH Init..."
-    echo "With User $user"
-    echo "At host $targetIP"
+    echo "Login: $fullLogin"
     password=$(head -n 1 $passwordPath)
-    sshpass -p $password ssh $fullLogin cd "$defaultPath"
     if [ ! $2 -z 1 ]
         then
-        echo "updating database..."
-        sshpass -p $password ssh $fullLogin /usr/libexec/locate.updatedb > /dev/null 2>&1
+        echo "Updating Database..."
+        sshpass -p $password ssh $fullLogin sudo /usr/libexec/locate.updatedb > /dev/null 2>&1
     fi
     echo "Done."
 else
@@ -79,7 +90,7 @@ while [ ! -z "$search" ]
     echo locate -i ${search}
     #echo $password
     echo "Locate Commands:"
-    sshpass -p ${password} ssh -o StrictHostKeyChecking=no ${fullLogin} locate -i ${search} | grep -v "/usr/"
+    sshpass -p ${password} ssh ${fullLogin} locate -i ${search} | grep -Ev "/usr/|/var/|/etc/|/lib/|/sbin/|/dev/|/rescue/|/sys/|/bin/|/libexec/|/net/|/root/|/boot/|/home/|/media/|/proc/"
     echo "Press Enter When Done."
     read isdone
 done
