@@ -41,7 +41,7 @@ elif [ $deployTarget -eq 1 ]
     then
     #only a jail in the actual server is to be targetted
     user="fritz"
-    targetIP="192.168.66.7"
+    targetIP="192.168.66.1"
 elif [ $deployTarget -eq 0 ]
     #no ssh target is targetted, create a test directory structure on local machine
     #TODO: add this functionality
@@ -64,7 +64,7 @@ if [[ -f "$passwordPath" ]]; then #check if the password file exists
     if [ ! $2 -z 1 ]
         then
         echo "Updating Database..."
-        sshpass -p $password ssh $fullLogin sudo /usr/libexec/locate.updatedb > /dev/null 2>&1
+        sshpass -S -p $password ssh $fullLogin sudo /usr/libexec/locate.updatedb #> /dev/null 2>&1
     fi
     echo "Done."
 else
