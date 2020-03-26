@@ -3,22 +3,22 @@ import subprocess
 
 #system("sudo updatedb")
 DDpath = subprocess.getstatusoutput("locate DD-Blocksize.sh")[1]
-speds = []
-sudo = True
+speeds = []
+sudo = True #for debug, default True
 print(DDpath)
 if sudo:
-	speds = subprocess.getstatusoutput("sudo " + DDpath)
+	speeds = subprocess.getstatusoutput("sudo " + DDpath)
 else:
-	speds = subprocess.getstatusoutput(DDpath)
-speds = speds[1]
+	speeds = subprocess.getstatusoutput(DDpath)
+speeds = speeds[1]
 sped2 = list([])
-for i in range(len(speds)):
+for i in range(len(speeds)):
 	if i in range(32):
 		continue
 	else:
-		print(str(speds[i]))
-		sped2 = sped2.extend(str(speds[i]))
+		print(str(speeds[i]))
+		sped2 = sped2.extend(str(speeds[i]))
 	#print(str(speds[i]))
 	#print(i)
-print(speds2)
-print(type(speds))
+print(sped2)
+print(type(speeds))
