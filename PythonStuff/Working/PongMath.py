@@ -1,5 +1,6 @@
 import random
 from time import sleep
+import GraphicsLib
 
 P1Y = 4
 P2Y = 4
@@ -22,6 +23,7 @@ downDirs  =  [6, 5, 4]
 # 6  5  4
 def drawPixel(x, y):
     #print("Dreweds X: " + str(x) + " Y: " + str(y))
+
     pass
 def clearPixel(x, y):
     #print("cleared X: " + str(x) + " Y: " + str(y))
