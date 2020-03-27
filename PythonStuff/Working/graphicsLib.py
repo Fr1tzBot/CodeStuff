@@ -23,11 +23,12 @@ window = None
 windowSurface = None
 windowSize = width, height = (0, 0)
 defaultBackground = r, g, b = (0, 0, 0)
+scaler = 1
 
 def refresh():
     pygame.display.flip()
 
-def setDefaultBackgound(color):
+def setDefaultBackground(color):
     global defaultBackground
     defaultBackground = color
 
@@ -43,6 +44,13 @@ def setSize(width, height):
     global windowSize
     windowSize = [width, height]
 
+def setScaler(multiplier):
+    global scaler
+    scaler = multiplier
+
+def getScaledWindow(originalWidth, originalHeight):
+    return ((scaler*originalWidth), (scaler*originalHeight))
+
 def start():
     global window
     global windowSurface
@@ -50,41 +58,22 @@ def start():
     windowSurface = pygame.Surface(windowSize)
     pygame.init()
 
+def isRunning():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+           return False
+        else:
+            return True
+
 def stop():
     refresh()
     pygame.display.quit()
     pygame.quit()
     exit()
-
-def clearPixel(x, y, debug):
-    global defaultBackground
-    global windowSize
-    global windowSurface
-    if x > windowSize[0]:
-        print("Fatal Error: clearPixel X Out of Range")
-        if debug:
-            exit()
-    if y > windowSize[1]:
-        print("Fatal Error: clearPixel Y Out of Range")
-    elif debug:
-        s = pygame.Surface((1,1))   # the object surface 1 x 1 pixel (a point!)
-        s.fill(defaultBackground)               # color as (r,g,b); e.g. (100,20,30)
-        # now get an object 'rectangle' from the object surface and place it at position x,y
-        r,r.x,r.y = s.get_rect(),x,y    
-        window.blit(s,r)
-        print("Successfully cleared pixel: " + str(x) + " , " + str(y))
-    elif not debug:
-        s = pygame.Surface((1,1))   # the object surface 1 x 1 pixel (a point!)
-        s.fill(defaultBackground)               # color as (r,g,b); e.g. (100,20,30)
-        # now get an object 'rectangle' from the object surface and place it at position x,y
-        r,r.x,r.y = s.get_rect(),x,y    
-        window.blit(s,r)
-    refresh()
-
+    
 def paintPixel(x, y, color, debug):
     global windowSize
     global windowSurface
-    
     if x > windowSize[0]:
         print("Fatal Error: drawPixel X Out of Range")
 
@@ -95,16 +84,19 @@ def paintPixel(x, y, color, debug):
         print("Fatal Error: drawPixel Y Out of Range")
 
     elif debug:
-        s = pygame.Surface((1,1))   # the object surface 1 x 1 pixel (a point!)
+        s = pygame.Surface((1*scaler,1*scaler))   # the object surface 1 x 1 pixel (a point!)
         s.fill(color)               # color as (r,g,b); e.g. (100,20,30)
         # now get an object 'rectangle' from the object surface and place it at position x,y
-        r,r.x,r.y = s.get_rect(),x,y    
+        r,r.x,r.y = s.get_rect(),x*scaler,y*scaler    
         window.blit(s,r)
         print("Successfully drew pixel: " + str(x) + " , " + str(y))
 
     elif not debug:
-        s = pygame.Surface((1,1))   # the object surface 1 x 1 pixel (a point!)
+        s = pygame.Surface((1*scaler,1*scaler))   # the object surface 1 x 1 pixel (a point!)
         s.fill(color)               # color as (r,g,b); e.g. (100,20,30)
         # now get an object 'rectangle' from the object surface and place it at position x,y
-        r,r.x,r.y = s.get_rect(),x,y    
+        r,r.x,r.y = s.get_rect(),x*scaler,y*scaler    
         window.blit(s,r)
+
+def clearPixel(x, y, debug):
+    paintPixel(x, y, defaultBackground, debug)
