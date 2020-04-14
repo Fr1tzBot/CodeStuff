@@ -9,7 +9,7 @@ echo $second_number
 read -p "enter operator" operator
 echo $operator
 operators=("+" "-" "*" "/")
-if [$operator in $operators]; then
+if [ $operator in $operators ]; then
 	echo "operator is gud"
 	exit
 else
