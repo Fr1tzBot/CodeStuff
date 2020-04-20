@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FileChange",
+            "request": "launch",
+            "mainClass": "FileChange",
+            "projectName": "CodeStuff_bf4fbc43"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ForLoop",
+            "request": "launch",
+            "mainClass": "ForLoop",
+            "projectName": "CodeStuff_bf4fbc43"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - calculator2",
+            "request": "launch",
+            "mainClass": "calculator2",
+            "projectName": "CodeStuff_c2a4ceb6"
+        }
+    ]
+}

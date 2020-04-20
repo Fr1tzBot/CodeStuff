@@ -1,0 +1,1 @@
+arrayName=("foo", "yeet", "yeetus")
