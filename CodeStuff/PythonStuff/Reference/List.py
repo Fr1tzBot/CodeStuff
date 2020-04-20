@@ -1,1 +1,0 @@
-arrayName=("foo", "yeet", "yeetus")
