@@ -5,7 +5,7 @@ Defining a variable
 What's Your Name Program
     (Bash, Python)
 Hello World
-    (Bash, Python)
+    (Bash, Python, C++)
 While Loop
     (Bash, Python)
 For loop
