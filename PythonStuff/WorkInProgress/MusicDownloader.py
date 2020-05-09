@@ -152,9 +152,14 @@ if userReview:
         print("")
 
     #Ask USer To Pick Best Video to Download
-    videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): ")) - 1
+    try:
+        videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): ")) - 1
+    except:
+        print("You Must Enter A Number")
+        exit()
     if videoChoice < 1 or videoChoice > len(searchList):
         print("Please Enter a number between 1 and " + str(len(searchList)))
+        exit()
     print("")
 
     #Download the Chosen Video
