@@ -51,7 +51,7 @@ def getYoutubeInfo(url):
 def YoutubeHandler(url):
     ydl_opts = {
         "extractaudio" : True,
-        "format": "bestaudio/best",
+        "format": "bestvideo/best",
         "noplaylist" : True
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
