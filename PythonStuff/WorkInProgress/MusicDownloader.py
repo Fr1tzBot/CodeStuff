@@ -3,9 +3,12 @@ import youtube_dl               #Used To Download Videos
 import urllib.request           #Used To Get Youtube Info
 import json                     #Used To Handle Youtube Info
 import urllib                   #Used To Get Youtube Info
-import os                       #Used For file detection
+import os                       #Used For file removing
 from pydub import AudioSegment  #Used For Audio Conversion
 import glob                     #Used For file detection
+import vlc                      #Used For Audio Preview
+from mutagen.mp3 import MP3     #Used For mp3 Handling
+from time import sleep          #USed For mp3 delays
 
 #Utility Functions
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
@@ -48,15 +51,18 @@ def getYoutubeInfo(url):
         response_text = response.read()
         data = json.loads(response_text.decode())
     return data
+
 def YoutubeHandler(url):
     ydl_opts = {
         "extractaudio" : True,
         "format": "mp4",
         "noplaylist" : True
     }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download(["https://" + url])
-
+    try:
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download(["https://" + url])
+    except:
+        YoutubeHandler(url)
 
 #Define Variables
 domainWhitelist = ("youtube.com")
@@ -182,5 +188,16 @@ if userReview:
     print("Removing File '" + str(fileName[0].replace("./", "")) + "'...")
     for i in fileName:
         os.remove(i)
+    print("")
+    if str(input("Would You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
+        #play the song
+        print("Now Playing " + str(convertedFilename).replace("./", "") + ".mp3")
+        p = vlc.MediaPlayer(str(convertedFilename) + ".mp3")
+        p.play()
+        audio = MP3(str(convertedFilename) + ".mp3")
+        sleep(float(audio.info.length))
+        print("Done.")
+        p.stop()
+
 else:
     pass
