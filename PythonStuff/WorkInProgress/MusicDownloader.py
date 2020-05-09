@@ -60,6 +60,7 @@ def YoutubeHandler(url):
         "format": "mp4",
         "noplaylist" : True
     }
+    #Fix the Occasional Failed Download by Calling the Function Again
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download(["https://" + url])
@@ -67,25 +68,27 @@ def YoutubeHandler(url):
         YoutubeHandler(url)
 
 #Define Variables
-domainWhitelist = ("youtube.com") #List of domains accepted when creating list
-videoChoice = int()               #User Choice Variable
-searchList = list()               #List to Be filled with acceptable urls without http prefixes
-siteList = list()                 #List to be filled with list of acceptable domain names
-httpList = list()                 #List to be filled with aacptable urls and their http prefixes
-deleteRest = bool()               #Single Use boolean
-userReview = bool()               #Boolean set based on User Input
-userReviewString = str()          #User Input variable
-fileName = list()                 #List to be filled with .mp4 files in the working directory
-convertedFilename = str()         #Name of the mp3 file converted from mp4
+domainWhitelist = ("youtube.com")     #List of domains accepted when creating list
+searchList = list()                   #List to Be filled with acceptable urls without http prefixes
+siteList = list()                     #List to be filled with list of acceptable domain names
+httpList = list()                     #List to be filled with acceptable urls and their http prefixes
+
+#Introduce the program
+print("Music Downloader v1.4")
+print("Last Updated 5/9/20\n")
 
 #Input Functions
 songName = str(input("What is the Title of the Song You Would Like To Download? "))
+
 if songName == None or songName == "":
-    songName = "Welcome To the Jungle"
+    print("You Must Enter A Title")
+    exit()
+
 artist = str(input("Who is the Artist of this Song? "))
-print("")
+
 if artist == None or artist == "":
-    artist = "Guns N Roses"
+    print("\nYou Must enter an artist")
+    exit()
 
 #Create Search Query
 query = (songName + " by " + artist + " Official Audio")
@@ -99,7 +102,7 @@ for i in search(query, tld="com", num=10, stop=10, pause=2):
 for i in httpList:
     searchList.append(i)
 
-#remove https and http at the beginning f adresses
+#remove https and http at the beginning f addresses
 for i in range(len(httpList)):
     searchList[i] = searchList[i].replace("https://www.", "")
     searchList[i] = searchList[i].replace("https://", "")
@@ -110,7 +113,8 @@ for i in range(len(httpList)):
 for i in searchList:
     siteList.append(i)
 
-#remove slashes and all following values from sitelist adresses
+#remove slashes and all following values from sitelist addresses
+deleteRest = False
 for i in range(len(siteList)):
     for j in range(len(siteList[i])):
         if siteList[i][j] == "/":
@@ -121,85 +125,94 @@ for i in range(len(siteList)):
     deleteRest = False
 
         
-#make adresses in the blacklist empty
+#Replace Addresses Not in the Whitelist with Empty Strings
 for i in range(len(siteList)):
     if siteList[i] not in domainWhitelist:
         siteList[i] = ""
         searchList[i] = ""
         httpList[i] = ""
 
-#remove empty values
+#Remove Empty Strings
 siteList = list(filter(None, siteList))
 searchList = list(filter(None, searchList))
 httpList = list(filter(None, httpList))
 
-#show user the quantity of results
-
+#Show User the Quantity of Results
+if len(searchList) == 0:
+    print("No Results Found.")
+    exit()
 if len(searchList) == 1:
     print(str(len(searchList)) + " Result Found")
 else:
-    print(str(len(searchList)) + " Results Found")
-print("")
+    print(str(len(searchList)) + " Results Found\n")
 
-#Removed Until I add automated Video Picking
-#ask the user if they would like to review the videos
-#userReviewString = input("Would You Like To Review These Videos Yourself? [Y/N] ")
-#print("")
-#if userReviewString.lower() == "y" or userReviewString.lower() == "yes":
-#    userReview = True
-#else:
-#    userReview = False
-userReview = True
+userReview = True #TODO Add Functionality to Automatically Pick Video
 
 if userReview:
-    #List all video info to user
+    #List Titles and Channels of all Found Videos
     for i in range(len(searchList)):
         print(str(i+1) + afterNumber(i+1) + " Video:")
         print(getYoutubeInfo(searchList[i])["title"])
-        print(getYoutubeInfo(searchList[i])["author_name"])
-        print("")
+        print(getYoutubeInfo(searchList[i])["author_name"] + "\n")
 
-    #Ask USer To Pick Best Video to Download
+    #Ask User To Pick Best Video to Download
     try:
         videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): ")) - 1
     except:
         print("You Must Enter A Number")
         exit()
+
+    #Error Protection
     if videoChoice < 0:
         print("Please Enter A Positive number")
         exit()
     if videoChoice > (len(searchList)-1):
         print("Please Enter a number between 1 and " + str(len(searchList)))
         exit()
-    print("")
 
-    #Download the Chosen Video
-    print("Now Downloading " + searchList[videoChoice])
+    #Download the Video the User Chooses
+    print("\nNow Downloading " + searchList[videoChoice] + "\nPlease Ignore Any Red Error Messages.")
+    print("These are a Known Bug with the youtube-dl Module and Have Been Dealt With In This Program.\n")
     YoutubeHandler(searchList[videoChoice])
 
-    #Search For .webm Files
+    #Search for .mp4 Files in the Current Directory
     fileName = glob.glob("./*.mp4")
 
-    #Convert Those Files to mp3
+    #Convert Those Files to .mp3
     print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
-    convertedFilename = fileName[0].replace(".mp4","")
+    convertedFilename = (fileName[0].replace(".mp4","") + ".mp3").replace("./", "")
     for i in fileName:
-        AudioSegment.from_file(str(i)).export((str(convertedFilename) + ".mp3"), format="mp3")
+        AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
 
     #Remove .webm files
-    print("Removing File '" + str(fileName[0].replace("./", "")) + "'...")
+    print("Removing File '" + str(convertedFilename) + "'...")
     for i in fileName:
         os.remove(i)
-    print("")
-    if str(input("Would You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
-        #play the song
-        print("Now Playing " + str(convertedFilename).replace("./", "") + ".mp3")
-        p = vlc.MediaPlayer(str(convertedFilename) + ".mp3")
-        p.play()
-        audio = MP3(str(convertedFilename) + ".mp3")
-        sleep(float(audio.info.length))
-        print("Done.")
-        p.stop()
 
+    #Ask User if They Would Like to Listen to the Downloaded Song
+    if str(input("\nWould You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
+
+        #Play the Song with VLC
+        print("Now Playing " + str(convertedFilename))
+        vlcSong = vlc.MediaPlayer(str(convertedFilename))
+        vlcSong.play()
+
+        #Load the mp3 file into a variable
+        mp3Audio = MP3(str(convertedFilename))
+
+        #Wait Until the Audio is Finished Playing
+        try:
+            sleep(float(mp3Audio.info.length))
+        except KeyboardInterrupt:
+            #Finish if the User Presses ctrl + c
+            vlcSong.stop()
+            print("\nDone.")
+            exit()
+        #Finish
+        vlcSong.stop()
+        print("Done.")
+        exit()
+    else:
+        print("Goodbye.")
 else:
     pass
