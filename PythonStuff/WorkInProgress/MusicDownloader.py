@@ -42,6 +42,7 @@ def afterNumber(i):
         return "th"
 
 #Define Youtube Functions
+#Function to Get a dictionary containing info about a video
 def getYoutubeInfo(url):
     params = {"format": "json", "url": "https://www." + str(url)}
     embedURL = "https://www.youtube.com/oembed"
@@ -52,6 +53,7 @@ def getYoutubeInfo(url):
         data = json.loads(response_text.decode())
     return data
 
+#Function to Download a Youtube Video
 def YoutubeHandler(url):
     ydl_opts = {
         "extractaudio" : True,
@@ -65,16 +67,16 @@ def YoutubeHandler(url):
         YoutubeHandler(url)
 
 #Define Variables
-domainWhitelist = ("youtube.com")
-videoChoice = int()
-searchList = list()
-siteList = list()
-httpList = list()
-deleteRest = bool()
-userReview = bool()
-userReviewString = str()
-fileName = list()
-convertedFilename = str()
+domainWhitelist = ("youtube.com") #List of domains accepted when creating list
+videoChoice = int()               #User Choice Variable
+searchList = list()               #List to Be filled with acceptable urls without http prefixes
+siteList = list()                 #List to be filled with list of acceptable domain names
+httpList = list()                 #List to be filled with aacptable urls and their http prefixes
+deleteRest = bool()               #Single Use boolean
+userReview = bool()               #Boolean set based on User Input
+userReviewString = str()          #User Input variable
+fileName = list()                 #List to be filled with .mp4 files in the working directory
+convertedFilename = str()         #Name of the mp3 file converted from mp4
 
 #Input Functions
 songName = str(input("What is the Title of the Song You Would Like To Download? "))
