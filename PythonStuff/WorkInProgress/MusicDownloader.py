@@ -1,11 +1,14 @@
-from googlesearch import search 
-from time import sleep
-import youtube_dl
-import urllib.request
-import json
-import urllib
+from googlesearch import search #Used For Google Searching
+import youtube_dl               #Used To Download Videos
+import urllib.request           #Used To Get Youtube Info
+import json                     #Used To Handle Youtube Info
+import urllib                   #Used To Get Youtube Info
+import os                       #Used For file detection
+from pydub import AudioSegment  #Used For Audio Conversion
+import glob                     #Used For file detection
 
-#utility Functions
+#Utility Functions
+#Function to get the two letters after a number (1st, 2nd, 3rd...)
 def afterNumber(i):
     stringI = str(i)
     if int(stringI[-1]) == 1:
@@ -35,7 +38,7 @@ def afterNumber(i):
     else:
         return "th"
 
-#define handler functions
+#Define Youtube Functions
 def getYoutubeInfo(url):
     params = {"format": "json", "url": "https://www." + str(url)}
     embedURL = "https://www.youtube.com/oembed"
@@ -47,14 +50,15 @@ def getYoutubeInfo(url):
     return data
 def YoutubeHandler(url):
     ydl_opts = {
-        'format': 'bestaudio/best',
-        'noplaylist' : True
+        "extractaudio" : True,
+        "format": "bestaudio/best",
+        "noplaylist" : True
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download(["https://" + url])
 
 
-#define variables
+#Define Variables
 domainWhitelist = ("youtube.com")
 videoChoice = int()
 searchList = list()
@@ -63,8 +67,10 @@ httpList = list()
 deleteRest = bool()
 userReview = bool()
 userReviewString = str()
+fileName = list()
+convertedFilename = str()
 
-#input Functions
+#Input Functions
 songName = str(input("What is the Title of the Song You Would Like To Search For? "))
 if songName == None or songName == "":
     songName = "Welcome To the Jungle"
@@ -73,15 +79,15 @@ print("")
 if artist == None or artist == "":
     artist = "Guns N Roses"
 
-#create search query
+#Create Search Query
 query = (songName + " by " + artist + " Official Audio")
 print("Now Searching For: " + query)
 
-#make searchlist from search function
+#Perform Google Search
 for i in search(query, tld="com", num=10, stop=10, pause=2):
     httpList.append(i)
 
-#add all items of the httpList to the searchlist
+#Add all items of the httpList to the searchlist
 for i in httpList:
     searchList.append(i)
 
@@ -127,25 +133,44 @@ else:
     print(str(len(searchList)) + " Results Found")
 print("")
 
-
+#Removed Until I add automated Video Picking
 #ask the user if they would like to review the videos
-userReviewString = input("Would You Like To Review These Videos Yourself? [Y/N] ")
-print("")
-if userReviewString.lower() == "y" or userReviewString.lower() == "yes":
-    userReview = True
-else:
-    userReview = False
+#userReviewString = input("Would You Like To Review These Videos Yourself? [Y/N] ")
+#print("")
+#if userReviewString.lower() == "y" or userReviewString.lower() == "yes":
+#    userReview = True
+#else:
+#    userReview = False
+userReview = True
 
 if userReview:
+    #List all video info to user
     for i in range(len(searchList)):
-        print("The " + str(i+1) + afterNumber(i+1) + " Video is Called: " + getYoutubeInfo(searchList[i])["title"])
-        sleep(1)
-        print("On The YouTube Channel: " + getYoutubeInfo(searchList[i])["author_name"])
-        sleep(1)
+        print(str(i+1) + afterNumber(i+1) + " Video:")
+        print(getYoutubeInfo(searchList[i])["title"])
+        print(getYoutubeInfo(searchList[i])["author_name"])
         print("")
-    videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): "))
+
+    #Ask USer To Pick Best Video to Download
+    videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): "))-1
+    print("")
+
+    #Download the Chosen Video
     print("Now Downloading " + searchList[videoChoice])
-    sleep(5)
     YoutubeHandler(searchList[videoChoice])
+
+    #Search For .webm Files
+    fileName = glob.glob("./*.webm")
+
+    #Convert Those Files to mp3
+    print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3")
+    convertedFilename = fileName[0].replace(".webm","")
+    for i in fileName:
+        AudioSegment.from_file(str(i)).export((str(convertedFilename) + ".mp3"), format="mp3")
+
+    #Remove .webm files
+    print("Removing File '" + str(fileName[0].replace("./", "")) + "'")
+    for i in fileName:
+        os.remove(i)
 else:
     pass
