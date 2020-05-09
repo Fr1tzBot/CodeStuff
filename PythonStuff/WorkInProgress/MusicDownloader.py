@@ -77,7 +77,7 @@ fileName = list()
 convertedFilename = str()
 
 #Input Functions
-songName = str(input("What is the Title of the Song You Would Like To Search For? "))
+songName = str(input("What is the Title of the Song You Would Like To Download? "))
 if songName == None or songName == "":
     songName = "Welcome To the Jungle"
 artist = str(input("Who is the Artist of this Song? "))
