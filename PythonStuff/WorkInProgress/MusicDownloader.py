@@ -51,7 +51,7 @@ def getYoutubeInfo(url):
 def YoutubeHandler(url):
     ydl_opts = {
         "extractaudio" : True,
-        "format": "bestvideo/best",
+        "format": "mp4",
         "noplaylist" : True
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -157,7 +157,10 @@ if userReview:
     except:
         print("You Must Enter A Number")
         exit()
-    if videoChoice < 1 or videoChoice > len(searchList):
+    if videoChoice < 0:
+        print("Please Enter A Positive number")
+        exit()
+    if videoChoice > (len(searchList)-1):
         print("Please Enter a number between 1 and " + str(len(searchList)))
         exit()
     print("")
@@ -167,16 +170,16 @@ if userReview:
     YoutubeHandler(searchList[videoChoice])
 
     #Search For .webm Files
-    fileName = glob.glob("./*.webm")
+    fileName = glob.glob("./*.mp4")
 
     #Convert Those Files to mp3
-    print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3")
-    convertedFilename = fileName[0].replace(".webm","")
+    print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
+    convertedFilename = fileName[0].replace(".mp4","")
     for i in fileName:
         AudioSegment.from_file(str(i)).export((str(convertedFilename) + ".mp3"), format="mp3")
 
     #Remove .webm files
-    print("Removing File '" + str(fileName[0].replace("./", "")) + "'")
+    print("Removing File '" + str(fileName[0].replace("./", "")) + "'...")
     for i in fileName:
         os.remove(i)
 else:
