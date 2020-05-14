@@ -7,4 +7,4 @@ pip3 install urllib3
 pip3 install pydub
 pip3 install glob3
 pip3 install python-vlc
-pip install mutagen
+pip3 install mutagen
