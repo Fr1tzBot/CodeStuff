@@ -44,14 +44,23 @@ def afterNumber(i):
 #Define Youtube Functions
 #Function to Get a dictionary containing info about a video
 def getYoutubeInfo(url):
-    params = {"format": "json", "url": "https://www." + str(url)}
-    embedURL = "https://www.youtube.com/oembed"
-    query_string = urllib.parse.urlencode(params)
-    embedURL = embedURL + "?" + query_string
-    with urllib.request.urlopen(embedURL) as response:
-        response_text = response.read()
-        data = json.loads(response_text.decode())
-    return data
+    global failOver
+    try:
+        params = {"format": "json", "url": "https://www." + str(url)}
+        embedURL = "https://www.youtube.com/oembed"
+        query_string = urllib.parse.urlencode(params)
+        embedURL = embedURL + "?" + query_string
+        with urllib.request.urlopen(embedURL) as response:
+            response_text = response.read()
+            data = json.loads(response_text.decode())
+        return data
+    except:
+        failOver += 1
+        if failOver >= 15:
+            print("Fatal Error: The Info Script Has Thrown Too Many Errors.")
+            raise
+            exit()
+        getYoutubeInfo(url)
 
 #Function to Download a Youtube Video
 def YoutubeHandler(url):
@@ -72,6 +81,7 @@ domainWhitelist = ("youtube.com")     #List of domains accepted when creating li
 searchList = list()                   #List to Be filled with acceptable urls without http prefixes
 siteList = list()                     #List to be filled with list of acceptable domain names
 httpList = list()                     #List to be filled with acceptable urls and their http prefixes
+failOver = 0                          #Fail Protection int
 
 #Introduce the program
 print("Music Downloader v1.4")
