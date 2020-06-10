@@ -56,7 +56,7 @@ def getYoutubeInfo(url):
         return data
     except:
         failOver += 1
-        if failOver >= 15:
+        if failOver >= 5:
             print("Fatal Error: The Info Script Has Thrown Too Many Errors.")
             raise
             exit()
