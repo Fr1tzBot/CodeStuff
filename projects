@@ -28,7 +28,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=0;Arduino;0;EUTF-8;1;1;0;%2Fhome%2Ffritz%2FDownloads%2Foscilloscope.ino;0;4
+FILE_NAME_0=0;Arduino;0;EUTF-8;1;1;0;%2Frun%2Fuser%2F1000%2Fgvfs%2Fsftp%3Ahost%3D192.168.66.1%2FStorage%2FFilez%2FDocuments%2Foscilloscope.ino;0;4
 
 [VTE]
 last_dir=/home/fritz
