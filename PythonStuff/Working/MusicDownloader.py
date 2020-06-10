@@ -45,6 +45,7 @@ def afterNumber(i):
 #Function to Get a dictionary containing info about a video
 def getYoutubeInfo(url):
     global failOver
+    global notFoundDict
     try:
         params = {"format": "json", "url": "https://www." + str(url)}
         embedURL = "https://www.youtube.com/oembed"
@@ -57,13 +58,12 @@ def getYoutubeInfo(url):
     except:
         failOver += 1
         if failOver >= 5:
-            print("Fatal Error: The Info Script Has Thrown Too Many Errors.")
-            raise
-            exit()
+            return dict(notFoundDict)
         getYoutubeInfo(url)
 
 #Function to Download a Youtube Video
 def YoutubeHandler(url):
+    global failOver
     ydl_opts = {
         "extractaudio" : True,
         "format": "mp4",
@@ -74,6 +74,16 @@ def YoutubeHandler(url):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download(["https://" + url])
     except:
+        failOver += 1
+        if failOver == 3:
+            print("youtube-dl has failed 3 times")
+            #Recommend updating youtube-dl
+            print("Suggest running sudo pip install -U youtube-dl")
+        if failOver >= 5:
+            print("Fatal Error: Youtube-dl Has Thrown Too Many Errors.")
+            if input("Would You like to see the errors?").lower() in ("y", "yes"):
+                raise
+            exit()
         YoutubeHandler(url)
 
 #Define Variables
@@ -82,10 +92,11 @@ searchList = list()                   #List to Be filled with acceptable urls wi
 siteList = list()                     #List to be filled with list of acceptable domain names
 httpList = list()                     #List to be filled with acceptable urls and their http prefixes
 failOver = 0                          #Fail Protection int
+notFoundDict = {"title": "Title Not Found", "author_name": "Author Not Found"}
 
 #Introduce the program
-print("Music Downloader v1.4")
-print("Last Updated 5/9/20\n")
+print("Music Downloader v1.5")
+print("Last Updated 6/10/20\n")
 
 #Input Functions
 songName = str(input("What is the Title of the Song You Would Like To Download? "))
@@ -181,8 +192,8 @@ if userReview:
         exit()
 
     #Download the Video the User Chooses
-    print("\nNow Downloading " + searchList[videoChoice] + "\nPlease Ignore Any Red Error Messages.")
-    print("These are a Known Bug with the youtube-dl Module and Have Been Dealt With In This Program.\n")
+    #print("\nNow Downloading " + searchList[videoChoice] + "\nPlease Ignore Any Red Error Messages.")
+    #print("These are a Known Bug with the youtube-dl Module and Have Been Dealt With In This Program.\n")
     YoutubeHandler(searchList[videoChoice])
 
     #Search for .mp4 Files in the Current Directory
