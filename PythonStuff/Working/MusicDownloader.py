@@ -8,7 +8,8 @@ from pydub import AudioSegment  #Used For Audio Conversion
 import glob                     #Used For file detection
 import vlc                      #Used For Audio Preview
 from mutagen.mp3 import MP3     #Used For mp3 Handling
-from time import sleep          #USed For mp3 delays
+from time import sleep          #Used For mp3 delays
+import getpass                  #Used To Detect the User
 
 #Utility Functions
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
@@ -215,8 +216,9 @@ if userReview:
 
     #Move mp3 files to the music directory
     for i in fileName:
-        os.rename(str(i), ("/home/fritz/Music/" + convertedFilename))
-        convertedFilename = "/home/fritz/Music/" + convertedFilename
+        getpass.getuser()
+        os.rename(str(i), ("/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename))
+        convertedFilename = "/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename
 
     #Ask User if They Would Like to Listen to the Downloaded Song
     if str(input("\nWould You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
