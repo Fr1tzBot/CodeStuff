@@ -6,62 +6,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - List",
-            "request": "launch",
-            "mainClass": "List",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - ElseIf",
-            "request": "launch",
-            "mainClass": "ElseIf",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - IfStatement",
-            "request": "launch",
-            "mainClass": "IfStatement",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - WhileLoop",
-            "request": "launch",
-            "mainClass": "WhileLoop",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - WhatsYourName",
-            "request": "launch",
-            "mainClass": "WhatsYourName",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - FileChange",
-            "request": "launch",
-            "mainClass": "FileChange",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - ForLoop",
-            "request": "launch",
-            "mainClass": "ForLoop",
-            "projectName": "CodeStuff_bf4fbc43"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - calculator2",
-            "request": "launch",
-            "mainClass": "calculator2",
-            "projectName": "CodeStuff_c2a4ceb6"
         }
     ]
 }
