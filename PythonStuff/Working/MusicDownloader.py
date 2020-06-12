@@ -56,10 +56,10 @@ def getYoutubeInfo(url):
             data = json.loads(response_text.decode())
         return data
     except:
-        failOver += 1
-        if failOver >= 5:
-            return dict(notFoundDict)
-        getYoutubeInfo(url)
+        #failOver += 1
+        #if failOver >= 5:
+        return dict(notFoundDict)
+        #getYoutubeInfo(url)
 
 #Function to Download a Youtube Video
 def YoutubeHandler(url):
@@ -173,8 +173,8 @@ if userReview:
     #List Titles and Channels of all Found Videos
     for i in range(len(searchList)):
         print(str(i+1) + afterNumber(i+1) + " Video:")
-        print(getYoutubeInfo(searchList[i])["title"])
-        print(getYoutubeInfo(searchList[i])["author_name"] + "\n")
+        print(getYoutubeInfo(searchList[i])['title'])
+        print(getYoutubeInfo(searchList[i])['author_name'] + '\n')
 
     #Ask User To Pick Best Video to Download
     try:
