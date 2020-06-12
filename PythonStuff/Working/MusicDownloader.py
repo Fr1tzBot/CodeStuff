@@ -95,8 +95,8 @@ failOver = 0                          #Fail Protection int
 notFoundDict = {"title": "Title Not Found", "author_name": "Author Not Found"}
 
 #Introduce the program
-print("Music Downloader v1.5")
-print("Last Updated 6/10/20\n")
+print("Music Downloader v1.6")
+print("Last Updated 6/11/20\n")
 
 #Input Functions
 songName = str(input("What is the Title of the Song You Would Like To Download? "))
@@ -192,8 +192,6 @@ if userReview:
         exit()
 
     #Download the Video the User Chooses
-    #print("\nNow Downloading " + searchList[videoChoice] + "\nPlease Ignore Any Red Error Messages.")
-    #print("These are a Known Bug with the youtube-dl Module and Have Been Dealt With In This Program.\n")
     YoutubeHandler(searchList[videoChoice])
 
     #Search for .mp4 Files in the Current Directory
@@ -202,13 +200,23 @@ if userReview:
     #Convert Those Files to .mp3
     print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
     convertedFilename = (fileName[0].replace(".mp4","") + ".mp3").replace("./", "")
+    #convertedFilename = "~/Music/'" + convertedFilename + "'"
     for i in fileName:
+        #print(str(i))
         AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
 
     #Remove .webm files
     print("Removing File '" + str(convertedFilename) + "'...")
     for i in fileName:
         os.remove(i)
+
+    #Search for .mp3 Files in the Current Directory
+    fileName = glob.glob("./*.mp3")
+
+    #Move mp3 files to the music directory
+    for i in fileName:
+        os.rename(str(i), ("/home/fritz/Music/" + convertedFilename))
+        convertedFilename = "/home/fritz/Music/" + convertedFilename
 
     #Ask User if They Would Like to Listen to the Downloaded Song
     if str(input("\nWould You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
