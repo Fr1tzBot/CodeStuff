@@ -1,5 +1,5 @@
 # CodeStuff
-A repository with code-related things
+A repository with various code stuff and things
 
 This is just a random assortment of code, so one file probably won't correspond to another.
 
