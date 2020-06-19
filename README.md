@@ -1,2 +1,9 @@
 # CodeStuff
-A repo with code-related things
+A repository with code-related things
+
+This is just a random assortment of code, so you can't build all of it
+
+I don't recommend using any of this code for anything other than messing around
+
+Also, feel free to recommend fixes to the code, but I only work on this in my free time,
+so I probably won't see it for a while.
