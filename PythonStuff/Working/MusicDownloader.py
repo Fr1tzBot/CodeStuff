@@ -29,7 +29,7 @@ def playMp3(mp3Name):
     except KeyboardInterrupt:
         #Finish if the User Presses ctrl + c
         vlcSong.stop()
-        print("\nDone.")
+        print("\nGoodbye.")
         exit()
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
 def afterNumber(i):
