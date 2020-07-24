@@ -1,17 +1,36 @@
-from googlesearch import search #Used For Google Searching
-import youtube_dl               #Used To Download Videos
-import urllib.request           #Used To Get Youtube Info
-import json                     #Used To Handle Youtube Info
-import urllib                   #Used To Get Youtube Info
-import os                       #Used For file removing
-from pydub import AudioSegment  #Used For Audio Conversion
-import glob                     #Used For file detection
-import vlc                      #Used For Audio Preview
-from mutagen.mp3 import MP3     #Used For mp3 Handling
-from time import sleep          #Used For mp3 delays
-import getpass                  #Used To Detect the User
+from googlesearch import search #Used For Google Searching   #pip install google-search
+import youtube_dl               #Used To Download Videos     #pip install youtube_dl
+import urllib.request           #Used To Get Youtube Info    #pip install urllib3
+import json                     #Used To Handle Youtube Info #pip install jsonlib
+import urllib                   #Used To Get Youtube Info    #pip install urllib3
+import os                       #Used For file removing      #No Pip
+from pydub import AudioSegment  #Used For Audio Conversion   #pip install pydub
+import glob                     #Used For file detection     #pip install glob3
+import vlc                      #Used For Audio Preview      #pip install python-vlc
+from mutagen.mp3 import MP3     #Used For mp3 Handling       #pip install mutagen
+from time import sleep          #Used For mp3 delays         #No Pip
+import getpass                  #Used To Detect the User     #pip install micropython-getpass
+import musicbrainzngs           #Used to get Music Metadata #pip install musicbrainzngs
 
 #Utility Functions
+#Function to plan an mp3 with vlc media player
+def playMp3(mp3Name):
+    #Play the Song with VLC
+    print("Now Playing " + str(mp3Name))
+    vlcSong = vlc.MediaPlayer(str(mp3Name))
+    vlcSong.play()
+
+    #Load the mp3 file into a variable
+    mp3Audio = MP3(str(mp3Name))
+
+    #Wait Until the Audio is Finished Playing
+    try:
+        sleep(float(mp3Audio.info.length))
+    except KeyboardInterrupt:
+        #Finish if the User Presses ctrl + c
+        vlcSong.stop()
+        print("\nDone.")
+        exit()
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
 def afterNumber(i):
     stringI = str(i)
@@ -68,6 +87,7 @@ def YoutubeHandler(url):
     ydl_opts = {
         "extractaudio" : True,
         "format": "mp4",
+        'quiet': True,
         "noplaylist" : True
     }
     #Fix the Occasional Failed Download by Calling the Function Again
@@ -82,7 +102,7 @@ def YoutubeHandler(url):
             print("Suggest running sudo pip install -U youtube-dl")
         if failOver >= 5:
             print("Fatal Error: Youtube-dl Has Thrown Too Many Errors.")
-            if input("Would You like to see the errors?").lower() in ("y", "yes"):
+            if input("Would You like to see the errors? \n> ").lower() in ("y", "yes"):
                 raise
             exit()
         YoutubeHandler(url)
@@ -96,19 +116,22 @@ failOver = 0                          #Fail Protection int
 notFoundDict = {"title": "Title Not Found", "author_name": "Author Not Found"}
 
 #Introduce the program
-print("Music Downloader v1.6")
-print("Last Updated 6/11/20\n")
+print("Music Downloader v1.7")
+print("Last Updated 7/24/20\n")
 
-#Input Functions
-songName = str(input("What is the Title of the Song You Would Like To Download? "))
+#Input Function For Song Title
+songName = str(input("What is the Title of the Song You Would Like To Download? \n> "))
 
-if songName == None or songName == "":
-    print("You Must Enter A Title")
+#Require That Some Input is Given
+if songName == "":
+    print("\nYou Must Enter A Title")
     exit()
 
-artist = str(input("Who is the Artist of this Song? "))
+#Input Function For Song Artist
+artist = str(input("Who is the Artist of this Song? \n> "))
 
-if artist == None or artist == "":
+#Require That Some Input is Given
+if artist == "":
     print("\nYou Must enter an artist")
     exit()
 
@@ -124,14 +147,14 @@ for i in search(query, tld="com", num=10, stop=10, pause=2):
 for i in httpList:
     searchList.append(i)
 
-#remove https and http at the beginning f addresses
+#Remove https and http at the beginning f addresses
 for i in range(len(httpList)):
     searchList[i] = searchList[i].replace("https://www.", "")
     searchList[i] = searchList[i].replace("https://", "")
     searchList[i] = searchList[i].replace("http://www.", "")
     searchList[i] = searchList[i].replace("http://", "")
 
-#add all items of the httpless searchlist to sitelist
+#Add all items of the httpless searchlist to sitelist
 for i in searchList:
     siteList.append(i)
 
@@ -179,7 +202,7 @@ if userReview:
 
     #Ask User To Pick Best Video to Download
     try:
-        videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): ")) - 1
+        videoChoice = int(input("Which Number Would You Like? (1-" + str(len(searchList)) + "): \n> ")) - 1
     except:
         print("You Must Enter A Number")
         exit()
@@ -197,17 +220,19 @@ if userReview:
 
     #Search for .mp4 Files in the Current Directory
     fileName = glob.glob("./*.mp4")
+    if len(fileName) > 1:
+        print("Please Run This Program In a Directory Without mp3, mp4, or webm files, as they may break it.")
+        print("(AKA i'm too lazy to figure out the filename format youtube-dl uses)")
+        exit()
 
     #Convert Those Files to .mp3
     print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
     convertedFilename = (fileName[0].replace(".mp4","") + ".mp3").replace("./", "")
-    #convertedFilename = "~/Music/'" + convertedFilename + "'"
     for i in fileName:
-        #print(str(i))
         AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
 
     #Remove .webm files
-    print("Removing File '" + str(convertedFilename) + "'...")
+    #print("Removing File '" + str(convertedFilename) + "'...")
     for i in fileName:
         os.remove(i)
 
@@ -219,31 +244,11 @@ if userReview:
         getpass.getuser()
         os.rename(str(i), ("/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename))
         convertedFilename = "/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename
+    print("\nThe File Has Been Placed in Your Music Folder.")
 
     #Ask User if They Would Like to Listen to the Downloaded Song
-    if str(input("\nWould You Like to Preview This Song? [Y/N] ")).lower() in ["y", "yes"]:
-
-        #Play the Song with VLC
-        print("Now Playing " + str(convertedFilename))
-        vlcSong = vlc.MediaPlayer(str(convertedFilename))
-        vlcSong.play()
-
-        #Load the mp3 file into a variable
-        mp3Audio = MP3(str(convertedFilename))
-
-        #Wait Until the Audio is Finished Playing
-        try:
-            sleep(float(mp3Audio.info.length))
-        except KeyboardInterrupt:
-            #Finish if the User Presses ctrl + c
-            vlcSong.stop()
-            print("\nDone.")
-            exit()
-        #Finish
-        vlcSong.stop()
-        print("Done.")
-        exit()
+    if str(input("\nWould You Like to Preview This Song? [Y/N] \n> ")).lower() in ["y", "yes"]:
+        playMp3(convertedFilename)
+        print("Goodbye.")
     else:
         print("Goodbye.")
-else:
-    pass
