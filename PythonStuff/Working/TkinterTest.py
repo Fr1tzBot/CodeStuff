@@ -1,11 +1,10 @@
-from tkinter import *
+import tkinter
 
-window = Tk()
+stuff = ("uno", "dos", "tres")
 
-window.title("MusicDownloader")
+root = tkinter.Tk()
 
-window.geometry('')
-window.bind('<Return>', exit)
+root.title("MusicDownloader")
 
 def readAll():
     title.value = title.entry.get()
@@ -14,16 +13,16 @@ def readAll():
 class intro:
     row = 0
     version = 1.7
-    label = Label(window, text="Music Downloader Version " + str(version))
+    label = tkinter.Label(root, text="Music Downloader Version " + str(version))
 intro.label.grid(column=0, row=intro.row)
-blank = Label(window, text="")
+blank = tkinter.Label(root, text="")
 blank.grid(column=0, row = intro.row+1)
 
 class title:
     value = ""
     row = 2
-    label = Label(window, text="Title:")
-    entry = Entry(window,width=30)
+    label = tkinter.Label(root, text="Title:")
+    entry = tkinter.Entry(root,width=30)
 
 title.label.grid(column=0, row=title.row)
 title.entry.grid(column=0, row=title.row+1)
@@ -31,16 +30,26 @@ title.entry.grid(column=0, row=title.row+1)
 class artist:
     value = ""
     row = 4
-    label = Label(window, text="Artist:")
-    entry = Entry(window, width = 30)
+    label = tkinter.Label(root, text="Artist:")
+    entry = tkinter.Entry(root, width = 30)
 
 artist.label.grid(column=0, row=artist.row)
 artist.entry.grid(column=0, row=artist.row+1)
 
-blank = Label(window, text="")
+blank = tkinter.Label(root, text="")
 blank.grid(column=0, row=artist.row+3)
 
-nextButton = Button(window, text="Next", command=readAll)
-nextButton.grid(column=0, row=artist.row+4, sticky=SE)
+nextButton = tkinter.Button(root, text="Enter", command=readAll)
+nextButton.grid(column=0, row=artist.row+4)
 
-window.mainloop()
+class radioButtons:
+    row = 9
+    radio1 = tkinter.Radiobutton(root,text=stuff[0], value=1)
+    radio2 = tkinter.Radiobutton(root,text=stuff[1], value=2)
+    radio3 = tkinter.Radiobutton(root,text=stuff[2], value=3)
+
+radioButtons.radio1.grid(column=0, row=radioButtons.row)
+radioButtons.radio2.grid(column=0, row=radioButtons.row+1)
+radioButtons.radio3.grid(column=0, row=radioButtons.row+2)
+
+root.mainloop()
