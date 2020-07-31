@@ -1,18 +1,41 @@
-from googlesearch import search #Used For Google Searching   #pip install google-search
-import youtube_dl               #Used To Download Videos     #pip install youtube_dl
-import urllib.request           #Used To Get Youtube Info    #pip install urllib3
-import json                     #Used To Handle Youtube Info #pip install jsonlib
-import urllib                   #Used To Get Youtube Info    #pip install urllib3
 import os                       #Used For file removing      #No Pip
+from time import sleep          #Used For mp3 delays         #No Pip
+import sys                      #Used for Arguments          #No Pip
+import subprocess               #Used for Install            #No Pip
+from googlesearch import search #Used For Google Searching   #pip install beautifulsoup4, pip install google
+import youtube_dl               #Used To Download Videos     #pip install youtube_dl
+import urllib, urllib.request   #Used To Get Youtube Info    #pip install urllib3
+import json                     #Used To Handle Youtube Info #pip install jsonlib
 from pydub import AudioSegment  #Used For Audio Conversion   #pip install pydub
 import glob                     #Used For file detection     #pip install glob3
 import vlc                      #Used For Audio Preview      #pip install python-vlc
 from mutagen.mp3 import MP3     #Used For mp3 Handling       #pip install mutagen
-from time import sleep          #Used For mp3 delays         #No Pip
 import getpass                  #Used To Detect the User     #pip install micropython-getpass
-import musicbrainzngs           #Used to get Music Metadata #pip install musicbrainzngs
+import musicbrainzngs           #Used to get Music Metadata  #pip install musicbrainzngs
 
 #Utility Functions
+#Function to Install a single pip module
+def pip(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+#Function to install all necessary pip packages
+def install():
+    pip("beautifulsoup4")
+    pip("google")
+    pip("youtube_dl")
+    pip("urllib3")
+    pip("jsonlib")
+    pip("pydub")
+    pip("glob3")
+    pip("python-vlc")
+    pip("mutagen")
+    pip("micropython-getpass")
+    pip("musicbrainzngs")
+#Function to check if user is Root
+def isRoot():
+    if os.geteuid()==0:
+        return True
+    else:
+        return False
 #Function to plan an mp3 with vlc media player
 def playMp3(mp3Name):
     #Play the Song with VLC
@@ -99,13 +122,21 @@ def YoutubeHandler(url):
         if failOver == 3:
             print("youtube-dl has failed 3 times")
             #Recommend updating youtube-dl
-            print("Suggest running sudo pip install -U youtube-dl")
+            print("Suggest running pip install -U youtube-dl")
         if failOver >= 5:
             print("Fatal Error: Youtube-dl Has Thrown Too Many Errors.")
             if input("Would You like to see the errors? \n> ").lower() in ("y", "yes"):
                 raise
             exit()
         YoutubeHandler(url)
+if len(sys.argv) > 1:
+    if sys.argv[1].lower() in ["install"]:
+        if isRoot():
+            install()
+            exit()
+        else:
+            print("You Need To Run This Program as Root in order to Install the necessary pip packages.")
+            exit() 
 
 #Define Variables
 domainWhitelist = ("youtube.com")     #List of domains accepted when creating list
