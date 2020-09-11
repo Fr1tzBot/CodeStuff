@@ -7,9 +7,11 @@ from googlesearch import search #Used For Google Searching   #pip install google
 import youtube_dl               #Used To Download Videos     #pip install youtube_dl
 import urllib, urllib.request   #Used To Get Youtube Info    #pip install urllib3
 import json                     #Used To Handle Youtube Info #pip install jsonlib
-from pydub import AudioSegment  #Used For Audio Conversion   #pip install pydub
+#from pydub import AudioSegment  #Used For Audio Conversion   #pip install pydub
+from moviepy.editor import VideoFileClip
 import glob                     #Used For file detection     #pip install glob3
-import vlc                      #Used For Audio Preview      #pip install python-vlc
+#import vlc                      #Used For Audio Preview      #pip install python-vlc
+from pygame import mixer        #Used For Audio Preview
 from mutagen.mp3 import MP3     #Used For mp3 Handling       #pip install mutagen
 import getpass                  #Used To Detect the User     #pip install micropython-getpass
 #import musicbrainzngs           #Used to get Music Metadata  #pip install musicbrainzngs      #Not in use Right now
@@ -22,20 +24,18 @@ def isRoot():
         return False
 #Function to plan an mp3 with vlc media player
 def playMp3(mp3Name):
-    #Play the Song with VLC
-    print("Now Playing " + str(mp3Name))
-    vlcSong = vlc.MediaPlayer(str(mp3Name))
-    vlcSong.play()
-
-    #Load the mp3 file into a variable
-    mp3Audio = MP3(str(mp3Name))
+    mixer.init()
+    mixer.music.load(mp3Name)
+    
 
     #Wait Until the Audio is Finished Playing
     try:
-        sleep(float(mp3Audio.info.length))
+        #sleep(float(mp3Audio.info.length))
+        mixer.music.play()
     except KeyboardInterrupt:
         #Finish if the User Presses ctrl + c
-        vlcSong.stop()
+        
+        #vlcSong.stop()
         print("\nGoodbye.")
         exit()
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
@@ -236,7 +236,10 @@ if userReview:
     print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
     convertedFilename = (fileName[0].replace(".mp4","") + ".mp3").replace("./", "")
     for i in fileName:
-        AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
+        video = VideoFileClip(i)
+        video.audio.write_audiofile(convertedFilename)
+        video.close()
+        # AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
 
     #Remove .webm files
     #print("Removing File '" + str(convertedFilename) + "'...")
