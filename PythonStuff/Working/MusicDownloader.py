@@ -26,7 +26,6 @@ def playMp3(mp3Name):
     try:
         playsound(mp3Name) 
     except KeyboardInterrupt:
-        raise
         #Finish if the User Presses ctrl + c
         print("\nGoodbye.")
         exit()
