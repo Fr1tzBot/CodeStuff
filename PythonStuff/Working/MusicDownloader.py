@@ -1,16 +1,16 @@
-import os                       #Used For file removing      #No Pip
-import sys                      #Used for Arguments          #No Pip
-import subprocess               #Used for Install            #No Pip
-import shutil                   #Used for moving files       #pip install pytest-shutil
-from googlesearch import search #Used For Google Searching   #pip install google
-import youtube_dl               #Used To Download Videos     #pip install youtube_dl
-import urllib, urllib.request   #Used To Get Youtube Info    #pip install urllib3
-import json                     #Used To Handle Youtube Info #pip install jsonlib
-from moviepy.editor import VideoFileClip #used for mp4 to mp3#pip install moviepy
-import glob                     #Used For file detection     #pip install glob3
-from playsound import playsound #Used for audio Preview      #pip install playsound
-from mutagen.mp3 import MP3     #Used For mp3 Handling       #pip install mutagen
-import getpass                  #Used To Detect the User     #pip install micropython-getpass
+import os                                #Used For file removing      #No Pip
+import sys                               #Used for Arguments          #No Pip
+import subprocess                        #Used for Install            #No Pip
+import shutil                            #Used for moving files       #pip install pytest-shutil
+from googlesearch import search          #Used For Google Searching   #pip install google
+import youtube_dl                        #Used To Download Videos     #pip install youtube_dl
+import urllib, urllib.request            #Used To Get Youtube Info    #pip install urllib3
+import json                              #Used To Handle Youtube Info #pip install jsonlib
+from moviepy.editor import VideoFileClip #used for mp4 to mp3         #pip install moviepy
+import glob                              #Used For file detection     #pip install glob3
+from playsound import playsound          #Used for audio Preview      #pip install playsound
+from mutagen.mp3 import MP3              #Used For mp3 Handling       #pip install mutagen
+import getpass                           #Used To Detect the User     #pip install micropython-getpass
 
 #Utility Functions
 #Function to check if windows
@@ -19,10 +19,7 @@ def windows():
     
 #Function to check if user is Root
 def isRoot():
-    if os.geteuid()==0:
-        return True
-    else:
-        return False
+    return os.getuid() == 0
 #Function to plan an mp3
 def playMp3(mp3Name):
     audio = MP3(mp3Name)
