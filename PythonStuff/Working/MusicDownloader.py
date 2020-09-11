@@ -1,5 +1,4 @@
 import os                       #Used For file removing      #No Pip
-from time import sleep          #Used For mp3 delays         #No Pip
 import sys                      #Used for Arguments          #No Pip
 import subprocess               #Used for Install            #No Pip
 import shutil                   #Used for moving files       #pip install pytest-shutil
@@ -7,35 +6,31 @@ from googlesearch import search #Used For Google Searching   #pip install google
 import youtube_dl               #Used To Download Videos     #pip install youtube_dl
 import urllib, urllib.request   #Used To Get Youtube Info    #pip install urllib3
 import json                     #Used To Handle Youtube Info #pip install jsonlib
-#from pydub import AudioSegment  #Used For Audio Conversion   #pip install pydub
-from moviepy.editor import VideoFileClip
+from moviepy.editor import VideoFileClip #used for mp4 to mp3#pip install moviepy
 import glob                     #Used For file detection     #pip install glob3
-#import vlc                      #Used For Audio Preview      #pip install python-vlc
-from pygame import mixer        #Used For Audio Preview
+from playsound import playsound #Used for audio Preview      #pip install playsound
 from mutagen.mp3 import MP3     #Used For mp3 Handling       #pip install mutagen
 import getpass                  #Used To Detect the User     #pip install micropython-getpass
-#import musicbrainzngs           #Used to get Music Metadata  #pip install musicbrainzngs      #Not in use Right now
 
+#Utility Functions
+#Function to check if windows
+def windows():
+    return sys.platform == "win32"
+    
 #Function to check if user is Root
 def isRoot():
     if os.geteuid()==0:
         return True
     else:
         return False
-#Function to plan an mp3 with vlc media player
+#Function to plan an mp3
 def playMp3(mp3Name):
-    mixer.init()
-    mixer.music.load(mp3Name)
-    
-
-    #Wait Until the Audio is Finished Playing
+    audio = MP3(mp3Name)
     try:
-        #sleep(float(mp3Audio.info.length))
-        mixer.music.play()
+        playsound(mp3Name) 
     except KeyboardInterrupt:
+        raise
         #Finish if the User Presses ctrl + c
-        
-        #vlcSong.stop()
         print("\nGoodbye.")
         exit()
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
@@ -229,7 +224,7 @@ if userReview:
     fileName = glob.glob("./*.mp4")
     if len(fileName) > 1:
         print("Please Run This Program In a Directory Without mp3, mp4, or webm files, as they may break it.")
-        print("(AKA i'm too lazy to figure out the filename format youtube-dl uses)")
+        print("(AKA i'm too lazy to fix this spaghetti)")
         exit()
 
     #Convert Those Files to .mp3
@@ -239,10 +234,8 @@ if userReview:
         video = VideoFileClip(i)
         video.audio.write_audiofile(convertedFilename)
         video.close()
-        # AudioSegment.from_file(str(i)).export(str(convertedFilename), format="mp3")
 
-    #Remove .webm files
-    #print("Removing File '" + str(convertedFilename) + "'...")
+    #Remove .mp4 files
     for i in fileName:
         os.remove(i)
 
@@ -252,8 +245,12 @@ if userReview:
     #Move mp3 files to the music directory
     for i in fileName:
         getpass.getuser()
-        shutil.move(str(i), ("/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename))
-        convertedFilename = "/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename
+        if windows():
+            shutil.move(str(i), ("C:/Users/" + str(getpass.getuser()) + "/Music/" + convertedFilename))
+            convertedFilename =  "C:/Users/" + str(getpass.getuser()) + "/Music/" + convertedFilename
+        else:
+            shutil.move(str(i), ("/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename))
+            convertedFilename =  "/home/" + str(getpass.getuser()) + "/Music/" + convertedFilename
     print("\nThe File Has Been Placed in Your Music Folder.")
 
     #Ask User if They Would Like to Listen to the Downloaded Song
@@ -261,7 +258,7 @@ if userReview:
         try:
             playMp3(convertedFilename)
         except:
-            print("An Error Occured While Trying to Play this Song.")
+            print("An Error Ocurred While Trying to Play this Song.")
         print("Goodbye.")
     else:
         print("Goodbye.")
