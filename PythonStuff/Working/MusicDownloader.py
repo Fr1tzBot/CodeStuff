@@ -16,19 +16,20 @@ import getpass                           #Used To Detect the User     #pip insta
 #Function to check if windows
 def windows():
     return sys.platform == "win32"
-    
+#Function to get Music Directory
+def getMusicDir():
+    if windows():
+        return "C:/Users/" + str(getpass.getuser()) + "/Music"
+    else:
+        return "/home/" + str(getpass.getuser()) + "/Music"
 #Function to check if user is Root
 def isRoot():
     return os.getuid() == 0
 #Function to plan an mp3
 def playMp3(mp3Name):
+    print("Now Playing " + mp3Name)
     audio = MP3(mp3Name)
-    try:
-        playsound(mp3Name) 
-    except KeyboardInterrupt:
-        #Finish if the User Presses ctrl + c
-        print("\nGoodbye.")
-        exit()
+    playsound(mp3Name) 
 #Function to get the two letters after a number (1st, 2nd, 3rd...)
 def afterNumber(i):
     stringI = str(i)
@@ -58,11 +59,9 @@ def afterNumber(i):
             return "rd"
     else:
         return "th"
-
 #Define Youtube Functions
 #Function to Get a dictionary containing info about a video
 def getYoutubeInfo(url):
-    global failOver
     global notFoundDict
     try:
         params = {"format": "json", "url": "https://www." + str(url)}
@@ -74,10 +73,7 @@ def getYoutubeInfo(url):
             data = json.loads(response_text.decode())
         return data
     except:
-        #failOver += 1
-        #if failOver >= 5:
         return dict(notFoundDict)
-        #getYoutubeInfo(url)
 
 #Function to Download a Youtube Video
 def YoutubeHandler(url):
@@ -86,7 +82,9 @@ def YoutubeHandler(url):
         "extractaudio" : True,
         "format": "mp4",
         'quiet': True,
-        "noplaylist" : True
+        "noplaylist" : True,
+        "outtmpl" : getMusicDir() + "/%(title)s.%(ext)s"
+        
     }
     #Fix the Occasional Failed Download by Calling the Function Again
     try:
@@ -104,6 +102,8 @@ def YoutubeHandler(url):
                 raise
             exit()
         YoutubeHandler(url)
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        return ydl.prepare_filename(["https://" + url])
 
 #Define Variables
 domainWhitelist = ("youtube.com")     #List of domains accepted when creating list
@@ -114,8 +114,8 @@ failOver = 0                          #Fail Protection int
 notFoundDict = {"title": "Title Not Found", "author_name": "Author Not Found"}
 
 #Introduce the program
-print("Music Downloader v1.7")
-print("Last Updated 7/24/20\n")
+print("Music Downloader v2.0")
+print("Last Updated 9/11/20\n")
 
 #Input Function For Song Title
 songName = str(input("What is the Title of the Song You Would Like To Download? \n> "))
@@ -156,7 +156,7 @@ for i in range(len(httpList)):
 for i in searchList:
     siteList.append(i)
 
-#remove slashes and all following values from sitelist addresses
+#Remove slashes and all following values from sitelist addresses
 deleteRest = False
 for i in range(len(siteList)):
     for j in range(len(siteList[i])):
@@ -214,14 +214,8 @@ if userReview:
         exit()
 
     #Download the Video the User Chooses
-    YoutubeHandler(searchList[videoChoice])
-
-    #Search for .mp4 Files in the Current Directory
-    fileName = glob.glob("./*.mp4")
-    if len(fileName) > 1:
-        print("Please Run This Program In a Directory Without mp3, mp4, or webm files, as they may break it.")
-        print("(AKA i'm too lazy to fix this spaghetti)")
-        exit()
+    fileName = []
+    fileName[0] = YoutubeHandler(searchList[videoChoice])
 
     #Convert Those Files to .mp3
     print("Converting File '" + str(fileName[0].replace("./", "")) + "' To mp3...")
@@ -235,9 +229,7 @@ if userReview:
     for i in fileName:
         os.remove(i)
 
-    #Search for .mp3 Files in the Current Directory
-    fileName = glob.glob("./*.mp3")
-
+    fileName[0] = convertedFilename
     #Move mp3 files to the music directory
     for i in fileName:
         getpass.getuser()
@@ -251,10 +243,6 @@ if userReview:
 
     #Ask User if They Would Like to Listen to the Downloaded Song
     if str(input("\nWould You Like to Preview This Song? [Y/N] \n> ")).lower() in ["y", "yes"]:
-        try:
-            playMp3(convertedFilename)
-        except:
-            print("An Error Ocurred While Trying to Play this Song.")
-        print("Goodbye.")
+        playMp3(convertedFilename)
     else:
         print("Goodbye.")
