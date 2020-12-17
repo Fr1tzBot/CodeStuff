@@ -24,7 +24,7 @@ while True:
         sleep(3)
         print("Well, I guess if that's what you are going to do, I don't really have much of a choice.")
         sleep(3)
-        print("Game Over (You asked for it, you horrendous portion of excrement) ")
+        print("Game Over (You asked for it) ")
         answer = input("Play Again? ").lower().strip() #ask if they want to 
         sleep(0.5)
         if answer in yesList:
