@@ -3,7 +3,7 @@ from time import sleep
 answer = ""
 answerList = []
 hintList = []
-yesList = ["y", "yes", "ye", "si", "c", "true", "ur gae", "yep", ]
+yesList = ["y", "yes", "ye", "si", "c", "true", "yep", ]
 
 while True:
     print("Welcome To My Choose Your Own Adventure Game!") #greet the user
