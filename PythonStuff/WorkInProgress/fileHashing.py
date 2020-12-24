@@ -50,7 +50,7 @@ def getDataFile():
             return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
         else:
             f = open(str(pathlib.Path(__file__).parent.absolute()) + "/data.json", "w+")
-            f.write("{}")
+            f.write('{\n "links": {}\n}')
             f.close()
             return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
 
