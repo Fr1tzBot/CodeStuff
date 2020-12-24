@@ -9,6 +9,7 @@ try:
     import os
     import pathlib
     import json
+    import urllib
 except:
     print("Please run 'pip install wget' to get the needed dependencies to run this program")
     raise
@@ -20,6 +21,7 @@ def verifyHash(filename, hash):
     return md5(filename) == hash
 
 def downloadURL(url):
+    url = urllib.parse.unquote(url)
     def getFileName(cd, url):
         if cd:
             return (re.findall("filename=(.+)", cd))[0]
