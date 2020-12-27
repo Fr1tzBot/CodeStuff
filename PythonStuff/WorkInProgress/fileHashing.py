@@ -105,14 +105,17 @@ if url in data["links"]:
     #Then check for other links that provide the same file
     if len(data[currentHash]) > 1:
         print("The following links are available for that file:")
+        counter = 0
         for i in data[currentHash]:
-            print(i)
+            print(str(counter) + ". " + str(i))
     else:
-        print("That is the only link available for that file.")
-        
-    if input("Continue download? ").strip().lower() in ["y", "yes"]:
+        print("that is the only link available for that file.")
+    if input("continue download? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
-        verifyHash(fileName, data["links"][url])
+        verifyHash(fileName, currentHash)
+    else:
+        print("Goodbye.")
+        exit()
 else:
     #If it isn't, ask the user if they would like to add it
     print("This link is not in the database.")
@@ -128,15 +131,4 @@ else:
         else:
             print("Goodbye.")
             exit()
-if len(data[currentHash]) > 1:
-    print("The following links are available for that file:")
-    counter = 0
-    for i in data[currentHash]:
-        print(str(counter) + ". " + str(i))
-else:
-    print("that is the only link available for that file.")
-if input("continue download? ").strip().lower() in ["y", "yes"]:
-    downloadURL(url)
-else:
-    print("Goodbye.")
-    exit()
+
