@@ -1,11 +1,11 @@
 try:
-    import hashlib
-    import requests
-    import re
-    import os
-    import pathlib
-    import json
-    import urllib
+    import hashlib #Used to calculate file hashes
+    import requests#Used to download files and to verify URLs
+    import re      #Used for filename detection
+    import os      #Used for file sizes, os detection, current working directory, and some file management
+    import pathlib #Used for some path management
+    import json    #Used to manage data file
+    import urllib  #Used to parse url encoding
 except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
     exit()
@@ -30,7 +30,6 @@ def getFileSize(filename):
         return "%.1f%s%s" % (num, 'Y', "B")
     except:
         raise
-        return None
 
 def verifyUrl(url):
     request = requests.get(str(url))
@@ -86,17 +85,17 @@ def addData(url, hash, filename, size):
     data[hash] = {"Filename": filename, "Size": size}
     
 
-url = str()
 dataPath = getDataFile()
 data = json.load(open(dataPath))
-currentHash = str()
-counter = int()
+counter = 0
 
 url = input("Please Input URL: ")
+
 if not verifyUrl(url):
     print("Warning: Requests could not verify that this URL is working")
     if not input("Would you like to continue the download anyway?") in ["y", "yes"]:
         exit()
+
 if url in data["links"]:
     #If it is, set currentHash to the link's hash and provide that hash to the user
     currentHash = data["links"][url]
@@ -105,17 +104,15 @@ if url in data["links"]:
     #Then check for other links that provide the same file
     if len(data[currentHash]) > 1:
         print("The following links are available for that file:")
-        counter = 0
         for i in data[currentHash]:
             print(str(counter) + ". " + str(i))
     else:
         print("that is the only link available for that file.")
+    
+    #Ask if the user would like to continue
     if input("continue download? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
         verifyHash(fileName, currentHash)
-    else:
-        print("Goodbye.")
-        exit()
 else:
     #If it isn't, ask the user if they would like to add it
     print("This link is not in the database.")
@@ -123,12 +120,6 @@ else:
         fileName = downloadURL(url)
         addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
         writeData()
-        exit()
     else:
         if input("Would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
             downloadURL(url)
-            exit()
-        else:
-            print("Goodbye.")
-            exit()
-
