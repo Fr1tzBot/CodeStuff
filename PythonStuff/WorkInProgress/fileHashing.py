@@ -1,11 +1,9 @@
 try:
     import hashlib #Used to calculate file hashes
     import requests#Used to download files and to verify URLs
-    import re      #Used for filename detection
     import os      #Used for file sizes, os detection, current working directory, and some file management
     import pathlib #Used for some path management
     import json    #Used to manage data file
-    import urllib  #Used to parse url encoding
 except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
     exit()
@@ -36,11 +34,13 @@ def verifyUrl(url):
     return request.status_code == 200
 
 def downloadURL(url):
-    url = urllib.parse.unquote(url)
+    url = requests.utils.unquote(url)
     def getFileName(cd, url):
         if cd:
-            return (re.findall("filename=(.+)", cd))[0]
+            print("Ran filename= option")
+            return cd.split("filename=")[1]
         else:
+            print("ran url.split option")
             return url.split("/")[-1]
     r = requests.get(url)
     fileName = str(getFileName(r.headers.get('content-disposition'), url))
@@ -118,7 +118,10 @@ else:
     print("This link is not in the database.")
     if input("Would you like to add it? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
-        addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
+        if os.name == "nt":
+            addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
+        else:
+            addData(url, md5(fileName), fileName.split("/")[-1], getFileSize(fileName))
         writeData()
     else:
         if input("Would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
