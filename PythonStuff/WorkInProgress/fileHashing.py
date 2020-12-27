@@ -14,7 +14,23 @@ def md5(filename):
     return hashlib.md5(open(str(filename), "rb").read()).hexdigest()
 
 def verifyHash(filename, hash):
-    return md5(filename) == hash
+    if md5(filename) == hash:
+        print("File download successful")
+    else:
+        print("Warning: downloaded file hash does not match database hash")
+        print("File may not have been downloaded successfully")
+        
+def getFileSize(filename):
+    try:
+        num = os.path.getsize(filename)
+        for unit in ['','K','M','G','T','P','E','Z']:
+            if abs(num) < 1000.0:
+                return "%3.1f%s%s" % (num, unit, "B")
+            num /= 1024.0
+        return "%.1f%s%s" % (num, 'Y', "B")
+    except:
+        raise
+        return None
 
 def verifyUrl(url):
     request = requests.get(str(url))
@@ -33,8 +49,8 @@ def downloadURL(url):
         open(str(os.getcwd() + "\\" + fileName), 'wb').write(r.content)
         return str(os.getcwd() + "\\" + fileName)
     else:
-        open(str(os.getcwd() + "\\" + fileName), 'wb').write(r.content)
-        return str(os.getcwd() + "\\" + fileName)
+        open(str(os.getcwd() + "/" + fileName), 'wb').write(r.content)
+        return str(os.getcwd() + "/" + fileName)
 
 def getDataFile():
     if os.name == "nt":
@@ -64,10 +80,10 @@ def clearJSON():
     os.remove(getDataFile)
     getDataFile()
     
-def addData(url, hash, filename):
+def addData(url, hash, filename, size):
     global data
     data["links"][url] = hash
-    data[hash] = {"Filename": filename}
+    data[hash] = {"Filename": filename, "Size": size}
     
 
 url = str()
@@ -76,24 +92,37 @@ data = json.load(open(dataPath))
 currentHash = str()
 counter = int()
 
-print("Version 1.0")
 url = input("Please Input URL: ")
 if not verifyUrl(url):
     print("Warning: Requests could not verify that this URL is working")
     if not input("Would you like to continue the download anyway?") in ["y", "yes"]:
         exit()
 if url in data["links"]:
+    #If it is, set currentHash to the link's hash and provide that hash to the user
     currentHash = data["links"][url]
-    print(currentHash)
+    print("The hash of that URL is: " + str(currentHash))
+
+    #Then check for other links that provide the same file
+    if len(data[currentHash]) > 1:
+        print("The following links are available for that file:")
+        for i in data[currentHash]:
+            print(i)
+    else:
+        print("That is the only link available for that file.")
+        
+    if input("Continue download? ").strip().lower() in ["y", "yes"]:
+        fileName = downloadURL(url)
+        verifyHash(fileName, data["links"][url])
 else:
+    #If it isn't, ask the user if they would like to add it
     print("This link is not in the database.")
     if input("Would you like to add it? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
-        addData(url, md5(fileName), fileName.split("\\")[-1])
+        addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
         writeData()
         exit()
     else:
-        if input("Ok, would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
+        if input("Would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
             downloadURL(url)
             exit()
         else:
