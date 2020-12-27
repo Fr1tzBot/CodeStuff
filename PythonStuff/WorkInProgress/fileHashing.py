@@ -37,10 +37,8 @@ def downloadURL(url):
     url = requests.utils.unquote(url)
     def getFileName(cd, url):
         if cd:
-            print("Ran filename= option")
             return cd.split("filename=")[1]
         else:
-            print("ran url.split option")
             return url.split("/")[-1]
     r = requests.get(url)
     fileName = str(getFileName(r.headers.get('content-disposition'), url))
