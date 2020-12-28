@@ -2,7 +2,6 @@ try:
     import hashlib #Used to calculate file hashes
     import requests#Used to download files and to verify URLs
     import os      #Used for file sizes, os detection, current working directory, and some file management
-    import pathlib #Used for some path management
     import json    #Used to manage data file
 except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
@@ -51,21 +50,21 @@ def downloadURL(url):
 
 def getDataFile():
     if os.name == "nt":
-        if os.path.isfile(str(pathlib.Path(__file__).parent.absolute()) + "\data.json"):
-            return str(pathlib.Path(__file__).parent.absolute()) + "\data.json"
+        if os.path.isfile(str(os.getcwd()) + "\data.json"):
+            return str(os.getcwd()) + "\data.json"
         else:
-            f = open(str(pathlib.Path(__file__).parent.absolute()) + "\data.json", "w+")
+            f = open(str(os.getcwd()) + "\data.json", "w+")
             f.write('{\n "links": {}\n}')
             f.close()
-            return str(pathlib.Path(__file__).parent.absolute()) + "\data.json"
+            return str(os.getcwd()) + "\data.json"
     else:
         if os.path.isfile(str(os.getcwd()) + "/data.json"):
-            return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
+            return str(os.getcwd()) + "/data.json"
         else:
-            f = open(str(pathlib.Path(__file__).parent.absolute()) + "/data.json", "w+")
+            f = open(str(os.getcwd()) + "/data.json", "w+")
             f.write('{\n "links": {}\n}')
             f.close()
-            return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
+            return str(os.getcwd()) + "/data.json"
 
 def writeData():
     global data
