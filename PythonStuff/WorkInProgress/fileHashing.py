@@ -5,7 +5,7 @@ try:
     import json    #Used to manage data file
 except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
-    exit()
+    raise
 
 def md5(filename):
     return hashlib.md5(open(str(filename), "rb").read()).hexdigest()
@@ -54,17 +54,15 @@ def getDataFile():
         return str(os.getcwd()) + "/data.json"
 
 def writeData():
-    global data
     f = open(getDataFile(), "w")
     f.write(json.dumps(data, indent=4))
     f.close
 
 def clearJSON():
-    os.remove(getDataFile)
+    os.remove(getDataFile())
     getDataFile()
     
 def addData(url, hash, filename, size):
-    global data
     data["links"][url] = hash
     data[hash] = {"Filename": filename, "Size": size}
     
