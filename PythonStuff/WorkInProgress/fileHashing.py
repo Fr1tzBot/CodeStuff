@@ -42,30 +42,17 @@ def downloadURL(url):
             return url.split("/")[-1]
     r = requests.get(url)
     fileName = str(getFileName(r.headers.get('content-disposition'), url))
-    if os.name == "nt": 
-        open(str(os.getcwd() + "\\" + fileName), 'wb').write(r.content)
-        return str(os.getcwd() + "\\" + fileName)
-    else:
-        open(str(os.getcwd() + "/" + fileName), 'wb').write(r.content)
-        return str(os.getcwd() + "/" + fileName)
+    open(str(os.getcwd() + "/" + fileName), 'wb').write(r.content)
+    return str(os.getcwd() + "/" + fileName)
 
 def getDataFile():
-    if os.name == "nt":
-        if os.path.isfile(str(pathlib.Path(__file__).parent.absolute()) + "\data.json"):
-            return str(pathlib.Path(__file__).parent.absolute()) + "\data.json"
-        else:
-            f = open(str(pathlib.Path(__file__).parent.absolute()) + "\data.json", "w+")
-            f.write('{\n "links": {}\n}')
-            f.close()
-            return str(pathlib.Path(__file__).parent.absolute()) + "\data.json"
+    if os.path.isfile(str(os.getcwd()) + "/data.json"):
+        return str(os.getcwd()) + "/data.json"
     else:
-        if os.path.isfile(str(os.getcwd()) + "/data.json"):
-            return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
-        else:
-            f = open(str(pathlib.Path(__file__).parent.absolute()) + "/data.json", "w+")
-            f.write('{\n "links": {}\n}')
-            f.close()
-            return str(pathlib.Path(__file__).parent.absolute()) + "/data.json"
+        f = open(str(os.getcwd()) + "/data.json", "w+")
+        f.write('{\n "links": {}\n}')
+        f.close()
+        return str(os.getcwd()) + "/data.json"
 
 def writeData():
     global data
@@ -116,10 +103,7 @@ else:
     print("This link is not in the database.")
     if input("Would you like to add it? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
-        if os.name == "nt":
-            addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
-        else:
-            addData(url, md5(fileName), fileName.split("/")[-1], getFileSize(fileName))
+        addData(url, md5(fileName), fileName.split("/")[-1], getFileSize(fileName))
         writeData()
     else:
         if input("Would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
