@@ -7,6 +7,7 @@ except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
     raise
 
+
 def md5(filename):
     return hashlib.md5(open(str(filename), "rb").read()).hexdigest()
 
@@ -63,13 +64,17 @@ def clearJSON():
     getDataFile()
     
 def addData(url, hash, filename, size):
+    global data
     data["links"][url] = hash
     data[hash] = {"Filename": filename, "Size": size}
-    
+    try:
+        data[hash]["Links"].append(url)
+    except:
+        data[hash].update({"Links": [url]})
 
+#counter = 0
 dataPath = getDataFile()
 data = json.load(open(dataPath))
-counter = 0
 
 url = input("Please Input URL: ")
 
@@ -84,10 +89,13 @@ if url in data["links"]:
     print("The hash of that URL is: " + str(currentHash))
 
     #Then check for other links that provide the same file
-    if len(data[currentHash]) > 1:
-        print("The following links are available for that file:")
-        for i in data[currentHash]:
-            print(str(counter) + ". " + str(i))
+    if data[currentHash]["Links"]:
+        if len(data[currentHash]["Links"]) > 1:
+            print("The following links are available for that file:")
+            for i in range(len(data[currentHash]["Links"])):
+                print(str(i) + ". " + str(data[currentHash]["Links"][i]))
+        else:
+            print("that is the only link available for that file.")
     else:
         print("that is the only link available for that file.")
     
