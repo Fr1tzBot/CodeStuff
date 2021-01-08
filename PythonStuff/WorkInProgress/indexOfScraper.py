@@ -62,9 +62,12 @@ def recursiveGrabber(calledUrl):
         for i in grabLinks(calledUrl):
             if i[-1] == "/":
                 if not ".." in i:
-                    recursions += 1
-                    print("Recursion " + str(recursions) + ": " + str(requests.utils.unquote(i)))
-                    recursiveGrabber(i)
+                    if verifyUrl(i):
+                        recursions += 1
+                        print("Recursion " + str(recursions) + ": " + str(requests.utils.unquote(i)))
+                        recursiveGrabber(i)
+                    else:
+                        print("VerifyUrl failed: " + str(i))
             else:
                 urlList.append(i)
 
