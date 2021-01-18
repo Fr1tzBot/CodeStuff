@@ -5,7 +5,8 @@ try:
     import json    #Used to manage data file
 except:
     print("Please run 'pip install regex requests' to get the needed dependencies to run this program")
-    exit()
+    raise
+
 
 def md5(filename):
     return hashlib.md5(open(str(filename), "rb").read()).hexdigest()
@@ -41,50 +42,39 @@ def downloadURL(url):
             return url.split("/")[-1]
     r = requests.get(url)
     fileName = str(getFileName(r.headers.get('content-disposition'), url))
-    if os.name == "nt": 
-        open(str(os.getcwd() + "\\" + fileName), 'wb').write(r.content)
-        return str(os.getcwd() + "\\" + fileName)
-    else:
-        open(str(os.getcwd() + "/" + fileName), 'wb').write(r.content)
-        return str(os.getcwd() + "/" + fileName)
+    open(str(os.getcwd() + "/" + fileName), 'wb').write(r.content)
+    return str(os.getcwd() + "/" + fileName)
 
 def getDataFile():
-    if os.name == "nt":
-        if os.path.isfile(str(os.getcwd()) + "\data.json"):
-            return str(os.getcwd()) + "\data.json"
-        else:
-            f = open(str(os.getcwd()) + "\data.json", "w+")
-            f.write('{\n "links": {}\n}')
-            f.close()
-            return str(os.getcwd()) + "\data.json"
+    if os.path.isfile(str(os.getcwd()) + "/data.json"):
+        return str(os.getcwd()) + "/data.json"
     else:
-        if os.path.isfile(str(os.getcwd()) + "/data.json"):
-            return str(os.getcwd()) + "/data.json"
-        else:
-            f = open(str(os.getcwd()) + "/data.json", "w+")
-            f.write('{\n "links": {}\n}')
-            f.close()
-            return str(os.getcwd()) + "/data.json"
+        f = open(str(os.getcwd()) + "/data.json", "w+")
+        f.write('{\n "links": {}\n}')
+        f.close()
+        return str(os.getcwd()) + "/data.json"
 
 def writeData():
-    global data
     f = open(getDataFile(), "w")
     f.write(json.dumps(data, indent=4))
     f.close
 
 def clearJSON():
-    os.remove(getDataFile)
+    os.remove(getDataFile())
     getDataFile()
     
 def addData(url, hash, filename, size):
     global data
     data["links"][url] = hash
     data[hash] = {"Filename": filename, "Size": size}
-    
+    try:
+        data[hash]["Links"].append(url)
+    except:
+        data[hash].update({"Links": [url]})
 
+#counter = 0
 dataPath = getDataFile()
 data = json.load(open(dataPath))
-counter = 0
 
 url = input("Please Input URL: ")
 
@@ -99,10 +89,13 @@ if url in data["links"]:
     print("The hash of that URL is: " + str(currentHash))
 
     #Then check for other links that provide the same file
-    if len(data[currentHash]) > 1:
-        print("The following links are available for that file:")
-        for i in data[currentHash]:
-            print(str(counter) + ". " + str(i))
+    if data[currentHash]["Links"]:
+        if len(data[currentHash]["Links"]) > 1:
+            print("The following links are available for that file:")
+            for i in range(len(data[currentHash]["Links"])):
+                print(str(i) + ". " + str(data[currentHash]["Links"][i]))
+        else:
+            print("that is the only link available for that file.")
     else:
         print("that is the only link available for that file.")
     
@@ -115,10 +108,7 @@ else:
     print("This link is not in the database.")
     if input("Would you like to add it? ").strip().lower() in ["y", "yes"]:
         fileName = downloadURL(url)
-        if os.name == "nt":
-            addData(url, md5(fileName), fileName.split("\\")[-1], getFileSize(fileName))
-        else:
-            addData(url, md5(fileName), fileName.split("/")[-1], getFileSize(fileName))
+        addData(url, md5(fileName), fileName.split("/")[-1], getFileSize(fileName))
         writeData()
     else:
         if input("Would you like to download the file anyway?").strip().lower() in ["y", "yes"]:
