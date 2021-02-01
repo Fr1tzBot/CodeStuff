@@ -54,6 +54,9 @@ def recursiveGrabber(calledUrl):
     global urlList
     global recursions
     global url
+    if len(calledUrl.split("//")) > 2:
+        print("Multiple // detected in " + str(calledUrl))
+        return
     if not calledUrl.split("/")[2] == url.split("/")[2]:
         print(calledUrl)
         print(url)
@@ -73,7 +76,7 @@ def recursiveGrabber(calledUrl):
 
 recursions = 0
 urlList = []
-url = formatUrl(input("Input Domain Name: "))
+url = (input("Input Domain Name: "))
 
 
 startTime = time()
@@ -82,7 +85,7 @@ endTime = time()
 print("Website Scrape Time: " + str(datetime.timedelta(seconds=(endTime-startTime))))
 print("Files: " + str(len(fileOnly(urlList))))
 print("Dirs: " + str(recursions))
-print("Total: " + str(len(urlList)))
+print("Total: " + str(recursions + len(fileOnly(urlList))))
 if input("Do you want to see the file list? ").strip().lower() in ["y", "yes"]:
     for i in urlList:
         print(i)
