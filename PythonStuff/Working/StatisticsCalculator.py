@@ -28,7 +28,7 @@ def median(l):
   if not len(l) % 2:
     return (l[half - 1] + l[half]) / 2.0
   return l[half]
-#find number of numbers
+#get data from user
 data = input("input your data in [1,0,1] format (spaces will be removed) ")
 toRemove = [" ", "[", "]", "(", ")"]
 for i in toRemove:
@@ -41,29 +41,18 @@ for i in range(len(data)):
     print("You Must Enter a Number.")
     exit()
 
-#format data as tuple using tople function  #sort the data
+#sort the data
 data = sorted(data)
 
 #show the data
 print(data)
 
-#calculate the total
+#print statistics info
 print("Calculating total...")
-
-#format total variable
-print("Total is " + str(sum(data)))
-
-#calculate the mean
-print ("Average is " + str((sum(data)) / len(data)))
-
-#calculate the median
-print("Median is " + str(median(data)))
-
-#calculate the MAD
-print("MAD is " + str(mad(data, (sum(data)))))
-
-print("Mode is " + str(mode(data)))
-
-print("Maximum is " + str(max(data)))
-
-print("Minimum is " + str(min(data)))
+print("Total is "   +  str(sum(data)))
+print("Average is " +  str(sum(data)/len(data)))
+print("Median is "  +  str(median(data)))
+print("MAD is "     +  str(mad(data, sum(data))))
+print("Mode is "    +  str(mode(data)))
+print("Maximum is " +  str(max(data)))
+print("Minimum is " +  str(min(data)))
