@@ -3,7 +3,7 @@ from os import system
 
 downloadFiles = list()
 maxVal = 0
-f = open("/home/fritz/Downloads/chrome_bookmarks.json",)
+f = open("~/Downloads/chrome_bookmarks.json",)
 bookmarks = json.load(f)
 youtubeFolder = bookmarks[0]
 
@@ -25,7 +25,7 @@ f.close
 
 removeBookmark = str(input("Would You Like To Delete the BookMark Json? [y/n]"))
 if removeBookmark == "y" or removeBookmark == "yes":
-    system("rm /home/fritz/Downloads/chrome_bookmarks.json")
+    system("rm ~/Downloads/chrome_bookmarks.json")
     print("Removed Bookmarks File")
     print("Goodybye.")
 else:

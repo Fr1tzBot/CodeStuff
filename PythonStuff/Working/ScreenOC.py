@@ -8,7 +8,7 @@ xres = 1366
 yres = 768
 ref = 60
 def SetRef(NewRef, Interface): #function to set refresh rate
-	command = str("/home/fritz/cvt12" + " " + str(xres) + " " + str(yres) + " " + str(NewRef))
+	command = str("~/cvt12" + " " + str(xres) + " " + str(yres) + " " + str(NewRef))
 	cvt12 = (subprocess.getstatusoutput(command))
 	cvt12 = cvt12[1]
 	cvt = ""
