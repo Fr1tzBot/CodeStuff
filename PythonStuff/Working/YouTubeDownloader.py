@@ -9,7 +9,7 @@ youtubeFolder = bookmarks[0]
 
 print(youtubeFolder['title'] + " Folder Found.")
 print(str(len(bookmarks)) + " Bookmarks Found")
-print("Please Insure That You Have Downloaded The Latest Bookmarks json File.\n")
+print("Please Ensure That You Have Downloaded The Latest Bookmarks json File.\n")
 for i in range(len(bookmarks)):
     if int(bookmarks[i]['index']) > 0:
         maxVal = i-1
