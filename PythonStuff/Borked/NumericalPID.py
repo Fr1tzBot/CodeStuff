@@ -46,7 +46,7 @@ for i in range(1000):
     try:
         if int(i/100) > 0:
             target = random.randint(0, 100)
-            print("YEET")
+            print("What")
     except:
         pass
     error = target - getData()

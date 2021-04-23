@@ -14,5 +14,5 @@ def wordScroll(text, delay):
         sleep(delay)
         print(i + " ", end="")
     print("\n")
-scrollPrint("Galbert", 0.5)
+scrollPrint("Hello World", 0.5)
 wordScroll("Shall we play a game?", 1.5)
