@@ -1,0 +1,77 @@
+#!/bin/bash
+has() {type -p "$1" &> /dev/null}
+
+updateApt() {
+    apt update
+    apt upgrade
+    apt autoremove 
+}
+
+updateBrew() {
+    brew -v update
+    brew -v upgrade
+    brew -v autoremove
+}
+
+updateFlatpak() {
+    flatpak update
+}
+
+updateMac() {
+    softwareupdate --verbose -l
+    softwareupdate --verbose -ir --agree-to-license
+}
+
+updatePacman() {
+    pacman -Syu
+}
+
+updatePip() {
+    python -m pip install --upgrade pip
+}
+
+updatePkg() {
+    pkg upgrade
+    pkg autoclean
+}
+
+updatePort() {
+    port -v selfupdate
+    port -v upgrade outdated
+    port -v uninstall inactive
+}
+
+updateSnap() {
+    snap refresh
+}
+
+updateAll() {
+    has apt && updateApt
+    has brew && updateBrew
+    has flatpak && updateFlatpak
+    has softwareupdate && updateMac
+    has pacman && updatePacman
+    has pip && updatePip
+    has pkg && updatePkg
+    has port && updatePort
+    has snap && updateSnap
+}
+if (($#==0)); then
+    updateAll
+else
+    case $1 in
+        all) updateAll ;;
+
+        apt) updateApt ;;
+        brew) updateBrew ;;
+        flatpak) updateFlatpak ;;
+        mac) updateMac ;;
+        pacman) updatePacman;;
+        pip) updatePip ;;
+        pkg) updatePkg ;;
+        port) updatePort ;;
+        snap) updateSnap ;;
+
+        *) echo "Error: unrecognized parameter" ;;
+    esac
+fi
