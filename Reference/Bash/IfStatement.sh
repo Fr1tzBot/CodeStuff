@@ -1,6 +1,6 @@
 #!/bin/bash
 condition=true
-if [ condition ]
+if [ $condition ]
     then
     echo "yeet"
 fi

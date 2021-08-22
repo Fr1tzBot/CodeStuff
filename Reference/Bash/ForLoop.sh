@@ -1,7 +1,7 @@
 #!/bin/bash
 #Index through an array
 arrayToIndexThrough=(1 2 4 8 16 32 64 128)
-for i in array ${arrayToIndexThrough[@]}
+for i in array "${arrayToIndexThrough[@]}"
 	do
 	echo "$i"
 done

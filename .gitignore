@@ -3,3 +3,4 @@ projects
 
 .vscode/
 
+*/*.pyc

@@ -1,9 +1,9 @@
 #!/bin/bash
 condition=true
-if [ condition ]
+if [ $condition ]
     then
     echo "yee"
-elif [ condition ]
+elif [ $condition ]
     then
     echo "yeetus"
 fi
