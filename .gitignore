@@ -4,3 +4,9 @@ projects
 .vscode/
 
 */*.pyc
+
+*/a.out
+
+c/*.o
+
+reference/c/*.o

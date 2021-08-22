@@ -1,12 +1,13 @@
 #include <stdio.h>
-int main(){
+#include <stdbool.h> 
+int main() {
     bool condition = true;
     if (condition){
-        printf("foo");
+        printf("foo\n");
     }
     else if (condition)
     {
-        printf("yeet");
+        printf("yee\n");
     }
     return 0;
 }
