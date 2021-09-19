@@ -12,3 +12,5 @@ c/*.o
 reference/c/*.o
 
 */*/__pycache__
+
+*/*/*.class
