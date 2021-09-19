@@ -1,16 +1,20 @@
+#!/usr/bin/env python3
 import nmap
 from pexpect import pxssh
 import webbrowser
 import socket
 import colorama
 
+#Color Functions
+def error(message: str) -> None:
+    print(colorama.Fore.RED + message + colorama.Style.RESET_ALL)
 def warn(message: str) -> None:
     print(colorama.Fore.YELLOW + message + colorama.Style.RESET_ALL)
-
 def success(message: str) -> None:
     print(colorama.Fore.GREEN + message + colorama.Style.RESET_ALL)
 
 def getip() -> str:
+    """Return Current IP"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         s.connect(('1.1.1.1', 1))
@@ -25,6 +29,7 @@ def getip() -> str:
     return ip
 
 def sshTest(ip: str, username: str, password: str) -> bool:
+    """Attempt to login to a given host with given username and password"""
     s = pxssh.pxssh()
     try:
         s.login(ip, username, password)
