@@ -48,8 +48,11 @@ sshPasswords = ["password", "root", "password123"]
 #23: Telnet
 #80: HTTP
 #443: HTTPS
-scanPorts = ["22", "23", "80", "443"]
-scanIp = (".".join(getip().split(".")[0:-1])+".0/24")
+#62078: Iphone Sync
+ip = getip()
+portID = {22: "SSH", 23: "telnet", 80: "HTTP", 443: "HTTPS", 62078: "Iphone Sync"}
+scanPorts = ["22", "23", "80", "443", "62078"]
+scanIp = (".".join(ip.split(".")[0:-1])+".0/24")
 print("Scanning " + scanIp + " on ports " + ",".join(scanPorts) + "...")
 output = nm.scan(scanIp, ",".join(scanPorts), arguments="-T4")
 
@@ -61,20 +64,28 @@ for i in output["scan"].keys():
     for j in output["scan"][i]["tcp"].keys():
         if output["scan"][i]["tcp"][j]["state"] == "open":
             openPorts[i].append(j)
+        elif output["scan"][i]["tcp"][j]["state"] == "filtered":
+            warn("WARNING: port " + str(j) + " of " + str(i) + " is filtered")
+            openPorts[i].append(j)
         elif output["scan"][i]["tcp"][j]["state"] == "closed":
             continue
         else:
-            warn("WARNING: unrecognized state on " + i + ": " + j)
+            warn("WARNING: unrecognized state on port " + str(j) + " of " + str(i) + ": " + str(output["scan"][i]["tcp"][j]["state"]))
 
 for i in openPorts:
     for j in range(len(openPorts[i])):
-        print("port " + str(openPorts[i][j]) + " on " + str(i))
+        if i == ip:
+            name = "localhost"
+        else:
+            name = i
+        print("port " + str(openPorts[i][j]) + " on " + str(name) + " (" + str(portID[openPorts[i][j]]) + ")")
 
 #Ports to test:
 #22: SSH: try a couple of basic logins
 #23: Telnet
 #80: HTTP: open in a web browser
 #443: HTTPS: open in a web browser
+#62078: Iphone Sync
 print("\nTesting open ports...")
 for i in openPorts:
     if 80 in openPorts[i]:
@@ -90,6 +101,9 @@ for i in openPorts:
         pass
 
 for i in openPorts:
+    if i == ip:
+        #skip testing local ssh passwords to save time
+        continue
     if 22 in openPorts[i]:
         for j in sshUsernames:
             for k in sshPasswords:
@@ -98,3 +112,7 @@ for i in openPorts:
                     break
                 else:
                     warn(i + ": ssh failed: uname: '" + j + "' passwd: '" + k + "'")
+
+for i in openPorts:
+    if 62078 in openPorts[i]:
+        pass
