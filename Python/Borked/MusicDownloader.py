@@ -21,7 +21,7 @@ def getMusicDir():
     if windows():
         return "C:/Users/" + str(getpass.getuser()) + "/Music"
     else:
-        return "/home/" + str(getpass.getuser()) + "/Music"
+        return os.getenv("HOME") + "/Music"
 #Function to check if user is Root
 def isRoot():
     return os.getuid() == 0
