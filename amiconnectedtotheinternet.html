@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Site Checker</title>
+    <link rel="shortcut icon"  href="http://amiconnectedtotheinternet.com/favicon.ico" />
+
+    <script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).ready( function() {
+            addSiteLookup("http://google.com", "Google");
+            addSiteLookup("http://discord.com", "Discord");
+            addSiteLookup("http://duckduckgo.com", "Duckduckgo");
+            addSiteLookup("http://github.com", "Github");
+            addSiteLookup("http://thepiratebay.org", "Pirate Bay")
+            addSiteLookup("http://xkcd.com", "XKCD")
+
+            $('.links').append('<div style="clear:both;"></div>');
+            $('.sitelink img').bind('load',  function() { sucess($(this)); } );
+        });
+
+        var siteCount = 0;
+        var sucessCount = 0;
+        var failCount = 0;
+
+        function addSiteLookup(url, name) {
+            $('.links').append('<div class="sitelink"><img src="' + url + '/favicon.ico" onerror="failure(this);" /><span>' + name +'</span></div>');
+            siteCount++;
+        }
+
+        function sucess(obj) {
+            $(obj).parent().addClass('sucess');
+            sucessCount++;
+            $('.answer h2').text((sucessCount/siteCount)*100 +  "% of sites working (" + sucessCount + "/" + siteCount + ")");
+        };
+
+        function failure(obj) {
+            $(obj).parent().addClass('fail');
+            $(obj).attr('src','http://amiconnectedtotheinternet.com/sadface.gif');
+            $(obj).unbind('load');
+
+            failCount++;
+
+            $('.answer h2').text((sucessCount/siteCount)*100 +  "% of sites working (" + sucessCount + "/" + siteCount + ")");
+        };
+    </script>
+
+    <style type="text/css">
+        * { font-family: ubuntu, Arial; }
+
+        body {
+            margin: 0px;
+            background: #000000; /* set background */
+        }
+
+        .links {
+            margin: 0px auto;
+            width: 545px; /*set width of links area*/
+        }
+
+        .sitelink {
+            background: #ffffff; /* set background color used in link boxes */
+            /*border: 1px solid #ff0000; don't know what this does so it gets commented */
+            position: relative;
+            float: left;
+            width: 124px; /* control link box size*/
+            margin: 2px 5px 2px 5px;
+        }
+
+        .sucess {
+            border: 1px solid #00ff00; /* set color for working link */
+        }
+        .fail {
+            border: 1px solid #ff0000; /* set color for bad link */
+        }
+
+        .sitelink img {
+            width: 20px; /* set up dimensions for favicons */
+            height: 20px;
+            margin: 2px 2px 2px 3px;
+        }
+
+        .sitelink span {
+            display: block-inline;
+            /* set up dimensions and colors for individual site link boxes */
+            position: absolute;
+            top: 2px;
+            left: 26px;
+            width: 92px;
+            height: 18px;
+            font-size: 14px;
+            padding: 2px  0px 0px 4px;
+            color: #999999;
+            background: #eeeeee;
+            overflow: hidden;
+        }
+
+        .sucess span {
+            background: #00ff00;
+            color: #000000;
+        }
+
+        .fail span {
+            background: #ff0000;
+            color: #000000;
+        }
+
+        .head h2 {
+            margin: 0px auto;
+            padding-top: 80px;
+            font-size: 12pt;
+            color: #ffffff;
+            font-style: italic;
+            letter-spacing: 0.07em;
+        }
+
+        .answer h2 {
+            margin: 30px 0px 30px 0px;
+            font-size: 12pt;
+            letter-spacing: 0.09em;
+            color: #ffffff;
+        }
+
+        .head, .answer {
+            text-align: center;
+        }
+    </style>
+
+</head>
+    <body>
+        <div class="head">
+            <h2>Testing Sites...</h2>
+        </div>
+
+        <div class="answer">
+            <h2>loading...</h2>
+        </div>
+
+        <div class="links">
+        </div>
+
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-6713202-8");
+                pageTracker._trackPageview();
+            }
+            catch(err) {}
+        </script>
+    </body>
+</html>
