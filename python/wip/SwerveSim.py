@@ -20,7 +20,7 @@ class Constants:
     #maxRot = ((360/((math.pi*wheelbase)/realMaxSpeed))) #maxRot is in degrees/frame. (this is roughly translated from max speed based on wheelbase of howitzer)
     maxRot = 6 #TODO: fix above formula and rotation oscilating
     maxAccel = (10*scale)/(fps**2) #stepSize is speed increase/frame
-    slowFactor = 3.5 #multiplier that controls how quickly the bot slows down. relative to maxAccel
+    slowFactor = 1.0 #multiplier that controls how quickly the bot slows down. relative to maxAccel
     joystickID = 0
     deadZone = 0.1
     delay = math.ceil(1000/fps)
@@ -78,14 +78,17 @@ class JoystickMap:
         x = 0 #down is negative y
         y = 1  #left is negative x
 
-def xyToTheta(x: float, y: float):
+def xyToTheta(x: float, y: float) -> float:
     vec = pygame.math.Vector2(x, y)
     theta = vec.as_polar()[1]-90 #offset rotation by 90 degrees
     if theta != -90: #prevent resetting to 0 degrees when x and y are 0
         return theta
 
-def xyToMagnitude(x: float, y: float):
+def xyToMagnitude(x: float, y: float) -> float:
     return math.sqrt(x**2 + y**2)
+
+def signum(num: float) -> float:
+    return math.copysign(1.0, num)
 
 def applyDeadzone(value: float, constants: Constants) -> float:
     return 0 if abs(value) < constants.deadZone else value
@@ -118,13 +121,16 @@ def getXY(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap
     bot.yDelta += constants.maxAccel * y
     bot.xDelta += constants.maxAccel * x
 
-    if y == 0 and bot.yDelta != 0:
+
+    if (y == 0 and bot.yDelta != 0) or ySwitchDir:
+        #apply breaking force
         if abs(bot.yDelta) < constants.maxAccel*constants.slowFactor: #prevents oscilating when robot can't step to 0
             bot.yDelta = 0
         bot.accelState = bot.AccelStates.decelerating
         bot.yDelta += -math.copysign(constants.maxAccel*constants.slowFactor, bot.yDelta)
 
-    if x == 0 and bot.xDelta != 0:
+    if (x == 0 and bot.xDelta != 0) or xSwitchDir:
+        #apply breaking force
         if abs(bot.xDelta) < constants.maxAccel*constants.slowFactor: #prevents oscilating when robot can't step to 0
             bot.xDelta = 0
         bot.accelState = bot.AccelStates.decelerating
