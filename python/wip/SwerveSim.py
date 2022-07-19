@@ -90,6 +90,17 @@ def xyToMagnitude(x: float, y: float) -> float:
 def signum(num: float) -> float:
     return math.copysign(1.0, num)
 
+def constrainAngle(angle: float) -> float:
+    if angle > 180:
+        angle %= 180
+        angle -=180
+
+    if angle < -180:
+        angle %= -180
+        angle += 180
+
+    return angle
+
 def applyDeadzone(value: float, constants: Constants) -> float:
     return 0 if abs(value) < constants.deadZone else value
 
@@ -107,7 +118,7 @@ def getRot(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMa
     if rotSpeed != 0:
         print(rotSpeed)
         bot.thetaTarget = bot.theta
-    bot.thetaDelta = constants.maxRot*rotSpeed
+        bot.thetaDelta = constants.maxRot*rotSpeed
 
 def getXY(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap, constants: Constants):
     x = applyDeadzone(joystick.get_axis(joystickMap.axis.leftStick.x), constants)
@@ -159,10 +170,6 @@ def rotate(bot: Bot, constants: Constants):
         else:
             bot.thetaDelta = math.copysign(constants.maxRot, error)
         bot.theta += bot.thetaDelta
-    else:
-        if abs(bot.thetaDelta) > constants.maxRot:
-            bot.thetaDelta = math.copysign(constants.maxRot, bot.thetaDelta)
-        bot.theta += bot.thetaDelta
 
 def limitBot(bot: Bot, constants: Constants):
     if bot.x > constants.xres - constants.botWidth:
@@ -181,11 +188,12 @@ def limitBot(bot: Bot, constants: Constants):
         bot.y = 0
         bot.yDelta = 0
 
-    if bot.theta > 180:
-        bot.theta = bot.theta % 180 - 180
+    if abs(bot.thetaDelta) > constants.maxRot:
+        bot.thetaDelta = math.copysign(constants.maxRot, bot.thetaDelta)
 
-    if bot.theta < -180:
-        bot.theta = bot.theta % -180 + 180
+    bot.theta = constrainAngle(bot.theta)
+
+    bot.thetaTarget = constrainAngle(bot.thetaTarget)
 
 constants = Constants()
 joystickMap = JoystickMap()
