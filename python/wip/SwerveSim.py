@@ -122,14 +122,14 @@ def getXY(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap
     bot.xDelta += constants.maxAccel * x
 
 
-    if (y == 0 and bot.yDelta != 0) or ySwitchDir:
+    if (y == 0 and bot.yDelta != 0):
         #apply breaking force
         if abs(bot.yDelta) < constants.maxAccel*constants.slowFactor: #prevents oscilating when robot can't step to 0
             bot.yDelta = 0
         bot.accelState = bot.AccelStates.decelerating
         bot.yDelta += -math.copysign(constants.maxAccel*constants.slowFactor, bot.yDelta)
 
-    if (x == 0 and bot.xDelta != 0) or xSwitchDir:
+    if (x == 0 and bot.xDelta != 0):
         #apply breaking force
         if abs(bot.xDelta) < constants.maxAccel*constants.slowFactor: #prevents oscilating when robot can't step to 0
             bot.xDelta = 0
