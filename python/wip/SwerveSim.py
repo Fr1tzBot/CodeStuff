@@ -1,7 +1,9 @@
-import pygame
+#!/usr/bin/env python3
+"""SwerveSim.py: a simplistic swerve drivetrain simulator for testing new control schemes"""
 import math
-import time
 import enum
+import sys
+import pygame
 
 class Constants:
     scale = 18 #scale is in pixels/foot, non-integer scales will cause strange results
@@ -16,12 +18,12 @@ class Constants:
     maxSpeed = (realMaxSpeed*scale)/fps #maxspeed is in pixels/frame
     wheelbase = 38.75 #diagonal distance from wheel center to wheel center
     #maxRot = ((360/((math.pi*wheelbase)/realMaxSpeed))) #maxRot is in degrees/frame. (this is roughly translated from max speed based on wheelbase of howitzer)
-    maxRot = 10 #TODO: fix above formula and rotation oscilating
+    maxRot = 6 #TODO: fix above formula and rotation oscilating
     maxAccel = (10*scale)/(fps**2) #stepSize is speed increase/frame
     slowFactor = 3.5 #multiplier that controls how quickly the bot slows down. relative to maxAccel
     joystickID = 0
     deadZone = 0.1
-    delay = math.floor(1000/fps)
+    delay = math.ceil(1000/fps)
     fileName = "botSprite.png"
     #speed tests:
     #horiz: 1.66666 seconds
@@ -50,7 +52,7 @@ class Bot:
 
 class JoystickMap:
     class axis:
-        class leftStick: 
+        class leftStick:
             x = 0 #left is negative x
             y = 1 #up is negative y
         leftTrigger = 2 #starts at -1, goes to 1
@@ -86,10 +88,7 @@ def xyToMagnitude(x: float, y: float):
     return math.sqrt(x**2 + y**2)
 
 def applyDeadzone(value: float, constants: Constants) -> float:
-    if abs(value) < constants.deadZone:
-        return 0
-    else:
-        return value
+    return 0 if abs(value) < constants.deadZone else value
 
 def getRot(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap, constants: Constants):
     x = applyDeadzone(joystick.get_axis(joystickMap.axis.rightStick.x), constants)
@@ -103,14 +102,19 @@ def getRot(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMa
         bot.thetaTarget = xyToTheta(x, y)
 
     if rotSpeed != 0:
+        print(rotSpeed)
         bot.thetaTarget = bot.theta
     bot.thetaDelta = constants.maxRot*rotSpeed
-        
+
 def getXY(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap, constants: Constants):
     x = applyDeadzone(joystick.get_axis(joystickMap.axis.leftStick.x), constants)
     y = applyDeadzone(joystick.get_axis(joystickMap.axis.leftStick.y), constants)
+    if joystick.get_button(joystickMap.button.leftStick):
+        x *= 0.5
+        y *= 0.5
     bot.accelState = bot.AccelStates.accelerating
 
+    #acceleration rate is proportional to joystick magnitude
     bot.yDelta += constants.maxAccel * y
     bot.xDelta += constants.maxAccel * x
 
@@ -142,7 +146,12 @@ def getXY(bot: Bot, joystick: pygame.joystick.Joystick, joystickMap: JoystickMap
 
 def rotate(bot: Bot, constants: Constants):
     if bot.theta != bot.thetaTarget:
-        bot.thetaDelta = math.copysign(constants.maxRot, (bot.thetaTarget - bot.theta))
+        error = bot.thetaTarget - bot.theta
+        #make sure we don't overshoot the angle, leading to oscilation
+        if abs(error) < constants.maxRot:
+            bot.thetaDelta = error
+        else:
+            bot.thetaDelta = math.copysign(constants.maxRot, error)
         bot.theta += bot.thetaDelta
     else:
         if abs(bot.thetaDelta) > constants.maxRot:
@@ -172,11 +181,6 @@ def limitBot(bot: Bot, constants: Constants):
     if bot.theta < -180:
         bot.theta = bot.theta % -180 + 180
 
-
-
-    
-
-running = True
 constants = Constants()
 joystickMap = JoystickMap()
 bot = Bot()
@@ -191,30 +195,19 @@ bot.image = pygame.transform.scale(bot.image, (constants.botWidth, constants.bot
 joystick = pygame.joystick.Joystick(constants.joystickID)
 joystick.init()
 
-while running:
-    start = time.time()
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            sys.exit(0)
     bg.fill(constants.bgColor)
     getXY(bot, joystick, joystickMap, constants)
     getRot(bot, joystick, joystickMap, constants)
     rotate(bot, constants)
     limitBot(bot, constants)
+    print(bot.theta, bot.thetaDelta, bot.thetaTarget)
 
     bot.bot = pygame.transform.rotate(bot.image, bot.theta)
     bg.blit(bot.bot, (bot.x, bot.y))
     pygame.display.flip()
-    #print(bot.theta, bot.thetaDelta, bot.thetaTarget)
-    #print(bot.xDelta, bot.yDelta)
-    #print(bot.accelState)
-    if bot.getSpeed() == 0:
-        initTime = time.time()
-    try:
-        if bot.getSpeed() == constants.maxSpeed:
-            #print(time.time()-initTime)
-            initTime = None
-    except TypeError:
-        pass
 
     pygame.time.delay(constants.delay)
