@@ -8,6 +8,5 @@ done
 #Repeat a set number of times (10)
 for i in {1..10}
 	do
-	echo i
-	break
+	echo $i
 done
