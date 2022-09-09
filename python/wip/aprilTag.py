@@ -1,10 +1,10 @@
 import cv2
 from cv2 import VideoCapture, imshow, waitKey, destroyWindow
-from apriltag import apriltag
+#from apriltag import apriltag
 
 cam = VideoCapture(0)
 
-detector = apriltag("tagStandard36h11")
+# detector = apriltag("tagStandard36h11")
 
 while True:
     result, image = cam.read()
@@ -14,7 +14,7 @@ while True:
     if waitKey(1) & 0xFF == ord('q'):
         break
 
-    detections = detector.detect(image)
+    #detections = detector.detect(image)
 
 cam.release()
 cv2.destroyAllWindows()
