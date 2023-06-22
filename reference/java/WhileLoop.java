@@ -1,10 +1,9 @@
-
+import java.util.Scanner;
 public class WhileLoop {
-    public static void main(String[] args) {
-		boolean condition = true;
-        while (condition) {
-            System.out.println("foo");
-            break;
-        }
-	}
-}
+  public static void main(String[] args) {
+    int i = 1;
+    while (i <= 10) {
+      
+      i++;
+    }
+  }

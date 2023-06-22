@@ -1,14 +1,18 @@
+import java.util.Scanner;;
+
 public class ForLoop {
+
     public static void main(String args[]) {
-        int arrayToIndexThrough[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
-        int i;
-        //Index through an array
-        for (i=0; i<arrayToIndexThrough.length; i++){
-            System.out.println(arrayToIndexThrough[i]);
-        }
-        //Repeat a set number of times (10)
-        for (i=1; i<=10; i++){
-            System.out.println(i);
+        //ask user to enter their name
+        System.out.println("What's Your Name?");
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        name.low
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        //iterate through each character in the name
+        for (int i = 0; i < name.length(); i++) {
+            //print each character's index in the alphabet
+            System.out.println(name.charAt(i) + " is at index " + alphabet.indexOf(name.charAt(i)));
         }
     }
 }
