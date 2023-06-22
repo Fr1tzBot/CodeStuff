@@ -1,77 +1,40 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 import copy
+import math
 import time
-import argparse
+import numpy
 
 import cv2 as cv
 from pupil_apriltags import Detector
 
 
-def get_args():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--device", type=int, default=0)
-    parser.add_argument("--width", help='cap width', type=int, default=960)
-    parser.add_argument("--height", help='cap height', type=int, default=540)
-
-    parser.add_argument("--families", type=str, default='tag36h11')
-    parser.add_argument("--nthreads", type=int, default=1)
-    parser.add_argument("--quad_decimate", type=float, default=2.0)
-    parser.add_argument("--quad_sigma", type=float, default=0.0)
-    parser.add_argument("--refine_edges", type=int, default=1)
-    parser.add_argument("--decode_sharpening", type=float, default=0.25)
-    parser.add_argument("--debug", type=int, default=0)
-
-    args = parser.parse_args()
-
-    return args
-
-
 def main():
-    # 引数解析 #################################################################
-    args = get_args()
+    CAM_ID = 0
 
-    cap_device = args.device
-    cap_width = args.width
-    cap_height = args.height
+    cap = cv.VideoCapture(CAM_ID)
 
-    families = args.families
-    nthreads = args.nthreads
-    quad_decimate = args.quad_decimate
-    quad_sigma = args.quad_sigma
-    refine_edges = args.refine_edges
-    decode_sharpening = args.decode_sharpening
-    debug = args.debug
-
-    # カメラ準備 ###############################################################
-    cap = cv.VideoCapture(cap_device)
-    cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
-    cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
-
-    # Detector準備 #############################################################
     at_detector = Detector(
-        families=families,
-        nthreads=nthreads,
-        quad_decimate=quad_decimate,
-        quad_sigma=quad_sigma,
-        refine_edges=refine_edges,
-        decode_sharpening=decode_sharpening,
-        debug=debug,
+        families="tag36h11",
+        nthreads=8,
+        quad_decimate=2.0,
+        quad_sigma=0.0,
+        refine_edges=1,
+        decode_sharpening=0.25,
+        debug=0,
     )
 
-    elapsed_time = 0
+    elapsedTime = 0
 
     while True:
-        start_time = time.time()
+        startTime = time.time()
 
-        # カメラキャプチャ #####################################################
         ret, image = cap.read()
+
         if not ret:
             break
-        debug_image = copy.deepcopy(image)
+        debugImage = copy.deepcopy(image)
 
-        # 検出実施 #############################################################
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         tags = at_detector.detect(
             image,
@@ -80,28 +43,20 @@ def main():
             tag_size=None,
         )
 
-        # 描画 ################################################################
-        debug_image = draw_tags(debug_image, tags, elapsed_time)
+        debugImage = draw_tags(debugImage, tags, elapsedTime)
 
-        elapsed_time = time.time() - start_time
+        elapsedTime = time.time() - startTime
 
-        # キー処理(ESC：終了) #################################################
         key = cv.waitKey(1)
         if key == 27:  # ESC
             break
 
-        # 画面反映 #############################################################
-        cv.imshow('AprilTag Detect Demo', debug_image)
+        cv.imshow('AprilTag Detect Demo', debugImage)
 
     cap.release()
     cv.destroyAllWindows()
 
-
-def draw_tags(
-    image,
-    tags,
-    elapsed_time,
-):
+def draw_tags(image: numpy.ndarray, tags: list, elapsed_time: int):
     for tag in tags:
         tag_family = tag.tag_family
         tag_id = tag.tag_id
@@ -114,10 +69,8 @@ def draw_tags(
         corner_03 = (int(corners[2][0]), int(corners[2][1]))
         corner_04 = (int(corners[3][0]), int(corners[3][1]))
 
-        # 中心
         cv.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
-        # 各辺
         cv.line(image, (corner_01[0], corner_01[1]),
                 (corner_02[0], corner_02[1]), (255, 0, 0), 2)
         cv.line(image, (corner_02[0], corner_02[1]),
@@ -126,22 +79,33 @@ def draw_tags(
                 (corner_04[0], corner_04[1]), (0, 255, 0), 2)
         cv.line(image, (corner_04[0], corner_04[1]),
                 (corner_01[0], corner_01[1]), (0, 255, 0), 2)
-
-        # タグファミリー、タグID
-        # cv.putText(image,
-        #            str(tag_family) + ':' + str(tag_id),
-        #            (corner_01[0], corner_01[1] - 10), cv.FONT_HERSHEY_SIMPLEX,
-        #            0.6, (0, 255, 0), 1, cv.LINE_AA)
         cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
-                   cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
+                cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
 
-    # 処理時間
-    cv.putText(image,
-               "Elapsed Time:" + '{:.1f}'.format(elapsed_time * 1000) + "ms",
-               (10, 30), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2,
-               cv.LINE_AA)
+    # cv.putText(image,
+    #            "Elapsed Time:" + '{:.1f}'.format(elapsed_time * 1000) + "ms",
+    #            (10, 30), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2,
+    #            cv.LINE_AA)
 
     return image
+
+def calculateDistance(CAM_HEIGHT, CAM_ANGLE, TAG_HEIGHT, VERT_OFFSET):
+    # return (TAG_HEIGHT - CAM_HEIGHT) / numpy.tan(numpy.radians(CAM_ANGLE))
+    HEIGHT_DIFF = TAG_HEIGHT - CAM_HEIGHT
+    VERT_OFFSET += CAM_ANGLE
+
+    return HEIGHT_DIFF/math.tan(math.radians(VERT_OFFSET))
+
+    #A:
+    #   angle = VERT_OFFSET
+    #   length = HEIGHT_DIFF
+    #B:
+    #   angle = 90 - angle A
+    #   length = ?
+    #C:
+    #   angle = 90
+    #   length = ?
+
 
 
 if __name__ == '__main__':
