@@ -30,4 +30,7 @@ V_sum = V_s + V_d
 %display sum of dodecahedron and sphere to user
 disp(V_sum)
 
+%display colume of cone
+disp(V_c)
+
 
