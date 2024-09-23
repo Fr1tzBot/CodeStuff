@@ -2,3 +2,5 @@
 voidFunction () {
   echo "foo"
 }
+
+voidFunction
