@@ -7,7 +7,6 @@ public class ForLoop {
         System.out.println("What's Your Name?");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
-        name.low
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
         //iterate through each character in the name
         for (int i = 0; i < name.length(); i++) {
