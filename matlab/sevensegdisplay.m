@@ -57,10 +57,12 @@ end
 inputNumber = 99;
 chars = [8, 8];
 count = 0;
+data = zeros(2, 30);
+starttime = posixtime(datetime('now'))
 % for k = 1:4 % initialize all digits to high
 %     cache = setPin(a, cache, dig(k), 1, false);
 % end
-while true
+while num2str(posixtime(datetime('now')) - starttime * 1e6) < 60
     temp=num2str((a.readVoltage("A0")))
     chars(1)=str2double(temp(1));
     chars(2)=str2double(temp(2))
@@ -83,4 +85,16 @@ while true
     end
     % toc
     % disp(cache)
+    if mod(posixtime(datetime('now')), 2) == 2
+        for i=1:length(data)
+            if i ~= 0
+                data(i, 1) = a.readVoltage("A0");
+                data(i, 2) = posixtime(datetime('now'))
+            end
+        end
+    end
 end
+
+plot(data(1, :), data(2, :));
+xlabel("Time (Seconds)")
+ylabel("Temperature (fahrenheit)")
