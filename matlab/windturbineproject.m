@@ -19,7 +19,7 @@ function power = solveForPower(voltage, current)
     power = voltage*current;
 end
 
-INTERNAL_RESISTANCE = 0.1; %ohms (TODO find actual value)
+INTERNAL_RESISTANCE = 0.04*1000; %ohms (TODO find actual value)
 
 time = [];
 voltage = [];
