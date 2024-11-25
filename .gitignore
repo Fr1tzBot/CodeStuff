@@ -19,5 +19,9 @@ reference/c/*.o
 
 *.out
 
+*.png
+
+*.xlsx
+
 #macos
 .DS_Store
