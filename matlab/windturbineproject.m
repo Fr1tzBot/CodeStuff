@@ -7,6 +7,9 @@
 %P = v*a (watts = volts * amps)
 %V = I*R (volts = amps * ohms)
 
+clc
+clear
+
 a = arduino()
 tic
 t=0;
@@ -19,14 +22,14 @@ function power = solveForPower(voltage, current)
     power = voltage*current;
 end
 
-INTERNAL_RESISTANCE = 0.04*1000; %ohms (TODO find actual value)
+INTERNAL_RESISTANCE = 40; %ohms
 
 time = [];
 voltage = [];
 power = [];
 
 while t<10
-    v = readVoltage(a, 'A0');
+    v = a.readVoltage('A0');
     % v = rand()*5;
     i = solveForCurrent(v, INTERNAL_RESISTANCE);
     p = solveForPower(v, i);
@@ -35,7 +38,7 @@ while t<10
     time(end+1) = t;
     voltage(end+1) = v;
     power(end+1) = p;
-    pause(0.5)
+    % pause(0.05)
 end
 
 %plot voltage vs time and power vs time in a subplot
