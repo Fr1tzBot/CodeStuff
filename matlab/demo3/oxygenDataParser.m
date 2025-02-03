@@ -81,16 +81,16 @@ for i=1:length(GROUND_PINS)
 end
 
 % removed plotting code
-% hold on
-% plot(time, person1, 'r');
-% plot(time, person2, 'b');
-% yline(LOWER_THRESHOLD)
-% yline(UPPER_THRESHOLD)
-% xlabel('Time (s)');
-% ylabel('Oxygen Level');
-% title('Oxygen Levels Over Time');
-% legend('Person 1', 'Person 2');
-% hold off
+hold on
+plot(time, person1, 'r');
+plot(time, person2, 'b');
+yline(LOWER_THRESHOLD)
+yline(UPPER_THRESHOLD)
+xlabel('Time (s)');
+ylabel('Oxygen Level');
+title('Oxygen Levels Over Time');
+legend('Person 1', 'Person 2');
+hold off
 
 %initialize leds
 statustoled(a, p1status, 1)
