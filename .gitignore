@@ -25,3 +25,10 @@ reference/c/*.o
 
 #macos
 .DS_Store
+
+#Rust
+**/debug/
+**/target/
+**/*.rs.bk
+*.pdb
+
