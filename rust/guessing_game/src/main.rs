@@ -3,24 +3,32 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    let secretNum = rand::rng().random_range(1..=100);
-
+    let secret_num = rand::rng().random_range(1..=100);
     println!("Guess a number 1-100");
-    println!("Please input your guess.");
 
-    let mut guess = String::new();
+    loop {
+        println!("Please input your guess.");
 
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        let mut guess = String::new();
 
-    let guess: u32 = guess.trim().parse().expect("Type a number!");
+        io::stdin().read_line(&mut guess)
+            .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue
+        };
 
-    match guess.cmp(&secretNum) {
-        Ordering::Less => println!("Too Small!"),
-        Ordering::Greater => println!("Too Big!"),
-        Ordering::Equal => println!("You Win!"),
+        println!("You guessed: {}", guess);
+
+        match guess.cmp(&secret_num) {
+            Ordering::Less => println!("Too Small!"),
+            Ordering::Greater => println!("Too Big!"),
+            Ordering::Equal =>  {
+                println!("You Win!");
+                break;
+            }
+        }
     }
 }
 
