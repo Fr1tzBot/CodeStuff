@@ -9,8 +9,7 @@ fn numsuffix(num: i32) -> String {
     }.to_string();
 }
 
-fn search(array: &[i32], value: i32, size: i32) -> i32 {
-    let size: usize = size as usize;
+fn search(array: &[i32], value: i32, size: usize) -> usize {
     let mut low: usize = 0;
     let mut high: usize = size-1;
     let mut mid: usize;
@@ -18,9 +17,9 @@ fn search(array: &[i32], value: i32, size: i32) -> i32 {
     while low <= high {
         mid = (low+high)/2;
 
-        if value < array[low] { return low as i32; }
+        if value < array[low] { return low; }
 
-        if value > array[high] { return (high + 1) as i32; }
+        if value > array[high] { return high + 1; }
 
         if value > array[mid] {
             low = mid + 1;
@@ -28,12 +27,10 @@ fn search(array: &[i32], value: i32, size: i32) -> i32 {
             high = mid - 1;
         }
     }
-    return -1;
+    return 99999;
 }
 
-fn insertionSort(array: &mut[i32], size: i32) {
-    let size: usize = size as usize;
-
+fn insertionSort(array: &mut[i32], size: usize) {
     for i in 0..size {
         if i < size - 1 {
             print!("{}, ", array[i]);
@@ -49,11 +46,17 @@ fn insertionSort(array: &mut[i32], size: i32) {
     for i in 1..size {
         print!("\n");
         key = array[i];
-        index = search(&array, key, i as i32) as usize;
+        index = search(&array, key, i);
 
         for k in (index+1)..(i+1) {
+            print!("\nreplaced {} with {}\n", array[k], array[k-1]);
             array[k] = array[k-1];
         }
+
+        for h in 0..size {
+            print!("{}", array[h]);
+        }
+        print!("\n");
 
         array[index] = key;
 
