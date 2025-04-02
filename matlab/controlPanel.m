@@ -1,7 +1,7 @@
 clc
 clear all
 
-a = arduino()
+a = arduino();
 
 % define pins
 
@@ -66,6 +66,6 @@ while true
         break;
     end
 
-    simustate = simulate(a, inputs, simstate);
+    simstate = simulate(a, inputs, simstate);
 end
 
