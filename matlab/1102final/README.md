@@ -20,12 +20,14 @@
     - [x] yeast in fermenter
     - [x] maltose in fermenter
     - [ ] final %abv
+        - currently broken
     - [ ] graphs:
         - [ ] yeast concentration vs time
         - [ ] sugar concentration vs time
         - [ ] alchohol concentration vs time
         - [ ] CO2 concentration vs time
-- [x] comments Everywhere
+- [ ] comments Everywhere
+    - need em in ferment code
 - [ ] at least one thing turning on and one off for each stage in the process
     - need two added leds for mash and storage?
 - [ ] make pump do something

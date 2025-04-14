@@ -1,12 +1,12 @@
-function beer = ferment(a, crushedGrain, yeast, wort, batch)
+function beer = ferment(a, recipe, wort)
     %import constants
     constants
 
     %calculate maltose lbs (80% of grain by mass)
-    maltose = 0.8 * crushedGrain;
+    maltose = 0.8 * recipe.grain;
 
     %notify user of inputs
-    fprintf("Fermenting with %.2f gallons of wort, %.2f lbs yeast, and %.2f lbs maltose...\n", wort, yeast, maltose)
+    fprintf("Fermenting with %.2f gallons of wort, %.2f lbs yeast, and %.2f lbs maltose...\n", wort, recipe.yeast, maltose)
 
     %turn on ferment led
     a.writeDigitalPin(hwmap.leds.ferment, 1)
@@ -14,8 +14,10 @@ function beer = ferment(a, crushedGrain, yeast, wort, batch)
     %pause to simulate fermenting
     pause(1)
 
+    simulateFerment(recipe, wort)
+
     %calculate sediment waste and beer output
-    sediment = wort - batch;
+    sediment = wort - recipe.gallons;
     beer = wort - sediment;
 
     %notify user of outputs
@@ -24,37 +26,55 @@ function beer = ferment(a, crushedGrain, yeast, wort, batch)
 end
 
 
-function getYeastRate(yeastGrams, wort, grain)
-    maltose = grain * 0.8;
+function simulateFerment(recipe, wort)
+    maltose = recipe.grain * 0.8;
     dt = 1;
     i = 1;
-    hour(1) = 0;
-    sugar(1) = maltose / wort;
-    yeast(1) = yeastGrams / wort;
+    time(1) = 0;
+    sugar(1) = maltose / wort; %lbs/gal
+    yeast(1) = recipe.yeast / wort; %lbs/gal
     abv(1) = 0;
     co2(1) = 0;
 
+    consts.maxGrowth = 0.07; %/hr
+    consts.yeastYield = 0.05; %yeast:sugar
+    consts.yeastI = yeast(1);
+    consts.sugarI = sugar(1);
+    consts.saturationConc = 1.2; %lbs/gal
+    consts.alchoholYield = -0.488;
+    consts.co2Yield = -0.468;
+    consts.sugarYield = -20;
+
     while sugar(i) > (0.2 * sugar(1))
-        yeast_rate=((.07*((.05)*(sugar(1))+(yeast(1))-yeast(i)))/(1.2*.05+.05*(sugar(1))+yeast(1)-yeast(i)))*yeast(i);
-        sugarRate=-yeast_rate/.05;
-        abvRate=-yeast_rate*.488;
-        co2Rate=-yeast_rate*.468;
+        yeastRate = getYeastRate(consts, yeast(i));
+        sugarRate = yeastRate * consts.sugarYield;
+        abvRate   = yeastRate * consts.alchoholYield;
+        co2Rate   = yeastRate * consts.co2Yield;
 
         i = i + 1;
 
-        yeast(i)=yeast(i-1)+yeastRate*dt;
-        sugar(i)=sugar(i-1)+sugarRate*dt;
-        abv(i)=abv(i-1)+abvRate*dt;
-        co2(i)=co2(i-1)+co2Rate*dt;
+        yeast(i) = yeast(i - 1) + yeastRate * dt;
+        sugar(i) = sugar(i - 1) + sugarRate * dt;
+        abv(i) = abv(i - 1) + abvRate * dt;
+        co2(i) = co2(i - 1)+ co2Rate * dt;
 
-        hour(i) = hour(i-1)*dt;
+        time(i) = time(i - 1) + dt;
+
+        pause(0.1)
     end
 
-    hold on
-    plot(hour, sugar)
-    plot(hour, yeast)
-    plot(hour, abv)
-    plot(hour, co2)
-    hold off
+    fprintf("Final ABV: %.2f\n", abv(end));
+
+    subplot(4, 1, 1)
+    plot(time, sugar)
+
+    subplot(4, 1, 2)
+    plot(time, yeast)
+
+    subplot(4, 1, 3)
+    plot(time, abv)
+
+    subplot(4, 1, 4)
+    plot(time, co2)
 end
 

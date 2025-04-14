@@ -32,7 +32,7 @@ wort = whirl(a,wort);
 wort = chill(a,wort);
 
 %Fermenter
-beer = ferment(a, crushedGrain, recipe.yeast, wort, recipe.gallons);
+beer = ferment(a, recipe, wort);
 
 %Storage
 store(beer);
