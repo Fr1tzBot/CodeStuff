@@ -23,7 +23,7 @@ wort = mash(a, crushedGrain);
 wort = lauter(a, crushedGrain, wort);
 
 %Boil Kettle
-wort = boil(a, wort);
+wort = boil(a, recipe, wort);
 
 %Whirlpool
 wort = whirl(a,wort);

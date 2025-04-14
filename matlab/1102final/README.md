@@ -3,7 +3,7 @@
 ### Todo List:
 - [ ] prompt user to enter a size to be scaled up to
 - [ ] custom recipe input
-- [ ] hopulator code
+- [x] hopulator code
 - [ ] confirm outputs (all for scaled up batch):
     - [x] how many barrels of beer is produced
     - [x] lbs uncrushed & crushed grain
@@ -11,8 +11,9 @@
     - [x] gallons of sparge water added
     - [x] gallons of wort into boil
     - [ ] lbs of hops added to the boil
-    - [ ] length of boil
-    - [ ] total IBUs in a batch
+        - not currently in lbs
+    - [x] length of boil
+    - [x] total IBUs in a batch
     - [x] gallons of wort whirlpooled
     - [x] gallons of trub created
     - [x] gallons of wort chilled

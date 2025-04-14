@@ -1,4 +1,4 @@
-function wort = boil(a, wort)
+function wort = boil(a, recipe, wort)
     %import constants
     constants
 
@@ -10,6 +10,14 @@ function wort = boil(a, wort)
     fprintf("Boiling %.2f gallons of wort...\n", wort)
     fprintf("Added %.2f gallons of top up water.\n", topUpWater)
 
+    totalIbu = 0;
+    for i= 1:numel(recipe.hops.names)
+        fprintf("Added %.2f oz of hop %s after %d minutes of boil time.\n", recipe.hops.oz(i), recipe.hops.names(i), recipe.hops.bt(i))
+        util = 0.17691 + (0.94415 * recipe.hops.bt(i)) - (0.015027 * recipe.hops.bt(i)^2) + (0.00011369 * recipe.hops.bt(i)^3) - (0.00000033005 * recipe.hops.bt(i)^4);
+        totalIbu = totalIbu + (util * recipe.hops.aa(i) * recipe.hops.oz(i) / recipe.gallons);
+        pause(1)
+    end
+
     %turn on boil led
     a.writeDigitalPin(hwmap.leds.boil, 1)
 
@@ -20,7 +28,9 @@ function wort = boil(a, wort)
     wort = wort + topUpWater - evapWater;
 
     %notify user of boiled wort
+    fprintf("Boiled for %d minutes\n", max(recipe.hops.bt))
     fprintf("%.2f gallons of water evaporated while boiling.\n", evapWater)
+    fprintf("Total IBU: %.2f\n", totalIbu)
     fprintf("Produced %.2f gallons of wort.\n\n", wort)
 end
 
