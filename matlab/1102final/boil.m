@@ -12,7 +12,7 @@ function wort = boil(a, recipe, wort)
 
     totalIbu = 0;
     for i= 1:numel(recipe.hops.names)
-        fprintf("Added %.2f oz of hop %s after %d minutes of boil time.\n", recipe.hops.oz(i), recipe.hops.names(i), recipe.hops.bt(i))
+        fprintf("Added %.2f lbs of hop %s after %d minutes of boil time.\n", recipe.hops.oz(i)/16, recipe.hops.names(i), recipe.hops.bt(i))
         util = 0.17691 + (0.94415 * recipe.hops.bt(i)) - (0.015027 * recipe.hops.bt(i)^2) + (0.00011369 * recipe.hops.bt(i)^3) - (0.00000033005 * recipe.hops.bt(i)^4);
         totalIbu = totalIbu + (util * recipe.hops.aa(i) * recipe.hops.oz(i) / recipe.gallons);
         pause(1)

@@ -10,8 +10,7 @@
     - [x] gallons of mash water added
     - [x] gallons of sparge water added
     - [x] gallons of wort into boil
-    - [ ] lbs of hops added to the boil
-        - not currently in lbs
+    - [x] lbs of hops added to the boil
     - [x] length of boil
     - [x] total IBUs in a batch
     - [x] gallons of wort whirlpooled
