@@ -4,7 +4,7 @@
 %Recipe for Spotted Clown (New Glarus Spotted Cow clone)
 recipe1.gallons = 5.5;
 recipe1.grain = 12; %lbs of grain
-recipe1.yeast = 0.25; %lbs
+recipe1.yeast = 0.0254; %lbs
 recipe1.hopoz = [0.5, 0.5, 0.5]; %oz for each hop
 recipe1.hopaa = [6.7, 5.8, 5.2]; %TODO: add a desc of what AA is
 recipe1.hopbt = [60, 20, 5]; %minutes of boil time
@@ -12,7 +12,7 @@ recipe1.hopbt = [60, 20, 5]; %minutes of boil time
 %Recipe for New Glarus Fat Squirrel Clone
 recipe2.gallons = 5.5;
 recipe2.grain = 10; %lbs of grain
-recipe2.yeast = 0.25;
+recipe2.yeast = 0.0254;
 recipe2.hopoz = [0.5, 1]; %oz for each hop
 recipe2.hopaa = [14, 4]; %TODO: add a desc of what AA is
 recipe2.hopbt = [0, 10]; %minutes of boil time
