@@ -25,8 +25,7 @@
         - [ ] sugar concentration vs time
         - [ ] alchohol concentration vs time
         - [ ] CO2 concentration vs time
-- [ ] comments Everywhere
-    - just missing description of what hopAA is
+- [x] comments Everywhere
 - [ ] at least one thing turning on and one off for each stage in the process
     - need two added leds for mash and storage?
 - [ ] make pump do something
