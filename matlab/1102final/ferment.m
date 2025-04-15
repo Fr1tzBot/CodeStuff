@@ -48,7 +48,7 @@ function simulateFerment(recipe, wort)
     consts.sugarYield = -1/consts.yeastYield;
 
     while sugar(i) > (0.2 * sugar(1))
-        yeastRate = getYeastRate(consts, yeast(i));
+        yeastRate = getYeastRate(consts, yeast(i), sugar(i));
         sugarRate = yeastRate * consts.sugarYield;
         abvRate   = sugarRate * consts.alchoholYield;
         co2Rate   = sugarRate * consts.co2Yield;
