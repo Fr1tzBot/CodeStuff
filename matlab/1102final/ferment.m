@@ -1,4 +1,4 @@
-function beer = ferment(a, recipe, wort)
+function beer = ferment(a, s, recipe, wort)
     %import constants
     constants
 
@@ -14,7 +14,7 @@ function beer = ferment(a, recipe, wort)
     %pause to simulate fermenting
     pause(1)
 
-    simulateFerment(recipe, wort)
+    simulateFerment(s, recipe, wort)
 
     %calculate sediment waste and beer output
     sediment = wort - recipe.gallons;
@@ -28,7 +28,7 @@ function beer = ferment(a, recipe, wort)
 end
 
 
-function simulateFerment(recipe, wort)
+function simulateFerment(s, recipe, wort)
     maltose = recipe.grain * 0.8;
     dt = 1;
     i = 1;
@@ -66,6 +66,7 @@ function simulateFerment(recipe, wort)
     end
 
     fprintf("Final ABV: %.2f percent\n", abv(end) / 6.534 * 100);
+    writePosition(s, abv(end)/6.534)
     pause(1)
 
     subplot(4, 1, 1)

@@ -32,4 +32,4 @@ hwmap.pump.pin2    = 'D12';
 hwmap.thermistor   = 'A0';
 
 %Pump Invert:
-pumpInvert = false;
+pumpInvert = true;

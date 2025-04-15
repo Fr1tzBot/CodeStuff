@@ -4,7 +4,7 @@ function pump(a, on)
 
     if on
         %turn one of the motor pins on, based on the set motor invert
-        if motorInvert
+        if pumpInvert
             p = hwmap.pump.pin1;
         else
             p = hwmap.pump.pin2;
