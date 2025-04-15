@@ -1,5 +1,5 @@
 %returns the yeast growth rate in lbs/gal-hr
-function yeastRate = getYeastRate(consts, yeast, sugar)
+function yeastRate = getYeastRate(consts, yeast)
     %\mu_max = consts.maxGrowth
     %Y_{x/s} = consts.yeastI / consts.sugarI?
     %S_0 = consts.sugarI
@@ -12,8 +12,8 @@ function yeastRate = getYeastRate(consts, yeast, sugar)
     yeastI = consts.yeastI;
     saturationConc = consts.saturationConc;
 
-    dx = mu_max * (yeastYield * sugar + yeastI - yeast) * yeast;
-    dt = saturationConc * yeastYield + yeastYield * sugar + yeastI - yeast;
+    dx = mu_max * (yeastYield * sugarI + yeastI - yeast) * yeast;
+    dt = saturationConc * yeastYield + yeastYield * sugarI + yeastI - yeast;
 
     yeastRate = dx / dt;
 end

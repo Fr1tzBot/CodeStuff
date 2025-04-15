@@ -48,7 +48,7 @@ function simulateFerment(recipe, wort)
     consts.sugarYield = -1/consts.yeastYield;
 
     while sugar(i) > (0.2 * sugar(1))
-        yeastRate = getYeastRate(consts, yeast(i), sugar(i));
+        yeastRate = getYeastRate(consts, yeast(i));
         sugarRate = yeastRate * consts.sugarYield;
         abvRate   = sugarRate * consts.alchoholYield;
         co2Rate   = sugarRate * consts.co2Yield;
@@ -65,7 +65,7 @@ function simulateFerment(recipe, wort)
         pause(0.1)
     end
 
-    fprintf("Final ABV: %.2f percent\n", abv(end)/6.584*100);
+    fprintf("Final ABV: %.2f percent\n", abv(end) / 6.534 * 100);
     pause(1)
 
     subplot(4, 1, 1)
