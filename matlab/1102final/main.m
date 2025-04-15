@@ -1,5 +1,5 @@
 clc
-clear a
+clear all
 
 [a, s] = initarduino();
 
@@ -37,5 +37,5 @@ beer = ferment(a, recipe, wort);
 %Storage
 store(beer);
 
-exit(0)
+%exit(0)
 
