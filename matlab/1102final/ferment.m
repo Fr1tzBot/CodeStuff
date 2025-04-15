@@ -45,20 +45,20 @@ function simulateFerment(recipe, wort)
     consts.saturationConc = 1.2; %lbs/gal
     consts.alchoholYield = -0.488;
     consts.co2Yield = -0.468;
-    consts.sugarYield = -20;
+    consts.sugarYield = -1/consts.yeastYield;
 
     while sugar(i) > (0.2 * sugar(1))
         yeastRate = getYeastRate(consts, yeast(i));
         sugarRate = yeastRate * consts.sugarYield;
-        abvRate   = yeastRate * consts.alchoholYield;
-        co2Rate   = yeastRate * consts.co2Yield;
+        abvRate   = sugarRate * consts.alchoholYield;
+        co2Rate   = sugarRate * consts.co2Yield;
 
         i = i + 1;
 
         yeast(i) = yeast(i - 1) + yeastRate * dt;
         sugar(i) = sugar(i - 1) + sugarRate * dt;
         abv(i) = abv(i - 1) + abvRate * dt;
-        co2(i) = co2(i - 1)+ co2Rate * dt;
+        co2(i) = co2(i - 1) + co2Rate * dt;
 
         time(i) = time(i - 1) + dt;
 
@@ -70,14 +70,26 @@ function simulateFerment(recipe, wort)
 
     subplot(4, 1, 1)
     plot(time, sugar)
+    title("Sugar Vs. Time")
+    xlabel("Time (Hours)")
+    ylabel("Sugar (lbs/gal)")
 
     subplot(4, 1, 2)
     plot(time, yeast)
+    title("Yeast Vs. Time")
+    xlabel("Time (Hours)")
+    ylabel("Yeast (lbs/gal)")
 
     subplot(4, 1, 3)
     plot(time, abv)
+    title("Alchohol vs Time")
+    xlabel("Time (Hours)")
+    ylabel("Alchohol (lbs/gal)")
 
     subplot(4, 1, 4)
     plot(time, co2)
+    title("CO2 vs Time")
+    xlabel("Time (Hours)")
+    ylabel("CO2 (lbs/gal)")
 end
 
