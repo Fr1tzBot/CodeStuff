@@ -24,16 +24,15 @@ function initpins(a, pins)
     %iterate through the created array
     for i = 1:numel(fields)
         %set name to the selected item
-        name = fields{1};
+        name = fields{i};
 
         %set pin to the pin corresponding to the selected name
         pin = pins.(name);
 
         %configure pin as digital output, and ensure it is low
         a.configurePin(pin, "DigitalOutput")
-        a.writeDigitalPin(pin, 0)
 
         %debug message (in green)
-        fprintf("\033[32mInitialized pin %s (%s).\033[0m\n", name, pin)
+        fprintf("Initialized pin %s (%s).\n", name, pin)
     end
 end
