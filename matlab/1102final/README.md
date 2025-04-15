@@ -1,10 +1,10 @@
 # README.md
 
 ### Todo List:
-- [ ] prompt user to enter a size to be scaled up to
+- [x] prompt user to enter a size to be scaled up to
 - [ ] custom recipe input
 - [x] hopulator code
-- [ ] confirm outputs (all for scaled up batch):
+- [x] confirm outputs (all for scaled up batch):
     - [x] how many barrels of beer is produced
     - [x] lbs uncrushed & crushed grain
     - [x] gallons of mash water added
@@ -19,13 +19,13 @@
     - [x] gallons of wort into fermenter
     - [x] yeast in fermenter
     - [x] maltose in fermenter
-    - [ ] final %abv
-        - currently broken
-    - [ ] graphs:
-        - [ ] yeast concentration vs time
-        - [ ] sugar concentration vs time
-        - [ ] alchohol concentration vs time
-        - [ ] CO2 concentration vs time
+    - [x] final %abv
+        - currently not reasonable but it is there
+    - [x] graphs:
+        - [x] yeast concentration vs time
+        - [x] sugar concentration vs time
+        - [x] alchohol concentration vs time
+        - [x] CO2 concentration vs time
 - [ ] comments Everywhere
     - need em in ferment code
 - [ ] at least one thing turning on and one off for each stage in the process
