@@ -15,14 +15,17 @@ function wort = lauter(a, crushedGrain, wort)
     pause(1)
 
     %notify user of outputs
-    fprintf("Spent %d lbs of grain.\n", crushedGrain)
+    fprintf("Spent %.2f lbs of grain.\n", crushedGrain)
+    pause(1)
 
     %calculate waste water in grain
     grainWater = 0.1 * crushedGrain;
     fprintf("Removed %.2f gallons of water with grain.\n", grainWater)
+    pause(1)
 
     %calculate output wort
     wort = wort + spargeWater - grainWater;
     fprintf("Produced %.2f Gallons of wort.\n\n", wort)
+    pause(1)
 end
 

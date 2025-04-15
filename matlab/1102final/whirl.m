@@ -17,6 +17,8 @@ function wort = whirl(a, wort)
 
     %notify user of outputs
     fprintf("Produced %.2f gallons of trub.\n", trub)
+    pause(1)
     fprintf("Produced %.2f gallons of wort.\n\n", wort)
+    pause(1)
 end
 

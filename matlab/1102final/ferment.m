@@ -22,7 +22,9 @@ function beer = ferment(a, recipe, wort)
 
     %notify user of outputs
     fprintf("Produced %.2f gallons of sediment.\n", sediment)
+    pause(1)
     fprintf("Produced %.2f gallons of beer\n\n", beer)
+    pause(1)
 end
 
 
@@ -63,7 +65,8 @@ function simulateFerment(recipe, wort)
         pause(0.1)
     end
 
-    fprintf("Final ABV: %.2f\n", abv(end));
+    fprintf("Final ABV: %.2f percent\n", abv(end)/6.584*100);
+    pause(1)
 
     subplot(4, 1, 1)
     plot(time, sugar)

@@ -7,6 +7,7 @@ function chrushedGrain = mill(rawGrain)
 
     %notify user of outputs
     chrushedGrain = rawGrain;
-    fprintf("Crushed %d lbs of grain\n\n", chrushedGrain)
+    fprintf("Crushed %.2f lbs of grain\n\n", chrushedGrain)
+    pause(1)
 end
 

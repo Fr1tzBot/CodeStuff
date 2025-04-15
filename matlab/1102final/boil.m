@@ -8,7 +8,9 @@ function wort = boil(a, recipe, wort)
 
     %give input notifications
     fprintf("Boiling %.2f gallons of wort...\n", wort)
+    pause(1)
     fprintf("Added %.2f gallons of top up water.\n", topUpWater)
+    pause(1)
 
     totalIbu = 0;
     for i= 1:numel(recipe.hops.names)
@@ -29,8 +31,12 @@ function wort = boil(a, recipe, wort)
 
     %notify user of boiled wort
     fprintf("Boiled for %d minutes\n", max(recipe.hops.bt))
+    pause(1)
     fprintf("%.2f gallons of water evaporated while boiling.\n", evapWater)
+    pause(1)
     fprintf("Total IBU: %.2f\n", totalIbu)
+    pause(1)
     fprintf("Produced %.2f gallons of wort.\n\n", wort)
+    pause(1)
 end
 

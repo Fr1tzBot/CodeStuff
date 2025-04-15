@@ -13,5 +13,6 @@ function wort = chill(a, wort)
 
     %notify user of chilled output
     fprintf("Produced %.2f gallons of wort.\n\n", wort)
+    pause(1)
 end
 
