@@ -2,7 +2,7 @@
 
 ### Todo List:
 - [x] prompt user to enter a size to be scaled up to
-- [ ] custom recipe input
+- [x] custom recipe input
 - [x] hopulator code
 - [x] confirm outputs (all for scaled up batch):
     - [x] how many barrels of beer is produced
