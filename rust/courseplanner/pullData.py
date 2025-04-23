@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
+import json
 import requests
 from selectolax.parser import HTMLParser
-import json
 
 class Constants:
     BASE = "https://www.banweb.mtu.edu"
@@ -55,6 +55,16 @@ class Course:
         self.location = data[15]
         self.fee = data[16]
 
+def get(url) -> HTMLParser:
+    response = requests.get(url, timeout = 5)
+    checkResponse(response)
+    return HTMLParser(response.text)
+
+def post(url, data) -> HTMLParser:
+    response = requests.post(url, data, timeout = 5)
+    checkResponse(response)
+    return HTMLParser(response.text)
+
 def checkResponse(response: requests.Response) -> bool:
     if response.status_code == 200:
         return True
@@ -62,8 +72,7 @@ def checkResponse(response: requests.Response) -> bool:
     print(f"Request to {response.url} failed with code {response.status_code}")
     sys.exit(1)
 
-def scrapeData(name, text):
-    tree = HTMLParser(text)
+def scrapeData(name, tree):
     vals = tree.css(f"select[name='{name}'] > option")
     tmp = {}
     for i in vals:
@@ -76,26 +85,16 @@ def scrapeData(name, text):
     return tmp
 
 def getTerms() -> dict:
-    termRaw = requests.get(Constants.TERM_LIST)
-    checkResponse(termRaw)
-
-    return scrapeData("p_term", termRaw.text)
+    return scrapeData("p_term", get(Constants.TERM_LIST))
 
 def getSubjs(term: str) -> dict:
-
     Constants.SUBJ_DATA["p_term"] = term
-    subjList = requests.post(Constants.SUBJ_LIST, data = Constants.SUBJ_DATA)
-    checkResponse(subjList)
-
-    return scrapeData("sel_subj", subjList.text)
+    return scrapeData("sel_subj", post(Constants.SUBJ_LIST, Constants.SUBJ_DATA))
 
 
 def getCourses(subj) -> list:
     Constants.CLASS_DATA["sel_subj"] = ["dummy", subj]
-    classList = requests.post(Constants.CLASS_LIST, data = Constants.CLASS_DATA)
-    checkResponse(classList)
-
-    tree = HTMLParser(classList.text)
+    tree = post(Constants.CLASS_LIST, Constants.CLASS_DATA)
     vals = tree.css("table.datadisplaytable tr")
 
     courses = []
@@ -115,13 +114,10 @@ def getCourses(subj) -> list:
     return courses
 
 def getInfo(course: Course) -> dict:
-    classRaw = requests.get(course.url)
-    checkResponse(classRaw)
-
-    tree = HTMLParser(classRaw.text)
+    tree = get(course.url)
     vals = tree.css("ul li")
-    for i in range(len(vals)):
-        vals[i] = vals[i].text()
+    for i, val in enumerate(vals):
+        vals[i] = val.text()
 
     info = {}
     for i in vals:
@@ -149,10 +145,10 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
 
 
     #force uppercase to ensure compatibility
-    for i in range(len(currentClasses)):
-        currentClasses[i] = currentClasses[i].upper()
-    for i in range(len(pastClasses)):
-        pastClasses[i] = pastClasses[i].upper()
+    for i, course in enumerate(currentClasses):
+        currentClasses[i] = course.upper()
+    for i, course in enumerate(pastClasses):
+        pastClasses[i] = course.upper()
 
     prereq = prereq.strip()
 
@@ -164,37 +160,36 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
         a = parts[i]
         b = parts[i+1]
 
+        if "or" in b or "and" in b:
+            continue
 
         if "or" in a:
             toeval += " or "
             continue
-        elif "or" in b:
-            continue
-        elif "and" in a:
+
+        if "and" in a:
             toeval += " and "
             continue
-        elif "and" in b:
-            continue
+
+        #we must have a class selected
+        #first add opening parenthesis (there can be multiple)
+        while a[0] == "(":
+            toeval += " ( "
+            a = a[1:]
+        if "(C)" in b:
+            coreq = True
+            b = b.replace("(C)", "")
+
+        course = (a + b).strip(")")
+        if (course in pastClasses) or (coreq and course in currentClasses):
+            toeval += " 1 "
         else:
-            #we must have a class selected
-            #first add opening parenthesis
-            if a[0] == "(":
-                toeval += " ( "
-                a = a[1:]
-            if "(C)" in b:
-                coreq = True;
-                b = b.replace("(C)", "")
+            toeval += " 0 "
 
-            course = (a + b).strip(")")
-            if course in pastClasses:
-                toeval += " 1 "
-            elif coreq and course in currentClasses:
-                toeval += " 1 "
-            else:
-                toeval += " 0 "
-
-            if b[-1] == ")":
-                toeval += " ) "
+        if b[-1] == ")":
+            toeval += " ) "
+    print(prereq)
+    print(toeval)
     return eval(toeval)
 
 
@@ -203,24 +198,25 @@ def prettyprint(adict) -> None:
 
 terms = getTerms()
 
-Constants.TERM = list(terms.keys())[0]
+Constants.TERM = list(terms.keys())[12]
 
 subjs = getSubjs(Constants.TERM)
-
-Constants.SUBJ = list(subjs.keys())[0]
 
 
 Constants.CLASS_DATA["term_in"] = Constants.TERM
 
 currentClasses = ["ma2321", "ma3521", "un1015", "cs2311", "cs1142", "ph2200", "ph1200"]
-pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111", "ph1100", "ma2160", "eng1102", "ch1151", "ph2100"]
+pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111",
+               "ph1100", "ma2160", "eng1102", "ch1151", "ph2100"]
 
 courses = getCourses("ENG")
 for i in courses:
     print(i.number, end = " ")
     a = getInfo(i)
-    if "prereq" in a.keys():
+    if "prereq" in a:
         print("True" if checkPrereq(getInfo(i)["prereq"], currentClasses, pastClasses) else "False")
+    else:
+        print()
 
 
 
