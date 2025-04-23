@@ -8,6 +8,7 @@ A tool for creating and verifying class flow charts
 - [ ] ensures classes are offered in the given semester
 - [ ] checks for class conflicts (?)
 - [ ] interactive flowchart building gui/tui
+- [ ] written in rust for ludicrous speed :)
 
 ## Current issues:
 - [ ] replace eval() usage with a parser
