@@ -120,26 +120,107 @@ def getInfo(course: Course) -> dict:
 
     tree = HTMLParser(classRaw.text)
     vals = tree.css("ul li")
+    for i in range(len(vals)):
+        vals[i] = vals[i].text()
+
+    info = {}
     for i in vals:
-        print(i.attributes, i.text().split("\n"))
+        if "Credits" in i:
+            info["credits"] = i.split("\n")[1]
+        elif "Lec-Rec-Lab" in i:
+            info["lrl"] = i.split("(")[1].strip(")\n").split("-")
+        elif "Offered" in i:
+            info["offered"] = i.split("\n")[-1].split(", ")
+        elif "Requisite" in i:
+            info["prereq"] = i.split(":")[1].replace("\n", "")
+        elif "Restriction" in i:
+            info["restrict"] = i.split(":")[1]
+        else:
+            print(f"No idea what to do with: {i.split(":")[0]}")
+            continue
+    return info
+
+#Bugs here:
+#classes that require special testing break
+#classes that require pre-calc 1 classes can break
+def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
+    if prereq == "":
+        return True
+
+
+    #force uppercase to ensure compatibility
+    for i in range(len(currentClasses)):
+        currentClasses[i] = currentClasses[i].upper()
+    for i in range(len(pastClasses)):
+        pastClasses[i] = pastClasses[i].upper()
+
+    prereq = prereq.strip()
+
+    parts = prereq.split(" ")
+    toeval = ""
+
+    for i in range(len(parts) - 1):
+        coreq = False
+        a = parts[i]
+        b = parts[i+1]
+
+
+        if "or" in a:
+            toeval += " or "
+            continue
+        elif "or" in b:
+            continue
+        elif "and" in a:
+            toeval += " and "
+            continue
+        elif "and" in b:
+            continue
+        else:
+            #we must have a class selected
+            #first add opening parenthesis
+            if a[0] == "(":
+                toeval += " ( "
+                a = a[1:]
+            if "(C)" in b:
+                coreq = True;
+                b = b.replace("(C)", "")
+
+            course = (a + b).strip(")")
+            if course in pastClasses:
+                toeval += " 1 "
+            elif coreq and course in currentClasses:
+                toeval += " 1 "
+            else:
+                toeval += " 0 "
+
+            if b[-1] == ")":
+                toeval += " ) "
+    return eval(toeval)
+
 
 def prettyprint(adict) -> None:
     print(json.dumps(adict, indent = 4))
 
 terms = getTerms()
 
-Constants.TERM = list(terms.keys())[1]
-print(Constants.TERM)
+Constants.TERM = list(terms.keys())[0]
 
 subjs = getSubjs(Constants.TERM)
 
 Constants.SUBJ = list(subjs.keys())[0]
-print(Constants.SUBJ)
 
 
 Constants.CLASS_DATA["term_in"] = Constants.TERM
 
+currentClasses = ["ma2321", "ma3521", "un1015", "cs2311", "cs1142", "ph2200", "ph1200"]
+pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111", "ph1100", "ma2160", "eng1102", "ch1151", "ph2100"]
 
-courses = getCourses("EE")
-print(getInfo(courses[0]))
+courses = getCourses("ENG")
+for i in courses:
+    print(i.number, end = " ")
+    a = getInfo(i)
+    if "prereq" in a.keys():
+        print("True" if checkPrereq(getInfo(i)["prereq"], currentClasses, pastClasses) else "False")
+
+
 
