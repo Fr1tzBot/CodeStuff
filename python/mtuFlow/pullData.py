@@ -84,7 +84,7 @@ class Course:
                 self.restrict = i.strip().replace("Restrictions: \n", "")
             else:
                 print(f"No idea what to do with: {i.split(":")[0]}")
-                continue
+        return self
     def __str__(self):
         return f"""{self.name} ({self.subject}{self.number}):
             CRN: {self.crn}
@@ -172,7 +172,6 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
     if prereq == "":
         return True
 
-
     #force uppercase to ensure compatibility
     for i, course in enumerate(currentClasses):
         currentClasses[i] = course.upper()
@@ -182,7 +181,7 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
     prereq = prereq.strip()
 
     classes = re.split(r' and | or ', prereq)
-    andors = re.findall(f' or | and ', prereq)
+    andors = re.findall(r' or | and ', prereq)
     for i, val in enumerate(andors):
         andors[i] = val.strip()
 
@@ -209,7 +208,6 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
         course = val.strip("(C)").strip(")").replace(" ", "").upper()
 
         if ">=" in val or ">" in val:
-            print(f"Pushed 1 for {val}")
             toeval += " 1 "
         elif (course in pastClasses) or ("(C)" in val and course in currentClasses):
             toeval += " 1 "
