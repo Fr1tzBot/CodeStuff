@@ -55,6 +55,58 @@ class Course:
         self.date = data[14]
         self.location = data[15]
         self.fee = data[16]
+        self.creditsVerbose = ""
+        self.lrl = ""
+        self.offered = ""
+        self.prereq = ""
+        self.restrict = ""
+    def getInfo(self):
+        tree = get(self.url)
+        vals = tree.css("ul li")
+        for i, val in enumerate(vals):
+            vals[i] = val.text()
+
+        for i in vals:
+            if "Credits" in i:
+                self.creditsVerbose = i.split("\n")[1].strip().strip(";")
+                # info["credits"] = i.split("\n")[1]
+            elif "Lec-Rec-Lab" in i:
+                # info["lrl"] = i.split("(")[1].strip(")\n").split("-")
+                self.lrl = i.split("(")[1].strip(")\n").split("-")
+            elif "Offered" in i:
+                # info["offered"] = i.split("\n")[-1].split(", ")
+                self.offered = i.split("\n")[-1].split(", ")
+            elif "Requisite" in i:
+                # info["prereq"] = i.split(":")[1].replace("\n", "")
+                self.prereq = i.split(":")[1].replace("\n", "")
+            elif "Restriction" in i:
+                # info["restrict"] = i.split(":")[1]
+                self.restrict = i.strip().replace("Restrictions: \n", "")
+            else:
+                print(f"No idea what to do with: {i.split(":")[0]}")
+                continue
+    def __str__(self):
+        return f"""{self.name} ({self.subject}{self.number}):
+            CRN: {self.crn}
+            URL: {self.url}
+            Section: {self.section}
+            Campus: {self.campus}
+            Credits: {self.credits}
+            Days: {self.days}
+            Time: {self.time}
+            Capacity: {self.capacity}
+            Used Seats: {self.used}
+            Remaining Seats: {self.remaining}
+            Instructor: {self.instructor}
+            Dates: {self.date}
+            Location: {self.location}
+            Fee: {self.fee}
+            creditsVerbose: {self.creditsVerbose}
+            Lec-Rec-Lab: {self.lrl}
+            Offered: {self.offered}
+            Prereqs: {self.prereq}
+            Restrcitions: {self.restrict}
+        """
 
 def get(url) -> HTMLParser:
     response = requests.get(url, timeout = 5)
@@ -114,31 +166,7 @@ def getCourses(subj) -> list:
             courses.append(Course(data))
     return courses
 
-def getInfo(course: Course) -> dict:
-    tree = get(course.url)
-    vals = tree.css("ul li")
-    for i, val in enumerate(vals):
-        vals[i] = val.text()
-
-    info = {}
-    for i in vals:
-        if "Credits" in i:
-            info["credits"] = i.split("\n")[1]
-        elif "Lec-Rec-Lab" in i:
-            info["lrl"] = i.split("(")[1].strip(")\n").split("-")
-        elif "Offered" in i:
-            info["offered"] = i.split("\n")[-1].split(", ")
-        elif "Requisite" in i:
-            info["prereq"] = i.split(":")[1].replace("\n", "")
-        elif "Restriction" in i:
-            info["restrict"] = i.split(":")[1]
-        else:
-            print(f"No idea what to do with: {i.split(":")[0]}")
-            continue
-    return info
-
 #Bugs here:
-#classes that require special testing break
 #classes that require pre-calc 1 classes can break
 def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
     if prereq == "":
@@ -213,11 +241,6 @@ pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111",
 
 courses = getCourses("MA")
 for i in courses:
-    print(i.number)
-    a = getInfo(i)
-    if "prereq" in a:
-        print(checkPrereq(getInfo(i)["prereq"], currentClasses, pastClasses))
-    else:
-        print(checkPrereq("", currentClasses, pastClasses))
-
-
+    i.getInfo()
+    print(i)
+    print(checkPrereq(i.prereq, currentClasses, pastClasses))
