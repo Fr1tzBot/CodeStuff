@@ -2,6 +2,7 @@
 
 import sys
 import json
+import re
 import requests
 from selectolax.parser import HTMLParser
 
@@ -152,53 +153,54 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
 
     prereq = prereq.strip()
 
-    parts = prereq.split(" ")
+    classes = re.split(r' and | or ', prereq)
+    andors = re.findall(f' or | and ', prereq)
+    for i, val in enumerate(andors):
+        andors[i] = val.strip()
+
+    combined = []
+    combined.append(classes[0])
+    for i in range(len(andors)):
+        combined.append(andors[i])
+        combined.append(classes[i+1])
+
+
     toeval = ""
 
-    for i in range(len(parts) - 1):
-        coreq = False
-        a = parts[i]
-        b = parts[i+1]
-
-        if "or" in b or "and" in b:
+    for i, val in enumerate(combined):
+        #first push or/and statements
+        if val in ["or", "and"]:
+            toeval += f" {val} "
             continue
 
-        if "or" in a:
-            toeval += " or "
-            continue
-
-        if "and" in a:
-            toeval += " and "
-            continue
-
-        #we must have a class selected
-        #first add opening parenthesis (there can be multiple)
-        while a[0] == "(":
+        #then push all open parenthesis
+        while val[0] == "(":
             toeval += " ( "
-            a = a[1:]
-        if "(C)" in b:
-            coreq = True
-            b = b.replace("(C)", "")
+            val = val[1:]
 
-        course = (a + b).strip(")")
-        if (course in pastClasses) or (coreq and course in currentClasses):
+        course = val.strip("(C)").strip(")").replace(" ", "").upper()
+
+        if ">=" in val or ">" in val:
+            print(f"Pushed 1 for {val}")
+            toeval += " 1 "
+        elif (course in pastClasses) or ("(C)" in val and course in currentClasses):
             toeval += " 1 "
         else:
             toeval += " 0 "
 
-        if b[-1] == ")":
-            toeval += " ) "
-    print(prereq)
-    print(toeval)
-    return eval(toeval)
+        val = val.replace("(C)", "")
 
+        for i in range(val.count(")")):
+            toeval += " ) "
+
+    return bool(eval(toeval))
 
 def prettyprint(adict) -> None:
     print(json.dumps(adict, indent = 4))
 
 terms = getTerms()
 
-Constants.TERM = list(terms.keys())[12]
+Constants.TERM = list(terms.keys())[1]
 
 subjs = getSubjs(Constants.TERM)
 
@@ -209,14 +211,13 @@ currentClasses = ["ma2321", "ma3521", "un1015", "cs2311", "cs1142", "ph2200", "p
 pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111",
                "ph1100", "ma2160", "eng1102", "ch1151", "ph2100"]
 
-courses = getCourses("ENG")
+courses = getCourses("MA")
 for i in courses:
-    print(i.number, end = " ")
+    print(i.number)
     a = getInfo(i)
     if "prereq" in a:
-        print("True" if checkPrereq(getInfo(i)["prereq"], currentClasses, pastClasses) else "False")
+        print(checkPrereq(getInfo(i)["prereq"], currentClasses, pastClasses))
     else:
-        print()
-
+        print(checkPrereq("", currentClasses, pastClasses))
 
 
