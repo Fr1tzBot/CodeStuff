@@ -5,6 +5,7 @@ import json
 import re
 import requests
 from selectolax.parser import HTMLParser
+from tqdm import tqdm
 
 class Constants:
     BASE = "https://www.banweb.mtu.edu"
@@ -107,6 +108,31 @@ class Course:
             Prereqs: {self.prereq}
             Restrcitions: {self.restrict}
         """
+    def asDict(self) -> dict:
+        return {
+            "url": self.url,
+            "crn": self.crn,
+            "subject": self.subject,
+            "number": self.number,
+            "section": self.section,
+            "campus": self.campus,
+            "credits": self.credits,
+            "name": self.name,
+            "days": self.days,
+            "time": self.time,
+            "capacity": self.capacity,
+            "used": self.used,
+            "remaining": self.remaining,
+            "instructor": self.instructor,
+            "date": self.date,
+            "location": self.location,
+            "fee": self.fee,
+            "creditsVerbose": self.creditsVerbose,
+            "lrl": self.lrl,
+            "offered": self.offered,
+            "prereq": self.prereq,
+            "restrict": self.restrict,
+        }
 
 def get(url) -> HTMLParser:
     response = requests.get(url, timeout = 5)
@@ -224,6 +250,8 @@ def checkPrereq(prereq, currentClasses, pastClasses) -> bool:
 def prettyprint(adict) -> None:
     print(json.dumps(adict, indent = 4))
 
+
+
 terms = getTerms()
 
 Constants.TERM = list(terms.keys())[1]
@@ -237,8 +265,17 @@ currentClasses = ["ma2321", "ma3521", "un1015", "cs2311", "cs1142", "ph2200", "p
 pastClasses = ["cs1121", "eng1101", "ma1160", "cs1111",
                "ph1100", "ma2160", "eng1102", "ch1151", "ph2100"]
 
-courses = getCourses("MA")
-for i in courses:
-    i.getInfo()
-    print(i)
-    print(checkPrereq(i.prereq, currentClasses, pastClasses))
+courses = []
+print(f"Pulling Courses for {len(subjs)} subjects...")
+for j in tqdm(subjs):
+    courses += getCourses(j)
+
+
+print(f"Pullin info for {len(courses)} courses...")
+output = []
+for i in tqdm(range(len(courses[:100]))):
+    courses[i].getInfo()
+    output.append(courses[i].asDict())
+
+prettyprint(output)
+
