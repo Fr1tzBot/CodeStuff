@@ -1,13 +1,30 @@
 use std::time::Instant;
+use rayon::prelude::*;
+use reqwest::Client;
+use scraper::Html;
+
+pub fn parallelize<F, P, R>(func: F, params: impl IntoParallelIterator<Item = P>) -> Vec<R>
+where
+    F: Fn(P) -> R + Sync + Send,
+    P: Send,
+    R: Send,
+{
+    params.into_par_iter().map(func).collect()
+}
 
 /// Sends a GET request to the specified url
 /// Parses the returned content into a scraper HTML object
-pub async fn get(url: &str) -> String {
-    // TODO: proper non-200 response error handling, timeouts?
-    let client = reqwest::Client::new();
+pub async fn get(url: String) -> Html {
+    println!("{url}");
+    let client = Client::new();
     let result = client.get(url).send().await;
     let body = result.unwrap().text().await;
-    body.unwrap()
+    let text = body.unwrap();
+    Html::parse_document(&text)
+}
+
+pub async fn parallel_get(urls: Vec<String>) -> Vec<Html> {
+    futures::future::join_all(parallelize(get, urls)).await
 }
 
 
@@ -21,38 +38,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut start = Instant::now();
 
-    // Create a client to reuse connection
-    let client = reqwest::Client::new();
+    let results = parallel_get(urls.clone()).await;
 
-    // Create futures for each request
-    let futures = urls.clone().into_iter().map(|url| {
-        let client = client.clone();
-        tokio::spawn(async move {
-            let resp = client.get(url).send().await?;
-            resp.text().await
-        })
-    });
-
-    // Execute all futures concurrently
-    let results = futures::future::join_all(futures).await;
-
-    // Process results
-    for result in results {
-        match result {
-            Ok(Ok(_text)) => {},
-            Ok(Err(e)) => eprintln!("Request error: {}", e),
-            Err(e) => eprintln!("Task error: {}", e),
-        }
-    }
+    dbg!(results);
 
     println!("100 Parallel Request time: {:?}", start.elapsed());
 
     start = Instant::now();
 
-    let mut output: Vec<String> = vec![];
+    let mut output: Vec<Html> = vec![];
 
     for i in urls {
-        output.push(get(&i).await);
+        output.push(get(i.to_string()).await);
     }
 
     println!("100 Serial Request time: {:?}", start.elapsed());
