@@ -1,0 +1,9 @@
+// Begins the module, set the module name.
+// Then port list defining the impots and outputs of the module
+module Lab0(
+input [9:0] sw,
+output [9:0] LEDR);
+// assign statement settings red led arrau to switch array values
+assign LEFR = SW;
+// Ends the module
+endmodule
