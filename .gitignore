@@ -21,6 +21,8 @@ reference/c/*.o
 
 *.png
 
+*.zip
+
 *.xlsx
 
 #macos
