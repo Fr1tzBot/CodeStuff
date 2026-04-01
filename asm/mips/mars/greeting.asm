@@ -1,20 +1,20 @@
 .text
     #can do this or set a cap for name length...
     #prompt user for # of chars in name
-    la $a0 chars
-    li $v0 4
+    la $a0, chars
+    li $v0, 4
     syscall
 
     #read input
-    li $v0 5
+    li $v0, 5
     syscall
-    move $t0 $v0
+    move $t0, $v0
 
     #increment by 2 for null-terminator and \n
     addi $t0 $t0 2
 
     #prompt user for their name
-    la $a0 prompt
+    la $a0, prompt
     li $v0 4
     syscall
 

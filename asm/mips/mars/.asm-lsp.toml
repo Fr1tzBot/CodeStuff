@@ -1,0 +1,9 @@
+[default_config]
+version = "0.10.1"
+assembler = "mars"
+instruction_set = "mips"
+pseudoinstructions = true
+
+[default_config.opts]
+diagnostics = false
+default_diagnostics = false

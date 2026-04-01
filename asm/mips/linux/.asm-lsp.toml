@@ -1,0 +1,8 @@
+[default_config]
+version = "0.10.1"
+assembler = "gas"        # GNU assembler on Linux
+instruction_set = "mips" # real MIPS
+
+[default_config.opts]
+diagnostics = false # enable LSP checks for real MIPS
+default_diagnostics = false
