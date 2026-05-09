@@ -1,27 +1,21 @@
-use crossterm::event::{read, Event, KeyCode};
-use crossterm::terminal::{enable_raw_mode, disable_raw_mode};
+use std::io::{stdin,Read};
 use crate::board::Dir;
 
+pub fn clear_screen() {
+    print!("\x1b[2J\x1b[H");
+}
+
 pub fn get_key() -> Option<Dir> {
-    enable_raw_mode();
-    let key: Option<Dir>;
-    loop {
-        match read() {
-            Ok(Event::Key(event)) => {
-                key = match event.code {
-                    KeyCode::Up =>    Some(Dir::Up),
-                    KeyCode::Down =>  Some(Dir::Down),
-                    KeyCode::Left =>  Some(Dir::Left),
-                    KeyCode::Right => Some(Dir::Right),
-                    KeyCode::Char('q') => None,
-                    _ => {continue;}
-                };
-                break
-            },
-            _ => {continue;}
-        }
+    for byte in stdin().bytes() {
+        match byte.unwrap() {
+            b'q' => return None,
+            b'w' => return Some(Dir::Up),
+            b'a' => return Some(Dir::Left),
+            b's' => return Some(Dir::Down),
+            b'd' => return Some(Dir::Right),
+            _ => continue
+        };
     }
-    disable_raw_mode();
-    key
+    return None;
 }
 

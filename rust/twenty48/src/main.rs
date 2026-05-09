@@ -1,29 +1,33 @@
 use std::env;
-use rand::SeedableRng;
-use rand::RngExt;
-use rand::rngs::StdRng;
+use std::time::{SystemTime, UNIX_EPOCH};
 use crate::input::get_key;
+use crate::render::*;
 use crate::board::Board;
-
 mod board;
 mod input;
+mod render;
+
 
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
-    let mut rng = match args.len() {
-        2_usize => StdRng::seed_from_u64(args.get(1).unwrap().parse().unwrap()),
-        _ => StdRng::from_rng(&mut rand::rng()),
+
+    //Use unix time as seed if no seed is provided
+    let seed: u64 = match args.len() {
+        2_usize => args.get(1).unwrap().parse().unwrap(),
+        _ => SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
     };
-    let mut board = Board{data: [[0; 4]; 4], score: 0};
-    board.place_first(&mut rng);
-    board.print();
+    let mut board = Board::new(seed);
+    let renderer = Renderer::new(true);
+
+    board.place_first();
+    renderer.render(&board);
     while board.is_solveable() {
         let key = match get_key() {
             Some(i) => i,
             None => return Ok(()),
         };
-        board.shift(&mut rng, key);
-        board.print();
+        board.shift(key);
+        renderer.render(&board);
     }
     Ok(())
 }
