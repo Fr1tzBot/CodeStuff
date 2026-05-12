@@ -1,0 +1,9 @@
+8
+dog perro 0 0 0
+puppy perrito 0 0 1
+hello HOLA 2 10 2
+BETTER Mejor 2 29 3
+Worse Peor 0 2 2
+Cat gato 1 3 1
+kitten GatITo 2 18 5
+butterfly mariposa 1 6 4

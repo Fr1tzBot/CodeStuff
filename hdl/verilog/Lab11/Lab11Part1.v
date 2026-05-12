@@ -8,8 +8,8 @@ output reg [7:0] out2);
     always@(posedge clk)
     begin
 
-        out1 <= A;
-        out2 <= out1;
+        out1 = A;
+        out2 = out1;
 
     end
 

@@ -1,0 +1,17 @@
+16
+dog perro 0 0 0
+perro dog 0 0 0
+puppy perrito 0 0 1
+perrito puppy 0 0 1
+hello hola 2 10 2
+hola hello 2 10 2
+better mejor 2 29 3
+mejor better 2 29 3
+worse peor 0 2 2
+peor worse 0 2 2
+cat gato 1 3 1
+gato cat 1 3 1
+kitten gatito 2 18 5
+gatito kitten 2 18 5
+butterfly mariposa 1 6 4
+mariposa butterfly 1 6 4
