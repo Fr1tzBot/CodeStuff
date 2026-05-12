@@ -1,7 +1,7 @@
 use std::env;
 use std::time::{SystemTime, UNIX_EPOCH};
 use crate::input::get_key;
-use crate::render::*;
+use crate::render::Renderer;
 use crate::board::Board;
 mod board;
 mod input;
@@ -16,11 +16,13 @@ fn main() -> std::io::Result<()> {
         2_usize => args.get(1).unwrap().parse().unwrap(),
         _ => SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
     };
-    let mut board = Board::new(seed);
-    let renderer = Renderer::new(true);
 
+    //Set up and display initial board
+    let mut board = Board::new(seed);
+    let renderer = Renderer::new();
     board.place_first();
     renderer.render(&board);
+
     while board.is_solveable() {
         let key = match get_key() {
             Some(i) => i,

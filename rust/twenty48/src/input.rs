@@ -1,9 +1,6 @@
 use std::io::{stdin,Read};
 use crate::board::Dir;
 
-pub fn clear_screen() {
-    print!("\x1b[2J\x1b[H");
-}
 
 pub fn get_key() -> Option<Dir> {
     for byte in stdin().bytes() {
@@ -16,6 +13,6 @@ pub fn get_key() -> Option<Dir> {
             _ => continue
         };
     }
-    return None;
+    None
 }
 

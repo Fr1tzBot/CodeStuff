@@ -37,7 +37,7 @@ impl Board {
                 if self.data[i][j] != 0 { output += 1; }
             }
         }
-        return output;
+        output
     }
 
     /// Adds a new tile after the player's move

@@ -2,9 +2,6 @@ use std::io::{stdout, Stdout};
 use termion::raw::{IntoRawMode, RawTerminal};
 use crate::Board;
 
-const NUM_CELLS: i8 = 4;
-const PADDING: i8 = 2;
-const NUMBER_WIDTH: i8 = 5;
 const GRID_WIDTH: u16 = 32; //4 * (5+2) + (4+1)
 const GRID_HEIGHT: u16 = 17;
 const CELL_HEIGHT: usize = 3;
@@ -18,14 +15,13 @@ const CELL_CORDS: [[(u16, u16); 4]; 4] = [
 ];
 
 pub struct Renderer {
-    term: RawTerminal<Stdout>,
-    fancy: bool
+    _term: RawTerminal<Stdout>,
 }
 
 impl Renderer {
 
-    pub fn new(fancy: bool) -> Self {
-        Self { term: stdout().into_raw_mode().unwrap(), fancy: fancy }
+    pub fn new() -> Self {
+        Self { _term: stdout().into_raw_mode().unwrap()}
     }
 
     pub fn clear_screen(&self) {
@@ -33,19 +29,11 @@ impl Renderer {
     }
 
 
-    pub fn render(&self, board: &Board) {
-        if self.fancy {
-            self.render_fancy(board);
-        } else {
-            self.render_simple(board);
-        }
-    }
-
     fn move_to(&self, x: u16, y: u16) {
         print!("\x1b[{};{}H", y, x);
     }
 
-    fn render_fancy(&self, board: &Board) {
+    pub fn render(&self, board: &Board) {
         self.clear_screen();
         //Paint horizontal bars ([1, 5, 9, 13, 17])
         for j in (1..=GRID_HEIGHT).step_by(CELL_HEIGHT+1) {
@@ -67,8 +55,7 @@ impl Renderer {
             for (x, num) in row.iter().enumerate() {
                 let offset_x = if *num == 0 {0} else {
                     match num.ilog10() {
-                        1 => 0,
-                        2|3|4 => 1,
+                        2..=4 => 1,
                         5 => 2,
                         _ => 0
                     }
@@ -79,15 +66,5 @@ impl Renderer {
         }
         print!("\r\n\n\n");
     }
-
-    fn render_simple(&self, board: &Board) {
-        self.clear_screen();
-        for i in 0..4 {
-            for j in 0..4 {
-                print!("{} ", board.data[i][j]);
-            }
-            if i == 0 {print!(" Score: {}", board.score);}
-            print!("\r\n");
-        }
-    }
 }
+
