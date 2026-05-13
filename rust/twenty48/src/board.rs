@@ -160,6 +160,7 @@ impl Board {
     /// Calls shift_line with rightwards=true for Dir::Down and Dir::Right, false otherwise
     /// Increments score and runs insert_tile after calling
     pub fn shift(&mut self, dir: Dir) {
+        let original_state = self.get_flattened_data();
         for i in 0..4 {
             let result = match dir {
                 Dir::Up    => self.shift_line(self.get_col(i), false),
@@ -173,7 +174,11 @@ impl Board {
                 Dir::Left|Dir::Right => self.set_row(i, result.0),
             }
         }
-        self.insert_tile();
+
+        //Only insert new tile if a move was actually made
+        if original_state.ne(&self.get_flattened_data()) {
+            self.insert_tile();
+        }
     }
 
 }
