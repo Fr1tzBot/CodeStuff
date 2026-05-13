@@ -1,6 +1,7 @@
 use rand::SeedableRng;
 use rand::RngExt;
 use rand::rngs::StdRng;
+use std::fmt;
 
 #[derive(Debug)]
 pub struct Board {
@@ -30,6 +31,7 @@ impl Board {
          self.data[3][0], self.data[3][1], self.data[3][2], self.data[3][3]]
     }
 
+    #[allow(dead_code)]
     fn count_full_tiles(&self) -> i8 {
         let mut output: i8 = 0;
         for i in 0..4 {
@@ -62,12 +64,6 @@ impl Board {
     pub fn place_first(&mut self) {
         self.insert_tile();
         self.insert_tile();
-    }
-
-    /// Converts the data in the grid as well as the score to a string.
-    /// Prints the grid with whitespace between, prints the score after the first row
-    pub fn to_string(&self) -> String {
-        format!("{:?} Score: {}\n{:?}\n{:?}\n{:?}\n", self.data[0], self.score, self.data[1], self.data[2], self.data[3])
     }
 
     /// Returns a row in the grid reversed
@@ -181,6 +177,12 @@ impl Board {
         }
     }
 
+}
+
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?} Score: {}\n{:?}\n{:?}\n{:?}\n", self.data[0], self.score, self.data[1], self.data[2], self.data[3])
+    }
 }
 
 #[cfg(test)]

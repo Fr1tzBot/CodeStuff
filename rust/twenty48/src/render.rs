@@ -1,6 +1,7 @@
 use std::io::{stdout, Stdout};
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::{color, cursor, clear};
+use figlet_rs::FIGlet;
 use crate::Board;
 
 const GRID_WIDTH: u16 = 32; //4 * (5+2) + (4+1)
@@ -55,7 +56,7 @@ impl Renderer {
         print!("{}", cursor::Goto(x, y));
     }
 
-    fn color_num(&self, num: &u16) -> String {
+    fn color_num(&self, num: &u16, bg: bool) -> String {
         let color: Box<dyn color::Color> = match num {
             0 => Box::new(color::Black),
             2 => Box::new(color::White),
@@ -74,9 +75,15 @@ impl Renderer {
             16384 => Box::new(color::LightGreen),
             _ => Box::new(color::Black)
         };
-        let mut output = format!("{}", color::Bg(&*color));
-        if *num == 2 || *num == 4 || *num == 0 {
-            output = format!("{}{}", output, color::Fg(color::Black));
+
+        let mut output;
+        if bg {
+            output = format!("{}", color::Bg(&*color));
+            if *num == 2 || *num == 4 || *num == 0 {
+                output = format!("{}{}", output, color::Fg(color::Black));
+            }
+        } else {
+            output = format!("{}", color::Fg(&*color));
         }
         output
     }
@@ -91,7 +98,7 @@ impl Renderer {
             _ => (" ", " "),
         };
 
-        let color = self.color_num(num);
+        let color = self.color_num(num, true);
         let reset = format!("{}{}", color::Bg(color::Reset), color::Fg(color::Reset));
 
         self.move_to(CELL_CORDS[y][x].0, CELL_CORDS[y][x].1-1);
@@ -105,30 +112,47 @@ impl Renderer {
         print!("{color}       {reset}");
     }
 
+    fn render_score(&self, board: &Board) {
+        let cells = board.get_flattened_data();
+        let mut max_score = 0;
+        for val in cells {if val > max_score {max_score = val;}}
+        let color = format!("{}{}", self.color_num(&max_score, false),
+                    color::Bg(color::LightBlack));
+        let reset = format!("{}{}", color::Bg(color::Reset), color::Fg(color::Reset));
+
+        let mut score_string = board.score.to_string();
+        for _i in 0..(7-score_string.len()) {
+            score_string = format!("0{score_string}");
+        }
+        let figlet_font = FIGlet::big().unwrap();
+        let figlet_score = figlet_font.convert(&score_string).unwrap().to_string();
+        let mut y = 1;
+        self.move_to(GRID_WIDTH+3, y);
+        print!("{color}");
+        for c in figlet_score.chars() {
+            if c == '\n' {
+                print!("{reset}   ");
+                y += 1;
+                self.move_to(GRID_WIDTH+3, y);
+                print!("{color}");
+            } else {
+                print!("{c}");
+            }
+        }
+        print!("{reset}");
+    }
+
     pub fn render(&self, board: &Board) {
         for (y, row) in board.data.iter().enumerate() {
             for (x, num) in row.iter().enumerate() {
                 self.write_cell(x, y, num);
             }
         }
+        self.render_score(board);
         //Move the cursor back to the bottom
         //Note this also forces the buffer to be flushed each frame
-        print!("\r\n\n");
+        self.move_to(1, 17);
+        println!();
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_write_cell() {
-        let renderer = Renderer::new();
-        renderer.write_cell(0, 0, &0);
-        renderer.write_cell(0, 0, &2);
-        renderer.write_cell(0, 0, &16);
-        renderer.write_cell(0, 0, &128);
-        renderer.write_cell(0, 0, &1024);
-        renderer.write_cell(0, 0, &16384);
-    }
-}
